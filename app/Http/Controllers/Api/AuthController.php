@@ -117,9 +117,9 @@ class AuthController extends Controller
             'status' => true,
             'message' => 'Usuario registrado correctamente',
             'user' => [
-                'name' => $request->user()->name,
-                'email' => $request->user()->email,
-                'role' => $request->user()->role,
+                'name' => $user->name,
+                'email' => $user->email,
+                'role' => $user->role,
             ],
         ], 200);
     }
