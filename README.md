@@ -52,3 +52,14 @@
 - **Método:** POST
 - **URL:** `BASE_URL/v1/register`
 - **Status** Pending 🥹🥹
+- **Body (JSON) REQUEST:**
+    ```json
+    {
+      null
+    }
+- **Body (JSON) RESPONSE:**
+    
+    ```json
+    {
+     null
+    }
