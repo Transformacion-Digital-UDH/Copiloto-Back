@@ -62,4 +62,15 @@ class AuthController extends Controller
         return response()->json(['message' => 'Se desconectó con éxito'], 200);
     }
 
+    public function me(Request $request)
+    {
+        return response()->json([
+            'status' => true,
+            'user' => [
+                'name' => $request->user()->name,
+                'email' => $request->user()->email,
+                'role' => $request->user()->role,
+            ],
+        ], 200);
+    }
 }
