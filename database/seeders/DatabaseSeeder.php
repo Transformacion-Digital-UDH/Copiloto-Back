@@ -23,21 +23,18 @@ class DatabaseSeeder extends Seeder
         $data['role'] = "estudiante";
         $data['password'] = bcrypt(123456);
         $estudiante = \App\Models\User::create($data);
-   
 
         $data['name'] = "PAISI";
         $data['email'] = "paisi@gmail.com";
         $data['role'] = "paisi";
         $data['password'] = bcrypt(123456);
         $coordinador = \App\Models\User::create($data);
-     
 
         $data['name'] = "Coordinador";
         $data['email'] = "coordinador@gmail.com";
         $data['role'] = "coordinador";
         $data['password'] = bcrypt(123456);
         $coordinador = \App\Models\User::create($data);
- 
 
     }
 }
