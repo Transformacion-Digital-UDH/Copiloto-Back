@@ -22,3 +22,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 
 Route::post('/logout', [DemoController::class, 'logout']); //cierre de sesión
+
+
+Route::apiResource('users', "App\Http\Controllers\UserController");
+// Route::get('users', [App\Http\Controllers\UserController::class, "index"]);
+// Route::post('users/create', [App\Http\Controllers\UserController::class, "store"]);
