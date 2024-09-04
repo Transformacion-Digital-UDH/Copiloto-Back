@@ -16,8 +16,9 @@ use App\Http\Controllers\Api\AuthController;
 */
 // rutas para autenticacion
 
-Route::post('login', [AuthController::class, 'login']); // inicio de sesión
 
+Route::post('login', [AuthController::class, 'login']); // inicio de sesión
+Route::post('register', [AuthController::class, 'register']); // registrar usuario
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']); //cierre de sesión
