@@ -12,32 +12,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // users random
-        //\App\Models\User::factory(4)->create();
-        
-        // user role asesor
-        \App\Models\User::factory()->create([
-            'name' => 'Asesor',
-            'email' => 'asesor@gmail.com',
-            'role' => 'asesor',
-        ]);
-        // user role estudiante
-        \App\Models\User::factory()->create([
-            'name' => 'Estudiante',
-            'email' => 'estudiante@gmail.com',
-            'role' => 'estudiante',
-        ]);
-        // user role spaisi
-        \App\Models\User::factory()->create([
-            'name' => 'secretaria paisi',
-            'email' => 'spaisi@gmail.com',
-            'role' => 'spaisi',
-        ]);
-        // user role sfac
-        \App\Models\User::factory()->create([
-            'name' => 'secretaria facultad',
-            'email' => 'sfac@gmail.com',
-            'role' => 'sfac',
-        ]);
+        $data['name'] = "Jonathan";
+        $data['email'] = "jonathan123@gmail.com";
+        $data['password'] = bcrypt(123456);
+        \App\Models\User::create($data);
+
+        $data['name'] = "Estudiante";
+        $data['email'] = "estudiante@gmail.com";
+        $data['password'] = bcrypt(123456);
+        $estudiante = \App\Models\User::create($data);
+        $estudiante->assignRole('estudiante');
+
+        $data['name'] = "PAISI";
+        $data['email'] = "paisi@gmail.com";
+        $data['password'] = bcrypt(123456);
+        $coordinador = \App\Models\User::create($data);
+        $coordinador->assignRole('coordinador');
+
+        $data['name'] = "Coordinador";
+        $data['email'] = "coordinador@gmail.com";
+        $data['password'] = bcrypt(123456);
+        $coordinador = \App\Models\User::create($data);
+        $coordinador->assignRole('coordinador');
+
     }
 }
