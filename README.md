@@ -4,25 +4,17 @@
 <a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
 </p>
 
-## Pasos para la instalación
+## Pasos de instalación - WINDOWS 🪟
+1. **Descargar e instalar pecl php extension mongodb:**
+  - [Selecciona la version estable más reciente](https://pecl.php.net/package/mongodb)
+  - [Descarga segun tu version de php](https://pecl.php.net/package/mongodb/1.18.0/windows)
+  - Copiar y pegar el archivo php_mongodb.dll a las extensiones de tu version de php (ruta:\bin\php\php-8.3.11-nts-Win32-vs16-x64\ext)
 
-1. **Instalar Node.js v.20:**
-   - [Descargar e instalar Node.js](https://nodejs.org/)
+2. **Agregar la extension de mongodb en php.ini:**
+  - extension=mongodb
 
-2. **Instalar builderbot:**
-    ```bash
-    pnpm create builderbot@latest
-    ```
-
-3. **Instalar los paquetes necesarios:**
-    ```bash
-    pnpm install or  npm install
-    ```
-
-4. **Iniciar el servidor:**
-    ```bash
-    pnpm run dev o npm run dev
-    ```
+3. **Descargar e instalar el administrador de colecciones de mongodb**
+  - [Selecciona la version y el tipo de paquete](https://www.mongodb.com/try/download/community)
 
 ## Endpoints
 - **BASE_URL** = ""
