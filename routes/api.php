@@ -24,3 +24,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']); //cierre de sesión
     Route::get('/me', [AuthController::class, 'me']);
 });
+
+Route::apiResource('users', \App\Http\Controllers\UserController::class);
