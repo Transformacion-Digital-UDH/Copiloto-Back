@@ -57,11 +57,15 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        
         $user = $request->user();
 
         $user->currentAccessToken()->delete();
 
-        return response()->json(['message' => 'Se desconectó con éxito'], 200);
+        return response()->json([
+            'status' => true,
+            'message' => 'Se desconectó con éxito'
+        ], 200);
     }
 
     public function me(Request $request)
@@ -121,6 +125,7 @@ class AuthController extends Controller
                 'email' => $user->email,
                 'role' => $user->role,
             ],
+            'token' => $user->createToken('api_token')->plainTextToken
         ], 200);
     }
 }
