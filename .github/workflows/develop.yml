@@ -1,0 +1,21 @@
+name: Desplegar VPS de Prueba
+on:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Ejecutar script de despliegue
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.DEV_SSH_HOST }}
+        username: ${{ secrets.DEV_SSH_USER }}
+        key: ${{ secrets.DEV_SSH_KEY }}
+        script: |
+          php -v
+          cd htdocs/titulacion-back.abimaelfv.site
+          git pull origin main
+          composer install
+          php artisan migrate:fresh --seed
