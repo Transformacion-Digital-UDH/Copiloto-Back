@@ -19,3 +19,4 @@ jobs:
           git pull origin main
           composer install
           php artisan migrate:fresh --seed
+          
