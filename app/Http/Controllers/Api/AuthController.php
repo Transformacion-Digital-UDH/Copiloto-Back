@@ -86,7 +86,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:60|min:15',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:8|max:15',
-            'role' => 'required|string|in:admin,estudiante,paisi,coordinador,facultad'
+            'role' => 'required|string|in:admin,student,asesor,paisi,coordinador,facultad'
         ];
 
         $messages = [
@@ -97,7 +97,7 @@ class AuthController extends Controller
             'password.required' => 'La contraseña es requerido',
             'password.min' => 'La contraseña debe tener al menos :min caracteres',
             'password.max' => 'La contraseña debe tener como maximo :max caracteres',
-            'role.in' => 'El rol debe ser admin, estudiante, paisi, coordinador o facultad',
+            'role.in' => 'El rol debe ser admin, student, paisi, coordinador o facultad',
             'role.required' => 'El rol es requerido',
         ];
 
@@ -116,6 +116,17 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role
         ]);
+
+        // Crea el registro en la colección students si el rol es estudiante
+        if ($request->role === 'student') {
+            \App\Models\Student::create([
+                'user_id' => $user->_id,
+                'thesis_title' => '',
+                'thesis_status' => '',
+                'document_url' => '',
+                'advisor_id' => ''
+            ]);
+        }
 
         return response()->json([
             'status' => true,
