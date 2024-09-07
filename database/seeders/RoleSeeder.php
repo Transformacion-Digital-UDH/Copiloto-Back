@@ -15,7 +15,7 @@ class RoleSeeder extends Seeder
         $data['name'] = "student";
         \App\Models\Role::create($data);
 
-        $data['name'] = "reviser";
+        $data['name'] = "adviser";
         \App\Models\Role::create($data);
 
         $data['name'] = "sec_fac";
