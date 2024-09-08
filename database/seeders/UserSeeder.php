@@ -12,8 +12,8 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $data['name'] = "Jonathan";
-        $data['email'] = "jonathan123@gmail.com";
+        $data['name'] = "admin";
+        $data['email'] = "admin@gmail.com";
         $data['role'] = "admin";
         $data['password'] = bcrypt(123456);
         \App\Models\User::create($data);
@@ -22,18 +22,36 @@ class UserSeeder extends Seeder
         $data['email'] = "estudiante@gmail.com";
         $data['role'] = "estudiante";
         $data['password'] = bcrypt(123456);
-        $estudiante = \App\Models\User::create($data);
+        \App\Models\User::create($data);
+
+        $data['name'] = "Facultad";
+        $data['email'] = "facultad@gmail.com";
+        $data['role'] = "facultad";
+        $data['password'] = bcrypt(123456);
+        \App\Models\User::create($data);
 
         $data['name'] = "PAISI";
         $data['email'] = "paisi@gmail.com";
         $data['role'] = "paisi";
         $data['password'] = bcrypt(123456);
-        $coordinador = \App\Models\User::create($data);
+        \App\Models\User::create($data);
+
+        $data['name'] = "Asesor";
+        $data['email'] = "asesor@gmail.com";
+        $data['role'] = "asesor";
+        $data['password'] = bcrypt(123456);
+        \App\Models\User::create($data);
+
+        $data['name'] = "Jurado";
+        $data['email'] = "jurado@gmail.com";
+        $data['role'] = "jurado";
+        $data['password'] = bcrypt(123456);
+        \App\Models\User::create($data);
 
         $data['name'] = "Coordinador";
         $data['email'] = "coordinador@gmail.com";
         $data['role'] = "coordinador";
         $data['password'] = bcrypt(123456);
-        $coordinador = \App\Models\User::create($data);
+        \App\Models\User::create($data);
     }
 }
