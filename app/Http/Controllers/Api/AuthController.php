@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,25 +40,24 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'status' => false,
-                'error' => 'Las credenciales no son correctas.',
+                'error' => ['Las credenciales no son correctas.'],
             ], 401);
         }
 
-        if (Auth::attempt($request->only('email', 'password'))) {
-            $user = Auth::user();
-            $token = $user->createToken('api_token')->plainTextToken;
+        $user = Auth::user();
+        $token = $user->createToken('api_token')->plainTextToken;
 
-            return response()->json([
-                'status' => true,
-                'message' => 'Usuario autenticado correctamente.',
-                'token' => $token,
-            ], 200);
-        }
+        return response()->json([
+            'status' => true,
+            'message' => 'Usuario autenticado correctamente.',
+            'token' => $token,
+            'data' =>  new UserResource($user)
+        ], 200);
     }
 
     public function logout(Request $request)
     {
-        
+
         $user = $request->user();
 
         $user->currentAccessToken()->delete();
