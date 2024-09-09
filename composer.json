@@ -11,6 +11,7 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "mongodb/laravel-mongodb": "^4.8",
+        "rakutentech/laravel-request-docs": "^2.41",
         "spatie/laravel-permission": "^6.9"
     },
     "require-dev": {
