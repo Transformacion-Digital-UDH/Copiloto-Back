@@ -21,8 +21,8 @@ Route::post('login', [AuthController::class, 'login']); // inicio de sesión
 Route::post('register', [AuthController::class, 'register']); // registrar usuario
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::post('/logout', [AuthController::class, 'logout']); //cierre de sesión
-    Route::get('/me', [AuthController::class, 'me']);
+    Route::get('/logout', [AuthController::class, 'logout']); //cierre de sesión del token
+    Route::get('/me', [AuthController::class, 'me']); // obtener datos del usuario autenticado
 });
 
 Route::apiResource('users', \App\Http\Controllers\UserController::class);
