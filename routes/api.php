@@ -25,4 +25,5 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']); // obtener datos del usuario autenticado
 });
 
-Route::apiResource('users', \App\Http\Controllers\UserController::class);
+Route::apiResource('users', \App\Http\Controllers\UserController::class); //Ver users
+Route::apiResource('roles', \App\Http\Controllers\RoleController::class); //Ver roles
