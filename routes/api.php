@@ -14,8 +14,8 @@ use App\Http\Controllers\Api\AuthController;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-// rutas para autenticacion
 
+// Rutas para AUTENTIFICACIÓN
 
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
 Route::post('register', [AuthController::class, 'register']); // registrar usuario
@@ -25,7 +25,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']); // obtener datos del usuario autenticado
 });
 
+// Rutas de recursos de USUARIO
+
 Route::apiResource('users', \App\Http\Controllers\UserController::class); //Ver users
+
+//Rutas para ROLES y PERMISOS
+
 Route::apiResource('roles', \App\Http\Controllers\RoleController::class); //Ver roles
 Route::apiResource('permissions', \App\Http\Controllers\PermissionController::class); //Ver permisos
 Route::apiResource('permissionRoles', \App\Http\Controllers\PermissionRoleController::class); //Ver permisos con roles
+
+//Rutas para ESTUDIANTES
+
+//Rutas para ADVISER (ASESORES Y JURADOS)

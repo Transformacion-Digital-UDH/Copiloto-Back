@@ -5,15 +5,17 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
 
-class PermissionRole extends Model
+class Adviser extends Model
 {
     use HasFactory;
 
-    protected $connection = 'mongodb';
+    protected $connecion = 'mongodb';
 
     protected $fillable = [
-        'role_id',
-        'permission_id',
+        'name',
+        'lastname_m',
+        'latsname_f',
+        'orcid',
+        'jury_id',
     ];
-
 }

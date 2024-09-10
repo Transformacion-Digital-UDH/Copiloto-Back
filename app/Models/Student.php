@@ -5,13 +5,19 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
 
-class Permission extends Model
+class Student extends Model
 {
     use HasFactory;
 
-    protected $connection = 'mongodb';
-    
+    protected $connecion = 'mongodb';
+
     protected $fillable = [
         'name',
+        'lastname_m',
+        'latsname_f',
+        'dni',
+        'code',
+        'investigation_title',
+        'adviser_id',
     ];
 }
