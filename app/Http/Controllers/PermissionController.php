@@ -12,7 +12,8 @@ class PermissionController extends Controller
      */
     public function index()
     {
-        //
+        $permission = Permission::get()->toArray();
+        return response()->json($permission);
     }
 
     /**

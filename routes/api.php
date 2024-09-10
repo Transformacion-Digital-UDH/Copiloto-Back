@@ -27,3 +27,5 @@ Route::middleware('auth:sanctum')->group(function () {
 
 Route::apiResource('users', \App\Http\Controllers\UserController::class); //Ver users
 Route::apiResource('roles', \App\Http\Controllers\RoleController::class); //Ver roles
+Route::apiResource('permissions', \App\Http\Controllers\PermissionController::class); //Ver permisos
+Route::apiResource('permissionRoles', \App\Http\Controllers\PermissionRoleController::class); //Ver permisos con roles
