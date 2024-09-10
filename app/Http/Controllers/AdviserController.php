@@ -13,7 +13,7 @@ class AdviserController extends Controller
     public function index()
     {
         $adviser = Adviser::get();
-        return Adviser::collection($adviser);
+        return response()->json($adviser);
     }
 
     /**
@@ -29,7 +29,13 @@ class AdviserController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $adviser = Adviser::create($request->all());
+
+        return response()->json([
+            'status' => true,
+                'message' => "Adviser Created successfully!",
+            'user' => $adviser
+        ], 201);
     }
 
     /**

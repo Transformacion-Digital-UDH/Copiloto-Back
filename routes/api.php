@@ -34,7 +34,10 @@ Route::apiResource('users', \App\Http\Controllers\UserController::class); //Ver 
 Route::apiResource('roles', \App\Http\Controllers\RoleController::class); //Ver roles
 Route::apiResource('permissions', \App\Http\Controllers\PermissionController::class); //Ver permisos
 Route::apiResource('permissionRoles', \App\Http\Controllers\PermissionRoleController::class); //Ver permisos con roles
+Route::apiResource('juries', \App\Http\Controllers\JuryController::class); //Ver permisos con roles
 
 //Rutas para ESTUDIANTES
+Route::apiResource('students', \App\Http\Controllers\StudentController::class); //Ver estudiantes
 
 //Rutas para ADVISER (ASESORES Y JURADOS)
+Route::apiResource('advisers', \App\Http\Controllers\AdviserController::class); //Ver revisores (asesores)

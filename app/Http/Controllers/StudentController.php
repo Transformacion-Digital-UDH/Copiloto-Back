@@ -13,7 +13,7 @@ class StudentController extends Controller
     public function index()
     {
         $student = Student::get();
-        return Student::collection($student);
+        return response()->json($student);
     }
 
     /**
@@ -29,7 +29,13 @@ class StudentController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $student = Student::create($request->all());
+
+        return response()->json([
+            'status' => true,
+                'message' => "Student Created successfully!",
+            'user' => $student
+        ], 201);
     }
 
     /**
