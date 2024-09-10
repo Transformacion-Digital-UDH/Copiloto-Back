@@ -12,7 +12,8 @@ class JuryController extends Controller
      */
     public function index()
     {
-        //
+        $jury = Jury::get()->toArray();
+        return response()->json($jury);
     }
 
     /**
