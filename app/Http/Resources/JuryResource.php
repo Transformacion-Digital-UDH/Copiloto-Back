@@ -15,9 +15,8 @@ class JuryResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'nombre' => $this->name,
-            'correo' => $this->email,
-            'rol' => $this->role,
+            'id' => $this->_id,
+            'jurado_tipo' => $this->position,
         ];
     }
 }

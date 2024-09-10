@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\JuryResource;
 use App\Models\Jury;
 use Illuminate\Http\Request;
 
@@ -14,6 +15,8 @@ class JuryController extends Controller
     {
         $jury = Jury::get()->toArray();
         return response()->json($jury);
+//        return JuryResource::collection($jury);
+
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\RoleResource;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
@@ -14,6 +15,9 @@ class RoleController extends Controller
     {
         $role = Role::get()->toArray();
         return response()->json($role);
+    //    return RoleResource::collection($role);
+
+        
     }
 
     /**
