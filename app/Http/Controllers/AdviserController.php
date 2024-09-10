@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\AdviserResource;
 use App\Models\Adviser;
 use Illuminate\Http\Request;
 
@@ -13,7 +14,7 @@ class AdviserController extends Controller
     public function index()
     {
         $adviser = Adviser::get();
-        return response()->json($adviser);
+        return AdviserResource::collection($adviser);
     }
 
     /**

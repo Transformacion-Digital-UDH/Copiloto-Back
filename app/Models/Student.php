@@ -13,8 +13,8 @@ class Student extends Model
 
     protected $fillable = [
         'name',
-        'lastname_m',
-        'latsname_f',
+        'lastname_f', //apellido paterno
+        'lastname_m', //apellido materno
         'dni',
         'code',
         'investigation_title',

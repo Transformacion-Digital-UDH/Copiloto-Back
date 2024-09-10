@@ -17,10 +17,10 @@ class AdviserFactory extends Factory
     public function definition(): array
     {
         return [
-            'name' => fake()->name(),
+            'name' => fake()->firstName(),
+            'lastname_f'=> fake()->lastName(),
             'lastname_m' => fake()->lastName(),
-            'latsname_f'=> fake()->lastName(),
-            'ordic' => fake()->unique()->regexify('[A-Z]{2}[0-9]{8}[A-Z]{2}[0-9]{8}'),
+            'orcid' => fake()->unique()->regexify('[A-Z]{2}[0-9]{8}[A-Z]{2}[0-9]{8}'),
             'jury_id' => fake()->randomElement(["presidente", "secretario", "vocal", ""]),
             
         ];
