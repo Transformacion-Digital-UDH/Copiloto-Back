@@ -23,7 +23,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'program',
+        'faculty',
+        'role_id',
     ];
 
     /**
