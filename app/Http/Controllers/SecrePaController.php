@@ -2,19 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\UserResource;
-use App\Models\User;
+use App\Models\SecrePa;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class SecrePaController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $users = User::get();
-        return UserResource::collection($users);
+        //
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
+    {
+        //
     }
 
     /**
@@ -22,20 +28,21 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-       
-        $user = User::create($request->all());
-
-        return response()->json([
-            'status' => true,
-                'message' => "User Created successfully!",
-            'user' => $user
-        ], 201);
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(User $users)
+    public function show(SecrePa $secrePa)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(SecrePa $secrePa)
     {
         //
     }
@@ -43,7 +50,7 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $users)
+    public function update(Request $request, SecrePa $secrePa)
     {
         //
     }
@@ -51,7 +58,7 @@ class UserController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(User $users)
+    public function destroy(SecrePa $secrePa)
     {
         //
     }

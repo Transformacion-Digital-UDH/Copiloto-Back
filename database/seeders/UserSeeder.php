@@ -12,28 +12,54 @@ class UserSeeder extends Seeder
      */
     public function run(): void
     {
-        $data['name'] = "Jonathan";
-        $data['email'] = "jonathan123@gmail.com";
-        $data['role'] = "admin";
+        $data['name'] = "admin";
+        $data['email'] = "admin@udh.edu.pe";
         $data['password'] = bcrypt(123456);
+        $data['faculty'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
+        $data['role_id'] = "admin";
         \App\Models\User::create($data);
 
         $data['name'] = "Estudiante";
-        $data['email'] = "estudiante@gmail.com";
-        $data['role'] = "estudiante";
+        $data['email'] = "estudiante@udh.edu.pe";
         $data['password'] = bcrypt(123456);
-        $estudiante = \App\Models\User::create($data);
+        $data['school'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
+        $data['role_id'] = "estudiante";
+        \App\Models\User::create($data);
+
+        $data['name'] = "Asesor";
+        $data['email'] = "asesor@udh.edu.pe";
+        $data['password'] = bcrypt(123456);
+        $data['school'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
+        $data['role_id'] = "asesor";
+        \App\Models\User::create($data);
 
         $data['name'] = "PAISI";
-        $data['email'] = "paisi@gmail.com";
-        $data['role'] = "paisi";
+        $data['email'] = "paisi@udh.edu.pe";
         $data['password'] = bcrypt(123456);
-        $coordinador = \App\Models\User::create($data);
+        $data['school'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
+        $data['role_id'] = "secretaria_pa";
+        \App\Models\User::create($data);
 
-        $data['name'] = "Coordinador";
-        $data['email'] = "coordinador@gmail.com";
-        $data['role'] = "coordinador";
+
+        $data['name'] = "FACULTAD";
+        $data['email'] = "facultad@udh.edu.pe";
         $data['password'] = bcrypt(123456);
-        $coordinador = \App\Models\User::create($data);
+        $data['school'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
+        $data['role_id'] = "secretaria_fa";
+        \App\Models\User::create($data);
+
+        $data['name'] = "Kevin arnold flores pacheco";
+        $data['email'] = "2018110451@udh.edu.pe";
+        $data['password'] = bcrypt(123456);
+        $data['faculty'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
+        $data['role_id'] = "estudiante";
+        \App\Models\User::create($data);
+
     }
 }

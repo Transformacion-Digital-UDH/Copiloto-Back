@@ -2,21 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\RoleResource;
-use App\Models\Role;
+use App\Models\PermissionRole;
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class PermissionRoleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $role = Role::get();
-        return RoleResource::collection($role);
-
-        
+        $permissionRole = PermissionRole::get()->toArray();
+        return response()->json($permissionRole);
     }
 
     /**
@@ -32,18 +29,13 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $role = Role::create($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => "Role Created successfully!",
-            'role' => $role
-        ], 201);
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show(PermissionRole $permissionRole)
     {
         //
     }
@@ -51,7 +43,7 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Role $role)
+    public function edit(PermissionRole $permissionRole)
     {
         //
     }
@@ -59,7 +51,7 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, PermissionRole $permissionRole)
     {
         //
     }
@@ -67,7 +59,7 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(PermissionRole $permissionRole)
     {
         //
     }

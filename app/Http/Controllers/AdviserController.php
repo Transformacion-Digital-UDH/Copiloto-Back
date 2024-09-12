@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\RoleResource;
-use App\Models\Role;
+use App\Http\Resources\AdviserResource;
+use App\Models\Adviser;
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class AdviserController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $role = Role::get();
-        return RoleResource::collection($role);
-
-        
+        $adviser = Adviser::get();
+        return AdviserResource::collection($adviser);
     }
 
     /**
@@ -32,18 +30,19 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $role = Role::create($request->all());
+        $adviser = Adviser::create($request->all());
+
         return response()->json([
             'status' => true,
-            'message' => "Role Created successfully!",
-            'role' => $role
+                'message' => "Adviser Created successfully!",
+            'user' => $adviser
         ], 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show(Adviser $adviser)
     {
         //
     }
@@ -51,7 +50,7 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Role $role)
+    public function edit(Adviser $adviser)
     {
         //
     }
@@ -59,7 +58,7 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, Adviser $adviser)
     {
         //
     }
@@ -67,7 +66,7 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(Adviser $adviser)
     {
         //
     }
