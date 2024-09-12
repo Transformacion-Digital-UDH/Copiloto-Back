@@ -21,7 +21,7 @@ class AdviserFactory extends Factory
             'lastname_f'=> fake()->lastName(),
             'lastname_m' => fake()->lastName(),
             'orcid' => fake()->unique()->regexify('[A-Z]{2}[0-9]{8}[A-Z]{2}[0-9]{8}'),
-            'jury_id' => fake()->randomElement(["presidente", "secretario", "vocal", ""]),
+            'jury_id' => fake()->md5(),
             
         ];
     }

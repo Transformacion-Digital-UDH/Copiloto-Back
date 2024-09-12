@@ -34,11 +34,26 @@ Route::apiResource('users', \App\Http\Controllers\UserController::class); //Ver 
 
 Route::apiResource('roles', \App\Http\Controllers\RoleController::class); //Ver roles
 Route::apiResource('permissions', \App\Http\Controllers\PermissionController::class); //Ver permisos
-Route::apiResource('permissionRoles', \App\Http\Controllers\PermissionRoleController::class); //Ver permisos con roles
+Route::apiResource('permissionroles', \App\Http\Controllers\PermissionRoleController::class); //Ver permisos con roles
 Route::apiResource('juries', \App\Http\Controllers\JuryController::class); //Ver permisos con roles
 
 //Rutas para ESTUDIANTES
 Route::apiResource('students', \App\Http\Controllers\StudentController::class); //Ver estudiantes
+Route::apiResource('documents', \App\Http\Controllers\DocumentController::class); //Ver estudiantes
+Route::apiResource('applications', \App\Http\Controllers\ApplicationController::class); //Ver estudiantes
 
 //Rutas para ADVISER (ASESORES Y JURADOS)
 Route::apiResource('advisers', \App\Http\Controllers\AdviserController::class); //Ver revisores (asesores)
+
+//Rutas para INVESTIGACIONES(TESIS, E INFORME FINAL)
+Route::apiResource('investigations', \App\Http\Controllers\InvestigationController::class); //Ver revisores (asesores)
+Route::apiResource('tipeinvestigations', \App\Http\Controllers\TipeInvestigationController::class); //Ver revisores (asesores)
+Route::apiResource('corrections', \App\Http\Controllers\CorrectionController::class); //Ver revisores (asesores)
+
+//Rutas para Status
+Route::apiResource('status', \App\Http\Controllers\StatusController::class); //Ver revisores (asesores)
+
+//Rutas para trámites
+Route::apiResource('requirements', \App\Http\Controllers\RequirementController::class); //Ver revisores (asesores)
+Route::apiResource('procedures', \App\Http\Controllers\ProcedureController::class); //Ver revisores (asesores)
+

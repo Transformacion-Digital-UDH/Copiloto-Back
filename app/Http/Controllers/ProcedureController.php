@@ -2,21 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\RoleResource;
-use App\Models\Role;
+use App\Http\Resources\ProcedureResource;
+use App\Models\Procedure;
 use Illuminate\Http\Request;
 
-class RoleController extends Controller
+class ProcedureController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $role = Role::get();
-        return RoleResource::collection($role);
-
-        
+        $procedure = Procedure::get();
+        return ProcedureResource::collection($procedure);
     }
 
     /**
@@ -32,18 +30,13 @@ class RoleController extends Controller
      */
     public function store(Request $request)
     {
-        $role = Role::create($request->all());
-        return response()->json([
-            'status' => true,
-            'message' => "Role Created successfully!",
-            'role' => $role
-        ], 201);
+        //
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Role $role)
+    public function show(Procedure $procedure)
     {
         //
     }
@@ -51,7 +44,7 @@ class RoleController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Role $role)
+    public function edit(Procedure $procedure)
     {
         //
     }
@@ -59,7 +52,7 @@ class RoleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Role $role)
+    public function update(Request $request, Procedure $procedure)
     {
         //
     }
@@ -67,7 +60,7 @@ class RoleController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Role $role)
+    public function destroy(Procedure $procedure)
     {
         //
     }
