@@ -24,7 +24,7 @@ class StudentFactory extends Factory
             'dni' => fake()->unique()->regexify('[0-9]{8}'),
             'code' => fake()->unique()->numerify(fake()->numberBetween(2000, 2024) . str_pad(fake()->numberBetween(1, 12), 2, '0', STR_PAD_LEFT) . str_pad(fake()->numberBetween(1, 31), 2, '0', STR_PAD_LEFT) . fake()->numberBetween(10, 99)),
             'investigation_title' =>fake()->unique()->sentence(6, true),
-            'adviser_id' => fake()-> name(),
+            'adviser_id' => fake()-> md5(),
         ];
     }
 }

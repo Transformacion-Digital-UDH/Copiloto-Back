@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
         $data['name'] = "Estudiante";
         $data['email'] = "estudiante@udh.edu.pe";
         $data['password'] = bcrypt(123456);
-        $data['faculty'] = "ingeniería";
+        $data['school'] = "ingeniería";
         $data['program'] = "ingeniería de sistemas e informática";
         $data['role_id'] = "estudiante";
         \App\Models\User::create($data);
@@ -31,7 +31,7 @@ class UserSeeder extends Seeder
         $data['name'] = "Asesor";
         $data['email'] = "asesor@udh.edu.pe";
         $data['password'] = bcrypt(123456);
-        $data['faculty'] = "ingeniería";
+        $data['school'] = "ingeniería";
         $data['program'] = "ingeniería de sistemas e informática";
         $data['role_id'] = "asesor";
         \App\Models\User::create($data);
@@ -39,7 +39,7 @@ class UserSeeder extends Seeder
         $data['name'] = "PAISI";
         $data['email'] = "paisi@udh.edu.pe";
         $data['password'] = bcrypt(123456);
-        $data['faculty'] = "ingeniería";
+        $data['school'] = "ingeniería";
         $data['program'] = "ingeniería de sistemas e informática";
         $data['role_id'] = "secretaria_pa";
         \App\Models\User::create($data);
@@ -48,7 +48,7 @@ class UserSeeder extends Seeder
         $data['name'] = "FACULTAD";
         $data['email'] = "facultad@udh.edu.pe";
         $data['password'] = bcrypt(123456);
-        $data['faculty'] = "ingeniería";
+        $data['school'] = "ingeniería";
         $data['program'] = "ingeniería de sistemas e informática";
         $data['role_id'] = "secretaria_fa";
         \App\Models\User::create($data);
