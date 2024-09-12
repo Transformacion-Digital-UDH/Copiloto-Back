@@ -18,6 +18,7 @@ use App\Http\Controllers\Api\AuthController;
 // Rutas para AUTENTIFICACIÓN
 
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
+Route::post('login/google', [AuthController::class, 'loginGoogle']); // inicio de sesión
 Route::post('register', [AuthController::class, 'register']); // registrar usuario
 
 Route::middleware('auth:sanctum')->group(function () {

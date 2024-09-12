@@ -15,6 +15,8 @@ class UserSeeder extends Seeder
         $data['name'] = "admin";
         $data['email'] = "admin@udh.edu.pe";
         $data['password'] = bcrypt(123456);
+        $data['faculty'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
         $data['role_id'] = "admin";
         \App\Models\User::create($data);
 
@@ -23,7 +25,7 @@ class UserSeeder extends Seeder
         $data['password'] = bcrypt(123456);
         $data['faculty'] = "ingeniería";
         $data['program'] = "ingeniería de sistemas e informática";
-        $data['role_id'] = "student";
+        $data['role_id'] = "estudiante";
         \App\Models\User::create($data);
 
         $data['name'] = "Asesor";
@@ -31,7 +33,7 @@ class UserSeeder extends Seeder
         $data['password'] = bcrypt(123456);
         $data['faculty'] = "ingeniería";
         $data['program'] = "ingeniería de sistemas e informática";
-        $data['role_id'] = "adviser";
+        $data['role_id'] = "asesor";
         \App\Models\User::create($data);
 
         $data['name'] = "PAISI";
@@ -39,7 +41,7 @@ class UserSeeder extends Seeder
         $data['password'] = bcrypt(123456);
         $data['faculty'] = "ingeniería";
         $data['program'] = "ingeniería de sistemas e informática";
-        $data['role_id'] = "sec_pa";
+        $data['role_id'] = "secretaria_pa";
         \App\Models\User::create($data);
 
 
@@ -48,7 +50,16 @@ class UserSeeder extends Seeder
         $data['password'] = bcrypt(123456);
         $data['faculty'] = "ingeniería";
         $data['program'] = "ingeniería de sistemas e informática";
-        $data['role_id'] = "sec_fac";
+        $data['role_id'] = "secretaria_fa";
         \App\Models\User::create($data);
+
+        $data['name'] = "Kevin arnold flores pacheco";
+        $data['email'] = "2018110451@udh.edu.pe";
+        $data['password'] = bcrypt(123456);
+        $data['faculty'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
+        $data['role_id'] = "estudiante";
+        \App\Models\User::create($data);
+
     }
 }
