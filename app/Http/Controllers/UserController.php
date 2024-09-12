@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -54,4 +55,22 @@ class UserController extends Controller
     {
         //
     }
+
+    // Asignar rol a un usuario
+    public function assignRole(Request $request, $userId)
+    {
+        $user = User::find($userId);
+        $roleId = $request->input('role_id');
+        $role = Role::find($roleId);
+
+        if (!$role) {
+            return response()->json(['message' => 'Role not found'], 404);
+        }
+
+        $user->role = $roleId;
+        $user->save();
+
+        return response()->json(['message' => 'Role assigned successfully', 'user' => $user]);
+    }
+
 }

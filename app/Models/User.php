@@ -7,9 +7,13 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Relations\BelongsTo;
+use App\Models\Permission;
 
 class User extends Authenticatable
 {
+    protected $connection = 'mongodb';
 
     use HasApiTokens, HasFactory, Notifiable;
 
@@ -22,7 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'role_id',
     ];
 
     /**
@@ -45,48 +49,41 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // Métodos para verificar roles
-    public function hasRole($role)
+    // Relación con el rol
+    public function role(): BelongsTo
     {
-        return $this->role === $role;
+        return $this->belongsTo(Role::class, 'role_id');
     }
 
-    public function isStudent()
+    // Verificar si el usuario tiene un permiso específico basado en IDs de permisos
+    public function hasPermission($permissionName)
     {
-        return $this->role === 'student';
+        $role = $this->role()->first();
+
+        if (!$role) {
+            \Log::warning('User has no role assigned', ['user_id' => $this->id]);
+            return false;
+        }
+
+        // Obtener los IDs de los permisos del rol
+        $permissionIds = $role->permission_ids ?? [];
+
+        // Buscar el permiso por nombre
+        $permission = Permission::where('name', $permissionName)->first();
+
+        if (!$permission) {
+            \Log::warning('Permission not found', ['permission_name' => $permissionName]);
+            return false;
+        }
+
+        // Verificar si el ID del permiso está en el array de IDs del rol
+        return in_array($permission->_id, $permissionIds);
     }
 
-    public function isAdvisor()
-    {
-        return $this->role === 'advisor';
-    }
+    // Relaciones adicionales
 
-    public function isJurado()
-    {
-        return $this->role === 'jurado';
-    }
-
-    public function ispaisi()
-    {
-        return $this->role === 'paisi';
-    }
-
-    public function isfacultad()
-    {
-        return $this->role === 'facultad';
-    }
-
-    public function iscoordinador()
-    {
-        return $this->role === 'coordinador';
-    }
-
-    // Relaciones
-    
     public function student()
     {
         return $this->hasOne(Student::class);
     }
-
-
 }
