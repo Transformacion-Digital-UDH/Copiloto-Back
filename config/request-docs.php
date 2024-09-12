@@ -4,9 +4,9 @@ return [
     // changes doc title
     'title' => 'VRI - Api Docs C3',
     'enabled' => true,
-    // change it to true will make lrd to throw exception if rules in request class need to be changed
+    // change it to true will make lrd to throw exception if rules in request class need to be changedq
     // keep it false
-    'debug' => false,
+    'debug' => true,
 
     /*
     * Route where request docs will be served from laravel app.
@@ -64,8 +64,8 @@ return [
     // open api config
     // used to generate open api json
     'open_api' => [
-        'title' => 'Laravel Request Docs',
-        'description' => 'Laravel Request Docs',
+        'title' => 'API C3 VRI',
+        'description' => 'Esta es la API de C3 VRI',
         // default version that this library provides
         'version' => '3.0.0',
         // changeable

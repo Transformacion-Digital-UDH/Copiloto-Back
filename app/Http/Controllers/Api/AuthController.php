@@ -12,6 +12,45 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+    public function loginGoogle(Request $request)
+    {
+        $rules = [
+            'email' => 'required|string|email|max:60',
+        ];
+
+        $messages = [
+            'email.required' => 'El correo electrónico es requerido',
+            'email.email' => 'El correo electrónico no es un correo electronico',
+            'email.max' => 'El correo electrónico debe tener como maximo :max caracteres'
+        ];
+
+        $validator = Validator::make($request->all(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'error' => $validator->errors()->all()
+            ], 400);
+        }
+
+        if (!User::where('email', $request->email)->exists()) {
+            return response()->json([
+                'status' => false,
+                'error' => ['Correo y/o contraseña incorrectos.'],
+            ], 401);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Usuario autenticado correctamente.',
+            'token' => $token,
+            'data' =>  new UserResource($user)
+        ], 200);
+    }
+
     public function login(Request $request)
     {
         $rules = [
@@ -40,7 +79,7 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'status' => false,
-                'error' => ['Las credenciales no son correctas.'],
+                'error' => ['Correo y/o contraseña incorrectos.'],
             ], 401);
         }
 
@@ -72,7 +111,7 @@ class AuthController extends Controller
             'user' => [
                 'name' => $request->user()->name,
                 'email' => $request->user()->email,
-                'role' => $request->user()->role,
+                'role' => $request->user()->role_id,
             ],
         ], 200);
     }
@@ -80,10 +119,8 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $rules = [
-            'name' => 'required|string|max:60|min:15',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:8|max:15',
-            'role' => 'required|string|in:admin,estudiante,paisi,coordinador,facultad'
         ];
 
         $messages = [
@@ -94,8 +131,6 @@ class AuthController extends Controller
             'password.required' => 'La contraseña es requerido',
             'password.min' => 'La contraseña debe tener al menos :min caracteres',
             'password.max' => 'La contraseña debe tener como maximo :max caracteres',
-            'role.in' => 'El rol debe ser admin, estudiante, paisi, coordinador o facultad',
-            'role.required' => 'El rol es requerido',
         ];
 
         $validator = Validator::make($request->input(), $rules, $messages);
@@ -103,7 +138,7 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
-                'errors' => $validator->errors()->all()
+                'error' => $validator->errors()->all()
             ], 400);
         }
 
@@ -111,18 +146,14 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role' => $request->role
+            'role_id' => 'estudiante'
         ]);
 
         return response()->json([
             'status' => true,
             'message' => 'Usuario registrado correctamente',
-            'user' => [
-                'name' => $user->name,
-                'email' => $user->email,
-                'role' => $user->role,
-            ],
-            'token' => $user->createToken('api_token')->plainTextToken
+            'token' => $user->createToken('api_token')->plainTextToken,
+            'data' => new UserResource($user)
         ], 200);
     }
 }
