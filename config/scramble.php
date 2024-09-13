@@ -78,7 +78,7 @@ return [
      */
     'servers' => [
         'Live' => 'api',
-        'Prod' => 'https://scramble.dedoc.co/api'
+        'Prod' => 'https://titulacion-back.abimaelfv.site'
     ],
 
     'middleware' => [
