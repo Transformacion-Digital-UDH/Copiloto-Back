@@ -120,7 +120,48 @@ class AuthController extends Controller
     {
         $rules = [
             'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|min:8|max:15',
+            'password' => 'required|string|min:6|max:15',
+        ];
+
+        $messages = [
+            'email.required' => 'El correo electrónico es requerido',
+            'email.email' => 'El correo electrónico no es un correo electronico',
+            'email.unique' => 'El correo electrónico ya se encuentra registrado',
+            'email.max' => 'El correo electrónico debe tener como maximo :max caracteres',
+            'password.required' => 'La contraseña es requerido',
+            'password.min' => 'La contraseña debe tener al menos :min caracteres',
+            'password.max' => 'La contraseña debe tener como maximo :max caracteres',
+        ];
+
+        $validator = Validator::make($request->input(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'error' => $validator->errors()->all()
+            ], 400);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => 'estudiante'
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Usuario registrado correctamente',
+            'token' => $user->createToken('api_token')->plainTextToken,
+            'data' => new UserResource($user)
+        ], 200);
+    }
+
+    public function registerGoogle(Request $request)
+    {
+        $rules = [
+            'email' => 'required|string|email|max:100|unique:users',
+            'password' => 'required|string|min:6|max:15',
         ];
 
         $messages = [
