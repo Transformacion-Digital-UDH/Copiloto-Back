@@ -39,21 +39,21 @@ Route::apiResource('juries', \App\Http\Controllers\JuryController::class); //Ver
 
 //Rutas para ESTUDIANTES
 Route::apiResource('students', \App\Http\Controllers\StudentController::class); //Ver estudiantes
-Route::apiResource('documents', \App\Http\Controllers\DocumentController::class); //Ver estudiantes
+Route::apiResource('documents', \App\Http\Controllers\DocumentController::class); //Ver documentos
 Route::apiResource('applications', \App\Http\Controllers\ApplicationController::class); //Ver estudiantes
 
 //Rutas para ADVISER (ASESORES Y JURADOS)
 Route::apiResource('advisers', \App\Http\Controllers\AdviserController::class); //Ver revisores (asesores)
 
 //Rutas para INVESTIGACIONES(TESIS, E INFORME FINAL)
-Route::apiResource('investigations', \App\Http\Controllers\InvestigationController::class); //Ver revisores (asesores)
-Route::apiResource('tipeinvestigations', \App\Http\Controllers\TipeInvestigationController::class); //Ver revisores (asesores)
-Route::apiResource('corrections', \App\Http\Controllers\CorrectionController::class); //Ver revisores (asesores)
+Route::apiResource('investigations', \App\Http\Controllers\InvestigationController::class); //Ver investigaciones 
+Route::apiResource('typeinvestigations', \App\Http\Controllers\TypeInvestigationController::class); //Ver tipo de investigacion 
+Route::apiResource('corrections', \App\Http\Controllers\CorrectionController::class); //Ver correcciones 
 
 //Rutas para Status
-Route::apiResource('status', \App\Http\Controllers\StatusController::class); //Ver revisores (asesores)
+Route::apiResource('status', \App\Http\Controllers\StatusController::class); //Ver estados 
 
 //Rutas para trámites
-Route::apiResource('requirements', \App\Http\Controllers\RequirementController::class); //Ver revisores (asesores)
-Route::apiResource('procedures', \App\Http\Controllers\ProcedureController::class); //Ver revisores (asesores)
+Route::apiResource('requirements', \App\Http\Controllers\RequirementController::class); //Ver requisitos 
+Route::apiResource('procedures', \App\Http\Controllers\ProcedureController::class); //Ver procesos
 

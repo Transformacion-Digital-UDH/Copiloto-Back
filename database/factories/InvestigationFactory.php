@@ -17,7 +17,7 @@ class InvestigationFactory extends Factory
     public function definition(): array
     {
         return [
-            'tipe_id' => fake()->md5(),
+            'type_id' => fake()->md5(),
             'archive' => fake()->mimeType(),
             'student_id' => fake()->md5(),
             'jury_id' => array(fake()->md5(),fake()->md5(),fake()->md5(),),

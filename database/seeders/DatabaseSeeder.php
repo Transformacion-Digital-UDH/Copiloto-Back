@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(JurySeeder::class);
         $this->call(AdviserSeeder::class);
         $this->call(StudentSeeder::class);
-        $this->call(TipeInvestigationSeeder::class);
+        $this->call(TypeInvestigationSeeder::class);
         $this->call(InvestigationSeeder::class);
         $this->call(StatusSeeder::class);
         $this->call(CorrectionSeeder::class);

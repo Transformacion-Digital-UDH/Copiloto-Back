@@ -15,7 +15,7 @@ class InvestigationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'tipo_id' => $this->tipe_id,
+            'tipo_id' => $this->type_id,
             'archivo' => $this->archive,
             'estudiante_id' => $this->student_id,
             'jurado_id' => $this->jury_id,

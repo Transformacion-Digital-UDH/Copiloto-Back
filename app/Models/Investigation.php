@@ -11,7 +11,7 @@ class Investigation extends Model
     protected $connecion = 'mongodb';
 
     protected $fillable = [
-        'tipe_id',
+        'type_id',
         'archive',
         'student_id',
         'jury_id',
