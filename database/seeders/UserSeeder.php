@@ -53,8 +53,40 @@ class UserSeeder extends Seeder
         $data['role_id'] = "secretaria_fa";
         \App\Models\User::create($data);
 
-        $data['name'] = "Kevin arnold flores pacheco";
+        $data['name'] = "KEVIN ARNOLD FLORES PACHECO";
         $data['email'] = "2018110451@udh.edu.pe";
+        $data['password'] = bcrypt(123456);
+        $data['faculty'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
+        $data['role_id'] = "estudiante";
+        \App\Models\User::create($data);
+
+        $data['name'] = "RENZO PAOLO LUCIANO ESTELA";
+        $data['email'] = "2018110461@udh.edu.pe";
+        $data['password'] = bcrypt(123456);
+        $data['faculty'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
+        $data['role_id'] = "estudiante";
+        \App\Models\User::create($data);
+
+        $data['name'] = "JOEL JOSUE INQUIEL CALDERON";
+        $data['email'] = "2018110397@udh.edu.pe";
+        $data['password'] = bcrypt(123456);
+        $data['faculty'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
+        $data['role_id'] = "estudiante";
+        \App\Models\User::create($data);
+
+        $data['name'] = "RENZO ANDRE PANDURO MOSCOSO";
+        $data['email'] = "2020160035@udh.edu.pe";
+        $data['password'] = bcrypt(123456);
+        $data['faculty'] = "ingeniería";
+        $data['program'] = "ingeniería de sistemas e informática";
+        $data['role_id'] = "estudiante";
+        \App\Models\User::create($data);
+
+        $data['name'] = "MARYCIELO MARTEL";
+        $data['email'] = "2020210311@udh.edu.pe";
         $data['password'] = bcrypt(123456);
         $data['faculty'] = "ingeniería";
         $data['program'] = "ingeniería de sistemas e informática";

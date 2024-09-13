@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\AuthController;
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
 Route::post('login/google', [AuthController::class, 'loginGoogle']); // inicio de sesión
 Route::post('register', [AuthController::class, 'register']); // registrar usuario
+Route::post('register/google', [AuthController::class, 'registerGoogle']); // inicio de sesión
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/logout', [AuthController::class, 'logout']); //cierre de sesión del token
