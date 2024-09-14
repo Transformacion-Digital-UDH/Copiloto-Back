@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,24 +39,28 @@ class AuthController extends Controller
         if (!Auth::attempt($request->only('email', 'password'))) {
             return response()->json([
                 'status' => false,
-                'error' => ['Las credenciales no son correctas.'],
+                'error' => 'Las credenciales no son correctas.',
             ], 401);
         }
 
-        $user = Auth::user();
-        $token = $user->createToken('api_token')->plainTextToken;
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user();
+            $token = $user->createToken('api_token')->plainTextToken;
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Usuario autenticado correctamente.',
-            'token' => $token,
-            'data' =>  new UserResource($user)
-        ], 200);
+            return response()->json([
+                'status' => true,
+                'message' => 'Usuario autenticado correctamente.',
+                'token' => $token,
+            ], 200);
+        }
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
-        auth()->user()->tokens()->delete();
+        
+        $user = $request->user();
+
+        $user->currentAccessToken()->delete();
 
         return response()->json([
             'status' => true,
@@ -83,7 +86,7 @@ class AuthController extends Controller
             'name' => 'required|string|max:60|min:15',
             'email' => 'required|string|email|max:100|unique:users',
             'password' => 'required|string|min:8|max:15',
-            'role' => 'required|string|in:admin,estudiante,paisi,coordinador,facultad'
+            'role' => 'required|string|in:admin,student,asesor,paisi,coordinador,facultad'
         ];
 
         $messages = [
@@ -94,7 +97,7 @@ class AuthController extends Controller
             'password.required' => 'La contraseña es requerido',
             'password.min' => 'La contraseña debe tener al menos :min caracteres',
             'password.max' => 'La contraseña debe tener como maximo :max caracteres',
-            'role.in' => 'El rol debe ser admin, estudiante, paisi, coordinador o facultad',
+            'role.in' => 'El rol debe ser admin, student, paisi, coordinador o facultad',
             'role.required' => 'El rol es requerido',
         ];
 
@@ -113,6 +116,17 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'role' => $request->role
         ]);
+
+        // Crea el registro en la colección students si el rol es estudiante
+        if ($request->role === 'student') {
+            \App\Models\Student::create([
+                'user_id' => $user->_id,
+                'thesis_title' => '',
+                'thesis_status' => '',
+                'document_url' => '',
+                'advisor_id' => ''
+            ]);
+        }
 
         return response()->json([
             'status' => true,

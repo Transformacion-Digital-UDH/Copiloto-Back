@@ -2,16 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Relations\BelongsToMany;
 
 class Role extends Model
 {
-    use HasFactory;
+    protected $collection = 'roles';
+    protected $fillable = ['name', 'permission_ids']; // 'permission_ids' es un array de IDs de permisos
+    
+    public function users()
+    {
+        return $this->hasMany(User::class, 'role_id');
+    }
 
-    protected $connection = 'mongodb';
-
-    protected $fillable = [
-        'name',
-    ];
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, null, 'permission_ids', '_id');
+    }
 }
+

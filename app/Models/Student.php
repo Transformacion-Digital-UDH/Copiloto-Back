@@ -5,19 +5,29 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
 
+
+
 class Student extends Model
 {
     use HasFactory;
 
-    protected $connecion = 'mongodb';
-
     protected $fillable = [
-        'name',
-        'lastname_f', //apellido paterno
-        'lastname_m', //apellido materno
-        'dni',
-        'code',
-        'investigation_title',
-        'adviser_id',
+        'user_id',
+        'thesis_title',
+        'thesis_status',
+        'document_url',
+        'advisor_id',
     ];
+
+    // Relación con el usuario
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // Relación con el asesor (otro usuario)
+    public function advisor()
+    {
+        return $this->belongsTo(User::class, 'advisor_id');
+    }
 }
