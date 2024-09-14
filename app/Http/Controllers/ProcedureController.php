@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\TipeInvestigationResource;
-use App\Models\TipeInvestigation;
+use App\Http\Resources\ProcedureResource;
+use App\Models\Procedure;
 use Illuminate\Http\Request;
 
-class TipeInvestigationController extends Controller
+class ProcedureController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        $tipeInvestigation = TipeInvestigation::get();
-        return TipeInvestigationResource::collection($tipeInvestigation);
+        $procedure = Procedure::get();
+        return ProcedureResource::collection($procedure);
     }
 
     /**
@@ -36,7 +36,7 @@ class TipeInvestigationController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(TipeInvestigation $tipeInvestigation)
+    public function show(Procedure $procedure)
     {
         //
     }
@@ -44,7 +44,7 @@ class TipeInvestigationController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(TipeInvestigation $tipeInvestigation)
+    public function edit(Procedure $procedure)
     {
         //
     }
@@ -52,7 +52,7 @@ class TipeInvestigationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, TipeInvestigation $tipeInvestigation)
+    public function update(Request $request, Procedure $procedure)
     {
         //
     }
@@ -60,7 +60,7 @@ class TipeInvestigationController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(TipeInvestigation $tipeInvestigation)
+    public function destroy(Procedure $procedure)
     {
         //
     }

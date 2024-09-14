@@ -5,7 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
-class TipeInvestigationSeeder extends Seeder
+class TypeInvestigationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -13,9 +13,9 @@ class TipeInvestigationSeeder extends Seeder
     public function run(): void
     {
         $data['name'] = "Proyecto de tesis";
-        \App\Models\TipeInvestigation::create($data);
+        \App\Models\TypeInvestigation::create($data);
 
         $data['name'] = "Informe final";
-        \App\Models\TipeInvestigation::create($data);
+        \App\Models\TypeInvestigation::create($data);
     }
 }

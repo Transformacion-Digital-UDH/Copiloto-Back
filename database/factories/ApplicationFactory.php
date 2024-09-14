@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Jury>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Application>
  */
-class JuryFactory extends Factory
+class ApplicationFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,7 +17,9 @@ class JuryFactory extends Factory
     public function definition(): array
     {
         return [
-            'position' => fake()->randomElement(["presidente", "secretario", "vocal"]),
+            'student_id' => fake()-> md5(),
+            'adviser_id' => fake()-> md5(),
+            'state_id' => fake()-> md5(),
         ];
     }
 }

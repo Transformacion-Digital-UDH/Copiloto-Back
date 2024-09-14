@@ -5,9 +5,9 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Investigation>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Correction>
  */
-class InvestigationFactory extends Factory
+class CorrectionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -17,10 +17,11 @@ class InvestigationFactory extends Factory
     public function definition(): array
     {
         return [
-            'type_id' => fake()->md5(),
+            'investigation_id' => fake()-> md5(),
+            'adviser_id' => fake()-> md5(),
+            'state_id' => fake()-> md5(),
             'archive' => fake()->mimeType(),
-            'student_id' => fake()->md5(),
-            'jury_id' => array(fake()->md5(),fake()->md5(),fake()->md5(),),
+            'comment' => fake()->sentence(6, true),
         ];
     }
 }
