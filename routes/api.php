@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\StudentController;
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
@@ -31,6 +32,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/permissions', [PermissionController::class, 'createPermission'])->middleware('permission:create-permissions'); //Crear permisos (Pueden ser muchos o un permiso)
 });
 
+Route::get('/students', [StudentController::class, 'index']); //Listar todos los Estudiantes
 
 
 

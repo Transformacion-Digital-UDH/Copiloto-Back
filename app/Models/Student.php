@@ -12,11 +12,12 @@ class Student extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'thesis_title',
-        'thesis_status',
-        'document_url',
-        'advisor_id',
+        'stu_name',
+        'stu_lastname_m',
+        'stu_latsname_f',
+        'stu_dni',
+        'stu_code',
+        'stu_user_id',
     ];
 
     // Relación con el usuario
