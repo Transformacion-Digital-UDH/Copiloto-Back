@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\SolicitudeController;
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
@@ -32,7 +33,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/permissions', [PermissionController::class, 'createPermission'])->middleware('permission:create-permissions'); //Crear permisos (Pueden ser muchos o un permiso)
     // Rutas de asesor
     Route::get('/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
+});
 
+//RUTAS PARA SOLICITUDES
+Route::middleware(['auth:sanctum'])->group(function () {
+    Route::post('/solicitudes', [SolicitudeController::class, 'store']); // Registrar tesis
+    Route::put('/solicitudes/{id}', [SolicitudeController::class, 'update'])->middleware('permission:update-thesis'); // Actualizar título de tesis
 });
 
 

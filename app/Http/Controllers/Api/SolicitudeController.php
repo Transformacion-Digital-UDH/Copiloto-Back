@@ -3,37 +3,40 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Solicitude;
 use Illuminate\Http\Request;
 
 class SolicitudeController extends Controller
 {
-    public function registerThesis(Request $request)
+    // Método para registrar una nueva solicitud con el título de la tesis
+    public function store(Request $request)
     {
-        $request->validate([
-            'thesis_title' => 'required|string|max:255',
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+            'student_id' => 'required|exists:students,_id', // Verificar que el estudiante existe
         ]);
 
-        $user = auth()->user();
-        $student = $user->student;
+        $solicitude = Solicitude::create([
+            'title' => $validatedData['title'],
+            'student_id' => $validatedData['student_id'],
+            // Otros campos si es necesario
+        ]);
 
-        if (!$student) {
-            return response()->json(['message' => 'Estudiante no encontrado.'], 404);
-        }
+        return response()->json(['message' => 'Tesis registrada exitosamente', 'solicitude' => $solicitude], 201);
+    }
 
-        // Verificar si el usuario tiene el rol de student
-        if ($user->role !== 'student') {
-            return response()->json(['message' => 'Acción no permitida.'], 403);
-        }
+    // Método para actualizar el título de la tesis en una solicitud existente
+    public function update(Request $request, $id)
+    {
+        $validatedData = $request->validate([
+            'title' => 'required|string|max:255',
+        ]);
 
-        if ($student->thesis_title) {
-            return response()->json(['message' => 'Ya tienes un proyecto de tesis registrado.'], 400);
-        }
+        $solicitude = Solicitude::findOrFail($id);
+        $solicitude->update([
+            'title' => $validatedData['title'],
+        ]);
 
-        $student->thesis_title = $request->thesis_title;
-        $student->thesis_status = 'En Revisión';
-        $student->document_url = $request->document_url;
-        $student->save();
-
-        return response()->json(['message' => 'Proyecto de tesis registrado correctamente.']);
+        return response()->json(['message' => 'Título de tesis actualizado', 'solicitude' => $solicitude]);
     }
 }
