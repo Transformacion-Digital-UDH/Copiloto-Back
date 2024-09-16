@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\UserResource;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -40,7 +42,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('api_token')->plainTextToken;
 
         return response()->json([
             'status' => true,
@@ -90,6 +92,7 @@ class AuthController extends Controller
                 'status' => true,
                 'message' => 'Usuario autenticado correctamente.',
                 'token' => $token,
+                'data' =>  new UserResource($user)
             ], 200);
         }
     }
@@ -111,10 +114,10 @@ class AuthController extends Controller
     {
         return response()->json([
             'status' => true,
-            'user' => [
-                'name' => $request->user()->name,
-                'email' => $request->user()->email,
-                'role' => $request->user()->role_id,
+            'data' => [
+                'nombre' => $request->user()->name,
+                'correo' => $request->user()->email,
+                'rol' => $request->user()->role->name,
             ],
         ], 200);
     }
@@ -149,7 +152,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => 'estudiante'
+            'role_id' => Role::where('name', 'estudiante')->value('_id'),
         ]);
 
         // Crea el registro en la colección students si el rol es estudiante
@@ -201,7 +204,7 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => 'estudiante'
+            'role_id' => Role::where('name', 'estudiante')->value('_id'),
         ]);
 
         return response()->json([
