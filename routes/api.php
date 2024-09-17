@@ -44,12 +44,15 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/solicitudes/{id}', [SolicitudeController::class, 'updateSolicitude'])->middleware('permission:update-solicitude');
     // Ruta para actualizar el estado de una solicitud
     Route::put('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
+    // Ruta para ver solicitudes aceptadas para -> PAISI
+    Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
+
 });
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    
+Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
     Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
 
 });
+
 

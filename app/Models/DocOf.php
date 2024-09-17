@@ -14,7 +14,6 @@ class DocOf extends Model
 
 
     protected $fillable = [
-        "_id",
         "docof_student_id",
         "docof_num_of",
         "docof_status",

@@ -119,6 +119,13 @@ class SolicitudeController extends Controller
             'solicitude' => $solicitude
         ], 200);
     }
-
+    public function getSolicitudeForPaisi()
+    {
+        // Extrae solicitud por la id del estudiante con estado pendiente
+        $solicitudes = Solicitude::where('sol_status', 'Aceptado')->get();
+                                    
+        // Devolver los datos del estudiante junto con sus solicitudes
+        return response()->json($solicitudes, 200);
+    }
 
 }

@@ -14,7 +14,6 @@ class DocResolution extends Model
 
 
     protected $fillable = [
-        "_id",
         "docres_student_id",
         "docres_status",
         "docres_num_res",
