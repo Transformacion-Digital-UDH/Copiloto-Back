@@ -1,0 +1,21 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use MongoDB\Laravel\Eloquent\Model;
+
+class DocResolution extends Model
+{
+    use HasFactory;
+
+    protected $connection = 'mongodb';
+
+    protected $fillable = [
+        "_id",
+        "docres_student_id",
+        "docres_status",
+        "docres_num_res",
+        "docres_date_emit"
+    ];
+}
