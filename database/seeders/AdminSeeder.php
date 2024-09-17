@@ -16,7 +16,10 @@ class AdminSeeder extends Seeder
             'create-roles',
             'view-roles',
             'assign-permissions',
-            'create-permissions'
+            'create-permissions',
+            'view-permissions',
+            'view-role-permissions'
+
         ];
 
         foreach ($permissions as $permissionName) {

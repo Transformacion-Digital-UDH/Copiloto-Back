@@ -10,6 +10,8 @@ class DocResolution extends Model
     use HasFactory;
 
     protected $connection = 'mongodb';
+    protected $collection = 'docresolutions'; // Nombre de la colección en MongoDB
+
 
     protected $fillable = [
         "_id",

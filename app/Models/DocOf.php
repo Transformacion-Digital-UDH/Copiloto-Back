@@ -10,6 +10,8 @@ class DocOf extends Model
     use HasFactory;
     
     protected $connection = 'mongodb';
+    protected $collection = 'docofs'; // Nombre de la colección en MongoDB
+
 
     protected $fillable = [
         "_id",

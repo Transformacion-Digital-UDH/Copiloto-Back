@@ -7,7 +7,10 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\SolicitudeController;
+<<<<<<< HEAD
 use App\Http\Controllers\StudentController;
+=======
+>>>>>>> 81e81a3b3703978d5eaad4f5018cb369bb08d9d9
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
@@ -34,10 +37,20 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/permissions', [PermissionController::class, 'createPermission'])->middleware('permission:create-permissions'); //Crear permisos (Pueden ser muchos o un permiso)
     // Rutas de asesor
     Route::get('/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
+});
 
+<<<<<<< HEAD
     // Rutas para paisi
 
 
+=======
+//RUTAS PARA SOLICITUDES
+Route::middleware(['auth:sanctum'])->group(function () {
+    // Actualizar título de tesis y asesor
+    Route::put('/solicitudes/{id}', [SolicitudeController::class, 'updateSolicitude'])->middleware('permission:update-solicitude');
+    // Ruta para actualizar el estado de una solicitud
+    Route::put('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
+>>>>>>> 81e81a3b3703978d5eaad4f5018cb369bb08d9d9
 });
 Route::get('/students', [StudentController::class, 'index']); //Listar todos los Estudiantes
 Route::get('/solicitudes', [SolicitudeController::class, 'index']); //Listar todos los Estudiantes
