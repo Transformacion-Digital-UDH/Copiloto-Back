@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdviserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
@@ -30,9 +31,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Rutas para permisos
     Route::get('/permissions', [PermissionController::class, 'getAllPermissions'])->middleware('permission:view-permissions'); //Listar todos los permisos
     Route::post('/permissions', [PermissionController::class, 'createPermission'])->middleware('permission:create-permissions'); //Crear permisos (Pueden ser muchos o un permiso)
+    // Rutas de asesor
+    Route::get('/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
+
+    // Rutas para paisi
+    Route::get('/student/getInfo/{student_id}', [StudentController::class, 'index']); //Listar todos los Estudiantes
+
+
 });
-
-Route::get('/students', [StudentController::class, 'index']); //Listar todos los Estudiantes
-
 
 
