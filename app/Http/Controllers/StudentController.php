@@ -21,20 +21,21 @@ class StudentController extends Controller
     public function getInfoStudentById($student_id)
     {
         // Recibe el id del estudiante y busca
-
         $student = Student::where('_id', $student_id)->first();
 
         if (!$student) {
             return response()->json(['message' => 'El estudiante no existe'], 404);
         }
-    
+
+        // Extrae solicitud por la id del estudiante con estado pendiente
         $solicitudes = Solicitude::where('sol_student_id', $student->_id)
                                     ->where('sol_status', 'Pendiente')->get();
-
+                                    
         if ($solicitudes->isEmpty()) {
             return response()->json(['message' => 'Este estudiante no inició su trámite'], 404);
         }
 
+        // Busca Documentos Oficio por id del estudiante
         $doc_of = DocOf::where('docof_student_id', $student->_id)->get();
 
         if ($doc_of->isEmpty()) {
@@ -45,6 +46,7 @@ class StudentController extends Controller
             ], 200);
         }
 
+        // Busca Documentos Resolucion por id del estudiante
         $doc_resolutions = DocResolution::where('docres_student_id', $student->_id)->get();
 
         if ($doc_resolutions->isEmpty()) {
