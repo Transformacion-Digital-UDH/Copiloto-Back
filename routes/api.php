@@ -7,10 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\SolicitudeController;
-<<<<<<< HEAD
 use App\Http\Controllers\StudentController;
-=======
->>>>>>> 81e81a3b3703978d5eaad4f5018cb369bb08d9d9
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
