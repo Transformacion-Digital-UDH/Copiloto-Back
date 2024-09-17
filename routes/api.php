@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\SolicitudeController;
 use App\Http\Controllers\StudentController;
 
 // rutas para autenticacion
@@ -35,9 +36,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
 
     // Rutas para paisi
-    Route::get('/student/getInfo/{student_id}', [StudentController::class, 'index']); //Listar todos los Estudiantes
 
 
 });
+Route::get('/students', [StudentController::class, 'index']); //Listar todos los Estudiantes
+Route::get('/solicitudes', [SolicitudeController::class, 'index']); //Listar todos los Estudiantes
+
 
 
