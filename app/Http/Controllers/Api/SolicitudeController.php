@@ -8,7 +8,38 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class SolicitudeController extends Controller
-{
+{   
+    //Crear solicitude después del registro del estudiante
+    public function store(Request $request)
+    {
+        // Validar que el student_id está presente
+        $validatedData = $request->validate([
+            'student_id' => 'required|string|exists:students,_id',
+        ]);
+
+        // Verificar si ya existe una solicitud en estado 'pending' o 'in-progress' para este estudiante
+        $existingSolicitude = Solicitude::where('student_id', $validatedData['student_id'])
+                                        ->whereIn('sol_status', ['pending', 'in-progress']) // Estados que deseas evitar duplicar
+                                        ->first();
+
+        if ($existingSolicitude) {
+            return response()->json([
+                'message' => 'El estudiante ya tiene una solicitud en proceso.',
+                'data' => $existingSolicitude
+            ], 409); // Código 409: Conflict
+        }
+
+        // Crear la solicitud si no existe una en estado pendiente
+        $solicitude = Solicitude::create([
+            'sol_title_inve' => null, // Inicialmente vacío
+            'sol_adviser_id' => null, // Inicialmente vacío
+            'student_id' => $validatedData['student_id'], // ID del estudiante
+            'sol_status' => 'pending' // Estado inicial pendiente
+        ]);
+
+        return response()->json(['message' => 'Solicitude created successfully', 'data' => $solicitude], 201);
+    }
+
     // Actualizar título de tesis y asesor
     public function updateSolicitude(Request $request, $id)
     {
