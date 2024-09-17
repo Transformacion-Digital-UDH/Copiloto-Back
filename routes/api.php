@@ -55,4 +55,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 });
 
+Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
 

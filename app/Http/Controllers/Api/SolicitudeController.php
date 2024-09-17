@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\Adviser;
 use App\Models\Solicitude;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -128,4 +129,37 @@ class SolicitudeController extends Controller
         return response()->json($solicitudes, 200);
     }
 
+    public function getSolicitudeToAdviser($adviser_id)
+    {
+        // Recibe el id del Asesor
+        $adviser = Adviser::where('_id', $adviser_id)->first();
+
+        if (!$adviser) {
+            return response()->json(['message' => 'El asesor no existe'], 404);
+        }
+
+        // Extrae solicitud por la id del asesor
+         $solicitudes = Solicitude::where('sol_adviser_id', $adviser->_id)->get();
+
+        if ($solicitudes->isEmpty()) {
+            return response()->json(['message' => 'Este asesor no tiene solicitudes'], 404);
+        }
+
+       // Ordenando las solicitudes
+        $orden = $solicitudes->sortBy(function ($solicitud) {
+            switch ($solicitud->sol_status) {
+                case 'Pendiente':
+                    return 1;
+                case 'Aceptado':
+                    return 2;
+                case 'Rechazado':
+                    return 3;
+            }
+        });
+
+        // Devolver los datos de las solicitudes ordenadas
+        return response()->json([
+            'solicitudes' => $orden->values(),
+        ], 200);
+    }
 }
