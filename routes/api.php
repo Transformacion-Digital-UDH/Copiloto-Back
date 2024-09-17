@@ -37,8 +37,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 //RUTAS PARA SOLICITUDES
 Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('/solicitudes', [SolicitudeController::class, 'store']); // Registrar tesis
-    Route::put('/solicitudes/{id}', [SolicitudeController::class, 'update'])->middleware('permission:update-thesis'); // Actualizar título de tesis
+    // Actualizar título de tesis y asesor
+    Route::put('/solicitudes/{id}', [SolicitudeController::class, 'updateSolicitude'])->middleware('permission:update-solicitude');
+    // Ruta para actualizar el estado de una solicitud
+    Route::put('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
 });
 
 

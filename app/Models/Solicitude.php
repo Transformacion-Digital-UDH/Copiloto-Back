@@ -11,8 +11,11 @@ class Solicitude extends Model
     protected $collection = 'solicitudes';
     
     protected $fillable = [
-        'title',   // Campo para almacenar el título de la tesis
+        'sol_title_inve',   // Campo para almacenar el título de la tesis
+        'sol_adviser_id',
         'student_id', // ID del estudiante que hace la solicitud
+        'sol_status'
+
     ];
 
     // Relación con el modelo Student 
