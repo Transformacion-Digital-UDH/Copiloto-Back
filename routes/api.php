@@ -46,7 +46,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
     // Ruta para ver solicitudes aceptadas para -> PAISI
     Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
-
+    // Ruta para listar solicitudes ordenando por estado (PENDIENTE, ACEPTADO, RECHAZADO) por id de asesor
+    Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
+    
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {   
@@ -55,5 +57,4 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 });
 
-Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
 

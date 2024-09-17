@@ -134,6 +134,7 @@ class SolicitudeController extends Controller
         // Recibe el id del Asesor
         $adviser = Adviser::where('_id', $adviser_id)->first();
 
+        // Revisa si el asesor existe
         if (!$adviser) {
             return response()->json(['message' => 'El asesor no existe'], 404);
         }
@@ -157,7 +158,7 @@ class SolicitudeController extends Controller
             }
         });
 
-        // Devolver los datos de las solicitudes ordenadas
+        // Devuelve los datos de las solicitudes ordenadas
         return response()->json([
             'solicitudes' => $orden->values(),
         ], 200);
