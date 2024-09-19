@@ -310,7 +310,7 @@ class UserSeeder extends Seeder
             switch ($user['role']) {
                 case 'estudiante':
                     \DB::table('students')->insert([
-                        'st_user_id' => $createdUser->_id,
+                        'user_id' => $createdUser->_id,
                         'stu_name' => $user['role_data']['stu_name'],
                         'stu_lastname_m' => $user['role_data']['stu_lastname_m'],
                         'stu_latsname_f' => $user['role_data']['stu_latsname_f'],
@@ -321,7 +321,7 @@ class UserSeeder extends Seeder
                     break;
                 case 'asesor':
                     \DB::table('advisers')->insert([
-                        'adv_user_id' => $createdUser->_id,
+                        'user_id' => $createdUser->_id,
                         'adv_name' => $user['role_data']['adv_name'],
                         'adv_lastname_m' => $user['role_data']['adv_lastname_m'],
                         'adv_latsname_f' => $user['role_data']['adv_latsname_f'],
@@ -332,12 +332,12 @@ class UserSeeder extends Seeder
                     break;
                 case 'paisi':
                     \DB::table('paisis')->insert([
-                        'pa_user_id' => $createdUser->_id,
+                        'user_id' => $createdUser->_id,
                     ]);
                     break;
                 case 'facultad':
                     \DB::table('faculties')->insert([
-                        'fa_user_id' => $createdUser->_id,
+                        'user_id' => $createdUser->_id,
                     ]);
                     break;
             }

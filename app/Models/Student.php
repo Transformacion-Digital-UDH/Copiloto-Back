@@ -6,25 +6,26 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use MongoDB\Laravel\Eloquent\Model;
 
-
-
 class Student extends Model
 {
     use HasFactory;
-
+    
+    protected $connection = 'mongodb';
+    protected $collection = 'students';
+    
     protected $fillable = [
         'stu_name',
         'stu_lastname_m',
         'stu_latsname_f',
         'stu_dni',
         'stu_code',
-        'stu_user_id',
+        'user_id',
     ];
 
     // Relación con el usuario
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     // Relación con el asesor (otro usuario)
