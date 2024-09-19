@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\SolicitudeController;
+use App\Http\Controllers\GoogleDocumentController;
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
@@ -45,4 +46,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
 });
 
-
+//RUTA PARA DOCUMENTO GOOGLE
+Route::post('/create-document', [GoogleDocumentController::class, 'createDocument']); //Crear gocumento de google docs (Tesis)
+Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'getDocumentLink']); //Obtener link del documento de google docs (Tesis)

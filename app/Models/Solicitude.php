@@ -14,7 +14,8 @@ class Solicitude extends Model
         'sol_title_inve',   // Campo para almacenar el título de la tesis
         'sol_adviser_id',
         'student_id', // ID del estudiante que hace la solicitud
-        'sol_status'
+        'sol_status',
+        'docs_link'
 
     ];
 
