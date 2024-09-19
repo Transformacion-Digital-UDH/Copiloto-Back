@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use MongoDB\Laravel\Eloquent\Model;
 
 
@@ -12,11 +13,12 @@ class Student extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
-        'thesis_title',
-        'thesis_status',
-        'document_url',
-        'advisor_id',
+        'stu_name',
+        'stu_lastname_m',
+        'stu_latsname_f',
+        'stu_dni',
+        'stu_code',
+        'stu_user_id',
     ];
 
     // Relación con el usuario
@@ -29,5 +31,23 @@ class Student extends Model
     public function advisor()
     {
         return $this->belongsTo(User::class, 'advisor_id');
+    }
+
+    // Relación con solicitude (Muchos - Solicitudes)
+    public function Solicitude(): BelongsTo
+    {
+        return $this->belongsTo(Solicitude::class);
+    }
+
+    // Relación con DocResolution (Muchos - Documentos Resolucion)
+    public function DocResolution(): BelongsTo
+    {
+        return $this->belongsTo(Solicitude::class);
+    }
+
+    // Relación con DoCof (Muchos - Documentos Oficio)
+    public function DoCof(): BelongsTo
+    {
+        return $this->belongsTo(Solicitude::class);
     }
 }

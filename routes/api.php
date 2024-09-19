@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\SolicitudeController;
 use App\Http\Controllers\GoogleDocumentController;
+use App\Http\Controllers\StudentController;
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
@@ -44,6 +45,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/solicitudes/{id}', [SolicitudeController::class, 'updateSolicitude'])->middleware('permission:update-solicitude');
     // Ruta para actualizar el estado de una solicitud
     Route::put('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
+    // Ruta para ver solicitudes aceptadas para -> PAISI
+    Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
+    // Ruta para listar solicitudes ordenando por estado (PENDIENTE, ACEPTADO, RECHAZADO) por id de asesor
+    Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
+    
+});
+
+Route::middleware(['auth:sanctum'])->group(function () {   
+    // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
+    Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
+
 });
 
 //RUTA PARA DOCUMENTO GOOGLE
