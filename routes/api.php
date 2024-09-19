@@ -32,10 +32,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Rutas para permisos
     Route::get('/permissions', [PermissionController::class, 'getAllPermissions'])->middleware('permission:view-permissions'); //Listar todos los permisos
     Route::post('/permissions', [PermissionController::class, 'createPermission'])->middleware('permission:create-permissions'); //Crear permisos (Pueden ser muchos o un permiso)
-    // Rutas de asesor
-    Route::get('/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
 });
-
+    
 //RUTAS PARA SOLICITUDES
 Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para crear una nueva solicitud
@@ -51,10 +49,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
 });
 
+// RUTAS PARA ESTUDIANTES
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
     Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
 
 });
-
-
+// RUTAS PARA ASESORES
+Route::middleware(['auth:sanctum'])->group(function () {   
+    // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
+    Route::get('/adviser/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
+});
