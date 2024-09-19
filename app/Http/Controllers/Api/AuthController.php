@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Http\Controllers\Api\SolicitudeController;
+use App\Models\Student;
 
 class AuthController extends Controller
 {
@@ -99,9 +99,15 @@ class AuthController extends Controller
     }
 
     public function logout(Request $request)
-    {
-        
+    {   
         $user = $request->user();
+        
+        if(!$user){
+            return response()->json([
+                'status' => false,
+                'message' => 'No se encontro el usuario'
+            ], 404);
+        }
 
         $user->currentAccessToken()->delete();
 
@@ -113,9 +119,17 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
+        if (!$request->user()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No se encontro el usuario'
+            ], 404);
+        }
+        
         return response()->json([
             'status' => true,
             'data' => [
+                'estudiante_id' => $request->user()->student->_id,
                 'nombre' => $request->user()->name,
                 'correo' => $request->user()->email,
                 'rol' => $request->user()->role->name,
@@ -156,16 +170,15 @@ class AuthController extends Controller
             'role_id' => Role::where('name', 'estudiante')->value('_id'),
         ]);
 
-        // Crea el registro en la colección students si el rol es estudiante
-        if ($request->role === 'student') {
-            \App\Models\Student::create([
-                'user_id' => $user->_id,
-                'thesis_title' => '',
-                'thesis_status' => '',
-                'document_url' => '',
-                'advisor_id' => ''
-            ]);
-        }
+        // Crea el registro en la colección students
+        Student::create([
+            'stu_name' => '',
+            'stu_lastname_m' => '',
+            'stu_latsname_f' => '',
+            'stu_dni' => '',
+            'stu_code' => '',
+            'stu_user_id' => $user->_id
+        ]);
 
         return response()->json([
             'status' => true,
@@ -206,6 +219,16 @@ class AuthController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'role_id' => Role::where('name', 'estudiante')->value('_id'),
+        ]);
+
+        // Crea el registro en la colección students 
+        Student::create([
+            'stu_name' => '',
+            'stu_lastname_m' => '',
+            'stu_latsname_f' => '',
+            'stu_dni' => '',
+            'stu_code' => '',
+            'stu_user_id' => $user->_id
         ]);
 
         return response()->json([
