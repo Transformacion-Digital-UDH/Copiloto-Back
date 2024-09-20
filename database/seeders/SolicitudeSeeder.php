@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Adviser;
+use App\Models\Solicitude;
 use App\Models\Student;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -49,6 +50,8 @@ class SolicitudeSeeder extends Seeder
             ],
         ];
 
-        \DB::table('solicitudes')->insert($solicitudes);
+        foreach ($solicitudes as $soli) {
+            Solicitude::create($soli);
+        }
     }
 }
