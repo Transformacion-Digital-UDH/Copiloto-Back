@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\SolicitudeController;
+use App\Http\Controllers\GoogleDocumentController;
 use App\Http\Controllers\StudentController;
 
 // rutas para autenticacion
@@ -60,3 +61,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
     Route::get('/adviser/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
 });
+
+//RUTA PARA DOCUMENTO GOOGLE
+Route::post('/create-document', [GoogleDocumentController::class, 'createDocument']); //Crear gocumento de google docs (Tesis)
+Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'getDocumentLink']); //Obtener link del documento de google docs (Tesis)
