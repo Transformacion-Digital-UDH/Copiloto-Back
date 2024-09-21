@@ -23,6 +23,6 @@ class Adviser extends Model
     // Relación con el usuario
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
