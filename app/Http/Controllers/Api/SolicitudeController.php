@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\SolicitudeResource;
 use App\Models\Adviser;
 use App\Models\Solicitude;
 use Illuminate\Http\Request;
@@ -51,6 +52,7 @@ class SolicitudeController extends Controller
         $validator = Validator::make($request->all(), [
             'sol_title_inve' => 'required|string|max:255',
             'adviser_id' => 'required|exists:advisers,_id', // Asumiendo que hay una colección 'advisers'
+            'sol_status' => 'required', 
         ]);
 
         // Si la validación falla
@@ -69,11 +71,12 @@ class SolicitudeController extends Controller
             $solicitude->update([
                 'sol_title_inve' => $request->input('sol_title_inve'),
                 'adviser_id' => $request->input('adviser_id'),
+                'sol_status' => $request->input('sol_status'),
             ]);
 
             return response()->json([
                 'message' => 'Solicitud enviada al asesor con exito',
-                'solicitude' => $solicitude
+                'data' => $solicitude
             ], 200);
         } catch (\Exception $e) {
             // Manejar cualquier excepción
@@ -89,7 +92,7 @@ class SolicitudeController extends Controller
     {
         // Definir las reglas de validación
         $rules = [
-            'sol_status' => 'required|string|in:pending,accepted,rejected', // Asume que los estados posibles son 'pendiente', 'aceptado', 'rechazado'
+            'sol_status' => 'required|string|in:pendiente,aceptado,rechazado', // Asume que los estados posibles son 'pendiente', 'aceptado', 'rechazado'
         ];
 
         // Validar los datos de entrada
@@ -119,17 +122,15 @@ class SolicitudeController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Solicitud enviada al asesor',
+            'message' => 'Solicitud aceptada correctamente',
             'solicitude' => $solicitude
         ], 200);
     }
     public function getSolicitudeForPaisi()
     {
-        // Extrae solicitud por la id del estudiante con estado pendiente
-        $solicitudes = Solicitude::where('sol_status', 'Aceptado')->get();
-                                    
-        // Devolver los datos del estudiante junto con sus solicitudes
-        return response()->json($solicitudes, 200);
+        $solicitudes = Solicitude::where('sol_status', 'aceptado')->get();                                   
+        return SolicitudeResource::collection($solicitudes);
+
     }
 
     public function getSolicitudeToAdviser($adviser_id)
@@ -143,7 +144,7 @@ class SolicitudeController extends Controller
         }
 
         // Extrae solicitud por la id del asesor
-         $solicitudes = Solicitude::where('sol_adviser_id', $adviser->_id)->get();
+         $solicitudes = Solicitude::where('adviser_id', $adviser->_id)->get();
 
         if ($solicitudes->isEmpty()) {
             return response()->json(['message' => 'Este asesor no tiene solicitudes'], 404);
@@ -152,18 +153,23 @@ class SolicitudeController extends Controller
        // Ordenando las solicitudes
         $orden = $solicitudes->sortBy(function ($solicitud) {
             switch ($solicitud->sol_status) {
-                case 'Pendiente':
+                case 'pendiente':
                     return 1;
-                case 'Aceptado':
+                case 'aceptado':
                     return 2;
-                case 'Rechazado':
+                case 'rechazado':
                     return 3;
             }
         });
 
         // Devuelve los datos de las solicitudes ordenadas
         return response()->json([
-            'solicitudes' => $orden->values(),
+            'data' => SolicitudeResource::collection($orden),
         ], 200);
+    }
+
+    public function getAll(){
+        $solicitudes = Solicitude::get()->toArray();
+        return response()->json($solicitudes);
     }
 }
