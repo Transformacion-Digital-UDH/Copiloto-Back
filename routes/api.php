@@ -70,4 +70,4 @@ Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'ge
 
 
 //Ruta para generar PDF de carta de aceptacion
-Route::get('/letter-accepted/{id}', [SolicitudeController::class, 'verPDF'])->name('letter-accepted');
+Route::get('/letter/{id}', [SolicitudeController::class, 'verPDF'])->name('letter');

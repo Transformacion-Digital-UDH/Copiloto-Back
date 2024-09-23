@@ -7,9 +7,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\SolicitudeResource;
 use App\Models\Adviser;
 use App\Models\Solicitude;
+use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+
 
 class SolicitudeController extends Controller
 {   
@@ -178,15 +180,43 @@ class SolicitudeController extends Controller
     
         // Verifica si el registro no se encuentra
         if (!$solicitude) {
-            return redirect()->back()->with('error', 'Dato no encontrado');
+            return redirect()->back()->with('error', 'Solicitud no encontrada');
         }
     
-         // Formatear la fecha updated_at como "Huánuco, 11 de julio de 2024"
-        // Formatear la fecha updated_at como "Huánuco, 11 de julio de 2024"
+        // Formatear la fecha updated_at como "11 de julio de 2024"
         $formattedDate = Carbon::parse($solicitude->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+    
+        // Recibe el id del Asesor
+        $adviser = Adviser::where('_id', $solicitude->adviser_id)->first();
+    
+        // Verifica si el asesor existe
+        if ($adviser) {
+            // Formatear los nombres del asesor
+            $adviserFormatted = [
+                'adv_name' => ucwords(strtolower($adviser->adv_name)),
+                'adv_lastname_m' => ucwords(strtolower($adviser->adv_lastname_m)),
+                'adv_latsname_f' => ucwords(strtolower($adviser->adv_latsname_f)),
+            ];
+        } else {
+            $adviserFormatted = null; // O un valor predeterminado
+        }
 
-        // Pasar la fecha formateada a la vista
-        $pdf = Pdf::loadView('letter-accepted', compact('solicitude', 'formattedDate'));
+        $student = Student::where('_id', $solicitude->student_id)->first();
+    
+        // Verifica si el asesor existe
+        if ($student) {
+            // Formatear los nombres del asesor
+            $studentFormatted = [
+                'stu_name' => ucwords(strtolower($student->stu_name)),
+                'stu_lastname_m' => ucwords(strtolower($student->stu_lastname_m)),
+                'stu_latsname_f' => ucwords(strtolower($student->stu_latsname_f)),
+            ];
+        } else {
+            $studentFormatted = null; // O un valor predeterminado
+        }
+    
+        // Pasar la fecha formateada y los datos a la vista
+        $pdf = Pdf::loadView('letter', compact('solicitude', 'formattedDate', 'adviserFormatted', 'studentFormatted'));
     
         // Opcional: establecer opciones de DomPDF
         $pdf->setOptions(['isHtml5ParserEnabled' => true]);
@@ -194,6 +224,7 @@ class SolicitudeController extends Controller
         return $pdf->stream();
     }
     
+
     public function getAll(){
         $solicitudes = Solicitude::get()->toArray();
         return response()->json($solicitudes);

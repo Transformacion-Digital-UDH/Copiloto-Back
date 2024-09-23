@@ -15,6 +15,7 @@ class Solicitude extends Model
         'adviser_id',
         'student_id', // ID del estudiante que hace la solicitud
         'sol_status',
+        'sol_num',
         'docs_link'
 
     ];

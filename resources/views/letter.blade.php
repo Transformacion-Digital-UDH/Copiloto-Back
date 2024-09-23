@@ -89,7 +89,7 @@
 <body>
     <div class="cabecera">
         <?php
-        $path = '..\storage\app\public\recursos\portada.jpg';
+        $path = '..\storage\app\public\front\portada.jpg';
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
@@ -102,7 +102,7 @@
         <p class="fecha-hoy">
             Huánuco, {{ $formattedDate }}
         </p>
-        <p class="data-oficio"><strong> N° 012-ARC-PAISI-FI-UDH</strong></p>
+        <p class="data-oficio"><strong> N° {{$solicitude->sol_num}}-ARC-PAISI-FI-UDH</strong></p>
     </div>
 
     <div class="content">
@@ -114,16 +114,16 @@
         <p><strong>Presente.</strong></p>
         <p>De mi consideración:</p>
         <p>Tengo el agrado de dirigirme a usted para saludarlo cordialmente y a la vez comunicarle que he aceptado asesorar el siguiente trabajo de investigación:</p>
-        <strong>sol_title_inve:</strong>
+        <strong>Titulo de tesis:</strong>
             <div class="titulo-tesis">
                 <p>
-                    {{$dato->tesis}} <!-- Accede directamente al campo 'tesis' -->
+                    {{$solicitude->sol_title_inve}} <!-- Accede directamente al campo 'tesis' -->
                 </p>
             </div>
         <strong>Tesista:</strong>
                 <div class="estudiante">
                     <p>
-                       {{$dato->estudiante}} <!-- Accede directamente al campo 'estudiante' -->
+                        {{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_latsname_f'] }}, {{ $studentFormatted['stu_name'] }}
                     </p>
                 </div>
         <p>Sin otro particular, me despido recordándole las muestras de mi especial consideración y estima personal.</p>
@@ -132,7 +132,7 @@
 
     <div class="firma">
         <?php
-        $path = '..\storage\app\public\firmas\firma.jpg';
+        $path = '..\storage\app\public\signatures\firma.jpg';
         $type = pathinfo($path, PATHINFO_EXTENSION);
         $data = file_get_contents($path);
         $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
@@ -143,7 +143,7 @@
     <div class="signature">
 
         <p><strong>
-            {{$dato->grado}} {{$dato->asesor}} <!-- Accede directamente al campo 'estudiante' -->
+            Ing. {{ $adviserFormatted['adv_name'] }} {{ $adviserFormatted['adv_lastname_m'] }} {{ $adviserFormatted['adv_latsname_f'] }}
         </strong></p>
     </div>
 </body>
