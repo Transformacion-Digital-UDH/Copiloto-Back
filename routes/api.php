@@ -69,5 +69,5 @@ Route::post('/create-document', [GoogleDocumentController::class, 'createDocumen
 Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'getDocumentLink']); //Obtener link del documento de google docs (Tesis)
 
 
-//Ruta para generar PDF de carta de aceptacion
+//Ruta para ver y generar PDF de carta de aceptacion
 Route::get('/letter/{id}', [SolicitudeController::class, 'verPDF'])->name('letter');
