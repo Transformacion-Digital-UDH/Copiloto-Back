@@ -114,7 +114,7 @@
         <p><strong>Presente.</strong></p>
         <p>De mi consideración:</p>
         <p>Tengo el agrado de dirigirme a usted para saludarlo cordialmente y a la vez comunicarle que he aceptado asesorar el siguiente trabajo de investigación:</p>
-        <strong>Título:</strong>
+        <strong>sol_title_inve:</strong>
             <div class="titulo-tesis">
                 <p>
                     {{$dato->tesis}} <!-- Accede directamente al campo 'tesis' -->
