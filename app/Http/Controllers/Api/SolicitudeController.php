@@ -218,8 +218,6 @@ class SolicitudeController extends Controller
         // Pasar los datos a la vista
         $pdf = Pdf::loadView('letter', compact('solicitude', 'formattedDate', 'adviserFormatted', 'studentFormatted'));
     
-        $pdf->setOptions(['isHtml5ParserEnabled' => true]);
-    
         return $pdf->stream();
     }
     
