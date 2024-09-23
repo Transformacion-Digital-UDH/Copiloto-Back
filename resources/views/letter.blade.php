@@ -88,14 +88,7 @@
 
 <body>
     <div class="cabecera">
-        <?php
-        $path = '..\storage\app\public\front\portada.jpg';
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
-        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-        ?>
-        
-      <img src="<?php echo $base64?>" alt="Cabecera Programa academico ingenieria de sistemas">      
+        <img src="{{ public_path('/img/portada.jpg') }}" alt="Cabecera Programa Académico Ingeniería de Sistemas">
     </div>
 
     <div class="header">
@@ -131,14 +124,7 @@
     </div>
 
     <div class="firma">
-        <?php
-        $path = '..\storage\app\public\signatures\firma.jpg';
-        $type = pathinfo($path, PATHINFO_EXTENSION);
-        $data = file_get_contents($path);
-        $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
-        ?>
-        
-      <img src="<?php echo $base64?>" alt="Cabecera Programa academico ingenieria de sistemas">
+        <img src="{{ public_path('/img/firma.jpg') }}" alt="Cabecera Programa Académico Ingeniería de Sistemas">
     </div>
     <div class="signature">
 
