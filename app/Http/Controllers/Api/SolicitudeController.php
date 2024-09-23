@@ -198,33 +198,31 @@ class SolicitudeController extends Controller
                 'adv_latsname_f' => ucwords(strtolower($adviser->adv_latsname_f)),
             ];
         } else {
-            $adviserFormatted = null; // O un valor predeterminado
+            $adviserFormatted = null;
         }
 
         $student = Student::where('_id', $solicitude->student_id)->first();
     
-        // Verifica si el asesor existe
+        // Verifica si el estudiante existe
         if ($student) {
-            // Formatear los nombres del asesor
+            // Formatear los nombres del estudiante
             $studentFormatted = [
                 'stu_name' => ucwords(strtolower($student->stu_name)),
                 'stu_lastname_m' => ucwords(strtolower($student->stu_lastname_m)),
                 'stu_latsname_f' => ucwords(strtolower($student->stu_latsname_f)),
             ];
         } else {
-            $studentFormatted = null; // O un valor predeterminado
+            $studentFormatted = null; 
         }
     
-        // Pasar la fecha formateada y los datos a la vista
+        // Pasar los datos a la vista
         $pdf = Pdf::loadView('letter', compact('solicitude', 'formattedDate', 'adviserFormatted', 'studentFormatted'));
     
-        // Opcional: establecer opciones de DomPDF
         $pdf->setOptions(['isHtml5ParserEnabled' => true]);
     
         return $pdf->stream();
     }
     
-
     public function getAll(){
         $solicitudes = Solicitude::get()->toArray();
         return response()->json($solicitudes);
