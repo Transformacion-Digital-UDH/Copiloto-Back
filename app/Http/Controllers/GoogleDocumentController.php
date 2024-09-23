@@ -7,6 +7,7 @@ use Google_Service_Drive;
 use Google_Service_Docs;
 use Google_Service_Docs_Document;
 use Google_Service_Drive_Permission;
+use Google_Service_Drive_DriveFile;
 use Illuminate\Http\Request;
 use App\Models\Solicitude;
 
@@ -58,6 +59,15 @@ class GoogleDocumentController extends Controller
             $editorPermission->setEmailAddress($defaultOwnerEmail);
 
             $this->driveService->permissions->create($documentId, $editorPermission);
+
+            // Mover documento a una carpeta del drive
+            $folderId = '1mdgGSEsnin24KVB7LAq6Z3kOlmf3PlOE'; // Reemplaza con el folderId
+            $emptyFileMetadata = new Google_Service_Drive_DriveFile();
+            $this->driveService->files->update($documentId, $emptyFileMetadata, [
+                'addParents' => $folderId,
+                'removeParents' => 'root',
+                'fields' => 'id, parents'
+            ]);
 
             // Obtener el enlace de visualización desde Google Drive
             $file = $this->driveService->files->get($documentId, ['fields' => 'webViewLink']);
