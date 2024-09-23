@@ -22,6 +22,9 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 Route::apiResource('users', \App\Http\Controllers\UserController::class);
+Route::get('solicitudes', [SolicitudeController::class, 'getAll']);
+Route::get('students', [StudentController::class, 'getAll']);
+Route::get('advisers', [AdviserController::class, 'getAll']);
 
 //RUTAS PARA ROLES Y PERMISOS
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -33,10 +36,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Rutas para permisos
     Route::get('/permissions', [PermissionController::class, 'getAllPermissions'])->middleware('permission:view-permissions'); //Listar todos los permisos
     Route::post('/permissions', [PermissionController::class, 'createPermission'])->middleware('permission:create-permissions'); //Crear permisos (Pueden ser muchos o un permiso)
-    // Rutas de asesor
-    Route::get('/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
 });
-
+    
 //RUTAS PARA SOLICITUDES
 Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para crear una nueva solicitud
@@ -47,15 +48,20 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
     // Ruta para ver solicitudes aceptadas para -> PAISI
     Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
-    // Ruta para listar solicitudes ordenando por estado (PENDIENTE, ACEPTADO, RECHAZADO) por id de asesor
-    Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
-    
 });
 
+// RUTAS PARA ESTUDIANTES
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
     Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
 
+});
+// RUTAS PARA ASESORES
+Route::middleware(['auth:sanctum'])->group(function () {   
+    // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
+    Route::get('/adviser/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
+    // Ruta para listar solicitudes ordenando por estado (PENDIENTE, ACEPTADO, RECHAZADO) por id de asesor    
+    Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
 });
 
 //RUTA PARA DOCUMENTO GOOGLE
