@@ -11,7 +11,7 @@ use MongoDB\Laravel\Eloquent\Casts\ObjectId;
 
 class StudentController extends Controller
 {
-    public function getAllStudents()
+    public function getAll()
     {
         $student = Student::get()->toArray();
         return response()->json($student);
