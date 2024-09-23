@@ -12,7 +12,7 @@ class Solicitude extends Model
     
     protected $fillable = [
         'sol_title_inve',   // Campo para almacenar el título de la tesis
-        'sol_adviser_id',
+        'adviser_id',
         'student_id', // ID del estudiante que hace la solicitud
         'sol_status',
         'docs_link'
@@ -23,5 +23,10 @@ class Solicitude extends Model
     public function student()
     {
         return $this->belongsTo(Student::class, 'student_id');
+    }
+
+    public function adviser()
+    {
+        return $this->belongsTo(Adviser::class, 'adviser_id');
     }
 }

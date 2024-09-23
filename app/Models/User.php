@@ -10,6 +10,7 @@ use Laravel\Sanctum\HasApiTokens;
 use MongoDB\Laravel\Eloquent\Model;
 use MongoDB\Laravel\Relations\BelongsTo;
 use App\Models\Permission;
+use MongoDB\Laravel\Relations\HasOne;
 
 class User extends Authenticatable
 {
@@ -82,8 +83,13 @@ class User extends Authenticatable
 
     // Relaciones adicionales
 
-    public function student()
+    public function student(): HasOne
     {
         return $this->hasOne(Student::class);
+    }
+
+    public function adviser(): HasOne
+    {
+        return $this->hasOne(Adviser::class);
     }
 }
