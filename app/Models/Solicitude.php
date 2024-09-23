@@ -24,4 +24,9 @@ class Solicitude extends Model
     {
         return $this->belongsTo(Student::class, 'student_id');
     }
+
+    public function adviser()
+    {
+        return $this->belongsTo(Adviser::class, 'adviser_id');
+    }
 }
