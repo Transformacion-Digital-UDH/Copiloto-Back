@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
+use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use App\Models\Adviser;
 use App\Models\Solicitude;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -120,6 +122,7 @@ class SolicitudeController extends Controller
             'solicitude' => $solicitude
         ], 200);
     }
+    //Muesta solicitudes de asesoria aceptados
     public function getSolicitudeForPaisi()
     {
         // Extrae solicitud por la id del estudiante con estado pendiente
@@ -128,7 +131,7 @@ class SolicitudeController extends Controller
         // Devolver los datos del estudiante junto con sus solicitudes
         return response()->json($solicitudes, 200);
     }
-
+    //Muestra solicitudes de un asesor en especifico, por orden pendiente, aceptado, rechazado.
     public function getSolicitudeToAdviser($adviser_id)
     {
         // Recibe el id del Asesor
@@ -162,5 +165,28 @@ class SolicitudeController extends Controller
         return response()->json([
             'solicitudes' => $orden->values(),
         ], 200);
+    }
+
+    //Generar PDF de aceptacion de asesor
+    public function verPDF($id) {
+        // Obtener el registro específico por su id
+        $solicitude = Solicitude::where('_id', $id)->first();
+    
+        // Verifica si el registro no se encuentra
+        if (!$solicitude) {
+            return redirect()->back()->with('error', 'Dato no encontrado');
+        }
+    
+         // Formatear la fecha updated_at como "Huánuco, 11 de julio de 2024"
+        // Formatear la fecha updated_at como "Huánuco, 11 de julio de 2024"
+        $formattedDate = Carbon::parse($solicitude->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+
+        // Pasar la fecha formateada a la vista
+        $pdf = Pdf::loadView('letter-accepted', compact('solicitude', 'formattedDate'));
+    
+        // Opcional: establecer opciones de DomPDF
+        $pdf->setOptions(['isHtml5ParserEnabled' => true]);
+    
+        return $pdf->stream();
     }
 }

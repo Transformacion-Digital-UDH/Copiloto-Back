@@ -61,3 +61,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 //RUTA PARA DOCUMENTO GOOGLE
 Route::post('/create-document', [GoogleDocumentController::class, 'createDocument']); //Crear gocumento de google docs (Tesis)
 Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'getDocumentLink']); //Obtener link del documento de google docs (Tesis)
+
+//Ruta para generar PDF de carta de aceptacion
+Route::get('/letter-accepted/{id}', [SolicitudeController::class, 'verPDF'])->name('letter-accepted');
