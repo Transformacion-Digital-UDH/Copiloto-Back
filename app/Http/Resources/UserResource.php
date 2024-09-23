@@ -15,6 +15,7 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {   
         $role = $this->role->name;
+        $id = null;
 
         if($role == 'estudiante'){
             $id = $this->student->_id;
