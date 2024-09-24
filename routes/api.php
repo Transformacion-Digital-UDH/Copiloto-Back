@@ -46,12 +46,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/solicitudes-store', [SolicitudeController::class, 'store']);
     // Actualizar título de tesis y asesor
     Route::put('/solicitudes/{id}', [SolicitudeController::class, 'updateSolicitude'])->middleware('permission:update-solicitude');
-    // Ruta para actualizar el estado de una solicitud
-    Route::put('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
+
     // Ruta para ver solicitudes aceptadas para -> PAISI
     Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
 });
-
+    // Ruta para actualizar el estado de una solicitud
+    Route::patch('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
+    
 // RUTAS PARA ESTUDIANTES
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
@@ -80,3 +81,5 @@ Route::get('/view-office/{id}', [DocOfController::class, 'offPDF']);
 
 //Ruta para ver y generar PDF de carta de aceptacion
 Route::get('/view-resolution/{id}', [DocResolutionController::class, 'resPDF']);
+
+Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
