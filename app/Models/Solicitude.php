@@ -32,9 +32,9 @@ class Solicitude extends Model
         return $this->belongsTo(Adviser::class, 'adviser_id');
     }
 
-    public function solicitude(): HasOne
+    public function docof(): HasOne
     {
-        return $this->solicitude(DocOf::class);
+        return $this->hasOne(DocOf::class);
     }
 
 }
