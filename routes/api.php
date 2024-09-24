@@ -75,3 +75,5 @@ Route::get('/view-letter/{id}', [SolicitudeController::class, 'viewPDF'])->name(
 
 
 Route::get('/view-off', [DocOfController::class, 'offPDF'])->name('off');
+
+Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
