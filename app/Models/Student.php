@@ -3,8 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Relations\BelongsTo;
 
 class Student extends Model
 {
@@ -35,7 +35,7 @@ class Student extends Model
     }
 
     // Relación con solicitude (Muchos - Solicitudes)
-    public function Solicitude(): BelongsTo
+    public function solicitude(): BelongsTo
     {
         return $this->belongsTo(Solicitude::class);
     }
@@ -50,5 +50,10 @@ class Student extends Model
     public function DoCof(): BelongsTo
     {
         return $this->belongsTo(Solicitude::class);
+    }
+
+    // Función para obtener el nombre completo
+    public function getFullName(){
+        return $this->stu_name . ' ' . $this->stu_lastname_m . ' ' . $this->stu_latsname_f;
     }
 }
