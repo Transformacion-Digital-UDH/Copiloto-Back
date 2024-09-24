@@ -174,7 +174,7 @@ class SolicitudeController extends Controller
     }
 
     //Generar PDF de aceptacion de asesor
-    public function verPDF($id) {
+    public function viewPDF($id) {
         // Obtener el registro específico por su id
         $solicitude = Solicitude::where('_id', $id)->first();
     
