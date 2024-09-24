@@ -3,7 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informe</title>
+    <title>RESOLUCIÓN Nº 1580-2024-D-FI-UDH</title>
+    <!-- Fuente Noto Sans Arabic de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Old+Uyghur&display=swap" rel="stylesheet">
     <style>
         @page {
             size: A4;
@@ -11,110 +15,70 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Noto Serif Old Uyghur", serif;
             margin: 20mm;
-        }
-
-        .cabecera {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 800px;
-            height: 120px;
+            height: 100vh; /* Centra verticalmente */
         }
 
-        .cabecera img {
-            max-width: 100%; /* Asegúrate de que la imagen no desborde */
-            height: auto; /* Mantiene la proporción de la imagen */
-            margin-left: -90px;
+        .container {
+            text-align: center; /* Centra horizontalmente */
         }
 
-        .firma {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 200px;
-            height: 200px; 
+        .container-tittle {
+            font-weight: bold;
+            font-size: 30px; /* Tamaño del título */
+            margin-bottom: 10px;
         }
 
-        .firma img {
-            max-width: 100%; /* Asegúrate de que la imagen no desborde */
-            height: auto; /* Mantiene la proporción de la imagen */
-            margin-left: 220px;
-            margin-top: -10px;
+        .container-facultad{
+            font-weight: bold;
+            font-style: italic;
+            font-size: 25px; /* Tamaño del título */
+            margin-bottom: 10px;
         }
 
-        .data-oficio {
-            text-align: left;
-            text-decoration: underline;
+        .container div {
+            margin-bottom: 5px; /* Espaciado entre los elementos */
+        }
+    
+        .res-date {
+            text-align: center; /* Centra horizontalmente */
         }
 
-        .content {
-            text-align: justify;
-            line-height: 5mm;
+        .fecha{
+            margin-bottom: 15mm;
         }
 
-        .titulo-tesis {
-            text-indent: 40px;
-            text-align: justify;
-            line-height: 5mm;
-            margin-left: 7mm;
+        .res-date div {
+            margin-bottom: 15px; /* Espaciado entre los elementos */
+            margin-top: 15px; /* Espaciado entre los elementos */
         }
 
-        .estudiante {
-            text-indent: 40px;
+        .relleno{
+            text-indent: 20mm;
             text-align: justify;
             line-height: 5mm;
             margin-left: 7mm;
-        }
-
-        .header {
-            text-align: center;
-        }
-
-        .signature {
-            margin-top: -50px;
-            text-align: center;
-        }
-
-        .fecha-hoy {
-            margin-top: auto;
-            text-align: right;
         }
     </style>
 </head>
 <body>
-    <div class="cabecera">
-            <img src="{{ public_path('/img/portada.jpg') }}" alt="Cabecera Programa Académico Ingeniería de Sistemas">
+    <div class="container">
+        <div class="container-tittle">UNIVERSIDAD DE HUÁNUCO</div>
+        <div class="container-facultad">Facultad de Ingeniería</div>
     </div>
-
-    <!-- <div class="header">
-            <p class="fecha-hoy">
-                Huánuco, 
-            </p>
-            <p class="data-oficio"><strong> N° -ARC-PAISI-FI-UDH</strong></p>
+    <div class="res-date">
+        <div class="">RESOLUCIÓN Nº 1580-2024-D-FI-UDH</div>
+        <div class="fecha">Huánuco, 16 de julio de 2024</div>
+        <div class="relleno">
+            Visto, el Oficio N° 152-2024-CA-PAISI-FI-UDH presentado por el Coordinador
+            del Programa Académico de Ingeniería de Sistemas e Informática y el Expediente N°
+            498351-0000003820, del Bach. Joel Josue INQUIEL CALDERON, quién solicita Asesor de
+            Tesis, para desarrollar el trabajo de investigación (Tesis).
+        </div>
     </div>
-
-
-    <h3 class="center">INFORME N°001-2023-PESJ-DO-PAISI-FI-UDH</h3>
-    
-    <p><span class="bold">A:</span> Ing. Paolo E. Solís Jara<br>
-    <span class="bold">Coordinador Académico</span></p>
-
-    <p><span class="bold">DE:</span> Ing. Paolo E. Solís Jara<br>
-    <span class="bold">Jurado</span></p>
-
-    <p><span class="bold">ASUNTO:</span> Informe de Aprobación del proyecto de tesis <span class="bold">"SISTEMA DE REGISTRO CIVIL Y SU INFLUENCIA EN LA CALIDAD DE ATENCIÓN A LOS USUARIOS DEL DISTRITO DE TAHUANÍA – ATALAYA - UCAYALI 2023"</span></p>
-
-    <p><span class="bold">FECHA:</span> Huánuco, 20 de febrero de 2023</p>
-
-    <p>Es grato dirigirme a usted con la finalidad de saludarle cordialmente y a la vez hacer de su conocimiento la <span class="bold">APROBACIÓN</span> del proyecto de tesis titulada: <span class="bold">SISTEMA DE REGISTRO CIVIL Y SU INFLUENCIA EN LA CALIDAD DE ATENCIÓN A LOS USUARIOS DEL DISTRITO DE TAHUANÍA – ATALAYA - UCAYALI 2023</span> presentado por el Bach. <span class="bold">FRANCISCO FRANCO PALOMINO CRISANTO.</span></p>
-
-    <p>Realizada la revisión del proyecto se sugiere al interesado seguir con los trámites que establece el Reglamento de Grados y Títulos de la UDH; por lo que informo a usted para los fines pertinentes.</p>
-
-    <p class="signature">Atentamente,</p> -->
-
-    Aqui va el texto :v pero <h1>NO </h1> colaboran con proporcionar el recurso
-    <H1>resolucion - resolucion de designacion de asesor</H1> 
 </body>
 </html>
