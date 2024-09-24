@@ -2,64 +2,27 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DocOf;
 use App\Models\DocResolution;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class DocResolutionController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
-    }
+    public function resPDF($id) {
+        $office = DocOf::where('_id', $id)->first();
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+        // Verifica si el registro no se encuentra
+        if (!$office) {
+            return redirect()->back()->with('error', 'Oficio no encontrado');
+        }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+        // Asegúrate de que tu vista se llame 'resolution_adviser.blade.php'
+        // Puedes pasar el objeto $office a la vista si es necesario
+        $pdf = Pdf::loadView('resolution_adviser');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(DocResolution $docResolution)
-    {
-        //
-    }
+        // Especifica un nombre para el archivo PDF
+        return $pdf->stream(); 
+}
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(DocResolution $docResolution)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, DocResolution $docResolution)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(DocResolution $docResolution)
-    {
-        //
-    }
 }

@@ -203,7 +203,7 @@ class SolicitudeController extends Controller
     }
 
     //Generar PDF de aceptacion de asesor
-    public function verPDF($id) {
+    public function viewPDF($id) {
         // Obtener el registro específico por su id
         $solicitude = Solicitude::where('_id', $id)->first();
     
@@ -246,8 +246,6 @@ class SolicitudeController extends Controller
     
         // Pasar los datos a la vista
         $pdf = Pdf::loadView('letter', compact('solicitude', 'formattedDate', 'adviserFormatted', 'studentFormatted'));
-    
-        $pdf->setOptions(['isHtml5ParserEnabled' => true]);
     
         return $pdf->stream();
     }

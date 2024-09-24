@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Relations\HasOne;
 
 class DocOf extends Model
 {
@@ -14,9 +15,15 @@ class DocOf extends Model
 
 
     protected $fillable = [
-        "student_id",
-        "docof_num_of",
-        "docof_status",
-        "docof_date_emit"
+        "of_name",
+        "solicitude_id",
+        "of_num_of",
+        "of_status",
     ];
+    
+    public function solicitude(): HasOne
+    {
+        return $this->solicitude(Solicitude::class);
+    }
+    
 }
