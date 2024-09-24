@@ -8,6 +8,7 @@ use App\Http\Resources\SolicitudeResource;
 use App\Models\Adviser;
 use App\Models\Solicitude;
 use App\Models\Student;
+use App\Models\History;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -94,15 +95,19 @@ class SolicitudeController extends Controller
     // Método para actualizar el estado de la solicitud
     public function updateStatus(Request $request, $id)
     {
-        // Definir las reglas de validación
+        // Validar la entrada
         $rules = [
-            'sol_status' => 'required|string|in:pendiente,aceptado,rechazado', // Asume que los estados posibles son 'pendiente', 'aceptado', 'rechazado'
+            'sol_status' => 'required|string|in:pendiente,aceptado,rechazado',
+            'sol_observation' => 'nullable|string'
         ];
 
-        // Validar los datos de entrada
+        // Si el estado es "rechazado", la observación debe ser obligatoria
+        if ($request->input('sol_status') === 'rechazado') {
+            $rules['sol_observation'] = 'required|string';
+        }
+
         $validator = Validator::make($request->all(), $rules);
 
-        // Verificar si hay errores
         if ($validator->fails()) {
             return response()->json([
                 'status' => false,
@@ -120,16 +125,39 @@ class SolicitudeController extends Controller
             ], 404);
         }
 
-        // Actualizar el estado de la solicitud
-        $solicitude->sol_status = $request->input('sol_status');
-        $solicitude->save();
+        // Acciones en función del estado
+        if ($request->input('sol_status') === 'rechazado') {
+            // Guardar en History
+            History::create([
+                'solicitude_id' => $solicitude->_id,
+                'action' => $request->input('action', 'rechazado por asesor'),
+                'sol_title_inve' => $solicitude->sol_title_inve,
+                'observation' => $request->input('sol_observation'),
+                'adviser_id' => $solicitude->adviser_id
+            ]);
+
+            // Resetear la solicitud
+            $solicitude->update([
+                'sol_title_inve' => null,
+                'adviser_id' => null,
+                'sol_status' => 'rechazado',
+                // Actualizar la observación
+                'sol_observation' => $request->input('sol_observation')
+            ]);
+        } else {
+            // Solo actualizar estado si no es rechazo, y no tocar la observación
+            $solicitude->update([
+                'sol_status' => $request->input('sol_status')
+            ]);
+        }
 
         return response()->json([
             'status' => true,
-            'message' => 'Solicitud aceptada correctamente',
+            'message' => 'Estado de la solicitud actualizado correctamente',
             'solicitude' => $solicitude
         ], 200);
     }
+
     //Muesta solicitudes de asesoria aceptados
     public function getSolicitudeForPaisi()
     {
@@ -137,6 +165,7 @@ class SolicitudeController extends Controller
         return SolicitudeResource::collection($solicitudes);
 
     }
+
     //Muestra solicitudes de un asesor en especifico, por orden pendiente, aceptado, rechazado.
     public function getSolicitudeToAdviser($adviser_id)
     {
