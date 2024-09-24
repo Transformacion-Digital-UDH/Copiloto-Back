@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Relations\HasOne;
 
 class Solicitude extends Model
 {
@@ -30,4 +31,10 @@ class Solicitude extends Model
     {
         return $this->belongsTo(Adviser::class, 'adviser_id');
     }
+
+    public function solicitude(): HasOne
+    {
+        return $this->solicitude(DocOf::class);
+    }
+
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
 use App\Http\Controllers\Api\PermissionController;
 use App\Http\Controllers\Api\SolicitudeController;
+use App\Http\Controllers\DocOfController;
 use App\Http\Controllers\GoogleDocumentController;
 use App\Http\Controllers\StudentController;
 
@@ -71,3 +72,6 @@ Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'ge
 
 //Ruta para ver y generar PDF de carta de aceptacion
 Route::get('/view-letter/{id}', [SolicitudeController::class, 'viewPDF'])->name('letter');
+
+
+Route::get('/view-off', [DocOfController::class, 'offPDF'])->name('off');
