@@ -3,118 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informe</title>
+    <title>RESOLUCIÓN Nº 1580-2024-D-FI-UDH</title>
+    <!-- Fuente Noto Sans Arabic de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Old+Uyghur&display=swap" rel="stylesheet">
     <style>
         @page {
-            size: A4;
+            size: 215.9mm 355.6mm;
             margin: 2mm;
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Noto Serif Old Uyghur", serif;
             margin: 20mm;
-        }
-
-        .cabecera {
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 800px;
-            height: 120px;
+            height: 100vh; /* Centra verticalmente */
+            color: #012160;
         }
 
-        .cabecera img {
-            max-width: 100%; /* Asegúrate de que la imagen no desborde */
-            height: auto; /* Mantiene la proporción de la imagen */
-            margin-left: -90px;
+        .container {
+            text-align: center; /* Centra horizontalmente */
         }
 
-        .firma {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 200px;
-            height: 200px; 
+        .container-tittle {
+            font-weight: bold;
+            font-size: 28px; /* Tamaño del título */
+            margin-bottom: 10px;
         }
 
-        .firma img {
-            max-width: 100%; /* Asegúrate de que la imagen no desborde */
-            height: auto; /* Mantiene la proporción de la imagen */
-            margin-left: 220px;
-            margin-top: -10px;
+        .container-facultad{
+            font-weight: bold;
+            font-style: italic;
+            font-size: 25px; /* Tamaño del título */
+            margin-bottom: 10px;
         }
 
-        .data-oficio {
-            text-align: left;
+        .container div {
+            margin-bottom: 5px; /* Espaciado entre los elementos */
+        }
+    
+        .res-date {
+            text-align: center; /* Centra horizontalmente */
+        }
+
+        .res-date div {
+            margin-bottom: 15px; /* Espaciado entre los elementos */
+            margin-top: 15px; /* Espaciado entre los elementos */
+        }
+
+        .parrafo{
+            text-indent: 20mm;
+            text-align: justify;
+            line-height: 5mm;
+            margin-left: 7mm;
+        }
+
+        .num-res{
+            font-weight: bold;
             text-decoration: underline;
         }
 
-        .content {
-            text-align: justify;
-            line-height: 5mm;
+        .firma {
+        display: flex;
+        justify-content: center; /* Centra horizontalmente */
+        width: 600px;
+        height: 250px; 
+        gap: 10px; /* Espacio entre las imágenes (opcional) */
         }
 
-        .titulo-tesis {
-            text-indent: 40px;
-            text-align: justify;
-            line-height: 5mm;
-            margin-left: 7mm;
+        .firma img {
+            max-width: 40%; /* Ajusta el tamaño de las imágenes si es necesario */
+            height: auto;
         }
 
-        .estudiante {
-            text-indent: 40px;
-            text-align: justify;
-            line-height: 5mm;
-            margin-left: 7mm;
-        }
-
-        .header {
-            text-align: center;
-        }
-
-        .signature {
-            margin-top: -50px;
-            text-align: center;
-        }
-
-        .fecha-hoy {
-            margin-top: auto;
-            text-align: right;
+        .pie{
+            text-align: left;
+            font-size: 11px;
         }
     </style>
 </head>
 <body>
-    <div class="cabecera">
-            <img src="{{ public_path('/img/portada.jpg') }}" alt="Cabecera Programa Académico Ingeniería de Sistemas">
+    <div class="container">
+        <div class="container-tittle">UNIVERSIDAD DE HUÁNUCO</div>
+        <div class="container-facultad">Facultad de Ingeniería</div>
     </div>
-
-    <!-- <div class="header">
-            <p class="fecha-hoy">
-                Huánuco, 
+    <div class="res-date">
+        <p class="num-res">RESOLUCIÓN Nº 1580-2024-D-FI-UDH</p>
+        <p class="fecha">Huánuco, 16 de julio de 2024</p>
+        <div class="parrafo">
+            <p>
+                Visto, el Oficio N° 152-2024-CA-PAISI-FI-UDH presentado por el Coordinador
+                del Programa Académico de Ingeniería de Sistemas e Informática y el Expediente N°
+                498351-0000003820, del Bach. <strong>Joel Josue INQUIEL CALDERON</strong>, quién solicita Asesor de
+                Tesis, para desarrollar el trabajo de investigación (Tesis).
             </p>
-            <p class="data-oficio"><strong> N° -ARC-PAISI-FI-UDH</strong></p>
+            <p><strong>CONSIDERANDO:</strong></p>
+            <p>Que, de acuerdo a la Nueva Ley Universitaria 30220, Capítulo V, Art 45º inc.45.2, es procedente su atención, y;</p>
+            <p>
+                Que, según el Expediente N° 498351-0000003820, presentado por el (la) 
+                Bach. <strong>Joel Josue INQUIEL CALDERON</strong>, 
+                quien solicita Asesor de Tesis, para desarrollar su trabajo de investigación, el mismo que propone al Mg. Aldo Enrique Ramirez Chaupis, como Asesor de Tesis, y;
+            </p>
+            <p>Que, según lo dispuesto en el Capítulo II, Art. 27 y 28 del Reglamento General de Grados y Títulos de la Universidad de Huánuco vigente, es procedente atender lo solicitado, y;</p>
+            <p>Estando a Las atribuciones conferidas al Decano de la Facultad de Ingeniería y con cargo a dar cuenta en el próximo Consejo de Facultad.</p>
+            <p><strong>SE RESUELVE:</strong></p>
+            <p><strong style="text-decoration: underline;">Artículo Primero</strong><strong>.-. DESIGNAR,</strong> como Asesor de Tesis del 
+            Bach. <strong>Joel Josue INQUIEL CALDERON</strong>,
+            al Mg. Aldo Enrique Ramirez Chaupis, Docente del Programa Académico de Ingeniería de Sistemas de Informática, Facultad de Ingeniería.</p>
+            <p><strong style="text-decoration: underline;">Artículo Segundo</strong>. - El interesado tendrá un plazo máximo de 6 meses para solicitar revisión del Trabajo de Investigación (Tesis). En todo caso deberá de solicitar nuevamente el trámite con el costo económico vigente.</p>
+            <p style="text-align: center"><br><strong>REGÍSTRESE, COMUNÍQUESE Y ARCHÍVESE</strong></p>
+            <br>
+        </div>
+
+        <div class="firma ">
+            <img src="{{ public_path('/img/sello.jpg') }}" alt="Firma 1">
+            <img src="{{ public_path('/img/sello.jpg') }}" alt="Firma 2">
+        </div>
+        <div class="pie">
+            <p style="text-decoration: underline;">Distribución:</p>
+            <p>
+                Fac. de Ingeniería – PAISI – Asesor – Mat. y Reg.Acad. – Interesado – Archivo.<br>
+                <strong>BLCR/EJML/nto.</strong>
+            </p>
+
+
+        </div>
     </div>
-
-
-    <h3 class="center">INFORME N°001-2023-PESJ-DO-PAISI-FI-UDH</h3>
-    
-    <p><span class="bold">A:</span> Ing. Paolo E. Solís Jara<br>
-    <span class="bold">Coordinador Académico</span></p>
-
-    <p><span class="bold">DE:</span> Ing. Paolo E. Solís Jara<br>
-    <span class="bold">Jurado</span></p>
-
-    <p><span class="bold">ASUNTO:</span> Informe de Aprobación del proyecto de tesis <span class="bold">"SISTEMA DE REGISTRO CIVIL Y SU INFLUENCIA EN LA CALIDAD DE ATENCIÓN A LOS USUARIOS DEL DISTRITO DE TAHUANÍA – ATALAYA - UCAYALI 2023"</span></p>
-
-    <p><span class="bold">FECHA:</span> Huánuco, 20 de febrero de 2023</p>
-
-    <p>Es grato dirigirme a usted con la finalidad de saludarle cordialmente y a la vez hacer de su conocimiento la <span class="bold">APROBACIÓN</span> del proyecto de tesis titulada: <span class="bold">SISTEMA DE REGISTRO CIVIL Y SU INFLUENCIA EN LA CALIDAD DE ATENCIÓN A LOS USUARIOS DEL DISTRITO DE TAHUANÍA – ATALAYA - UCAYALI 2023</span> presentado por el Bach. <span class="bold">FRANCISCO FRANCO PALOMINO CRISANTO.</span></p>
-
-    <p>Realizada la revisión del proyecto se sugiere al interesado seguir con los trámites que establece el Reglamento de Grados y Títulos de la UDH; por lo que informo a usted para los fines pertinentes.</p>
-
-    <p class="signature">Atentamente,</p> -->
-
-    Aqui va el texto :v pero <h1>NO </h1> colaboran con proporcionar el recurso
-    <H1>resolucion - resolucion de designacion de asesor</H1> 
 </body>
 </html>

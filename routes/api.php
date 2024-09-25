@@ -81,3 +81,5 @@ Route::get('/view-office/{id}', [DocOfController::class, 'offPDF']);
 
 //Ruta para ver y generar PDF de carta de aceptacion
 Route::get('/view-resolution/{id}', [DocResolutionController::class, 'resPDF']);
+
+Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);

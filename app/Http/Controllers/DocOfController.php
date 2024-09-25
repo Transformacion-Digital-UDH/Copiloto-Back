@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DocOfResource;
 use App\Models\DocOf;
 use App\Models\Solicitude;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -22,6 +23,12 @@ class DocOfController extends Controller
         $pdf = Pdf::loadView('office_adviser');
     
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
+    }
+
+    public function getOffices(){
+        $docs = DocOf::where('of_status', 'tramitado')->get();
+
+        return DocOfResource::collection($docs);
     }
     
 }

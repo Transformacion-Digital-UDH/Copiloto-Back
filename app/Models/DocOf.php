@@ -23,7 +23,7 @@ class DocOf extends Model
     
     public function solicitude(): HasOne
     {
-        return $this->solicitude(Solicitude::class);
+        return $this->hasOne(Solicitude::class, '_id', 'solicitude_id');
     }
     
 }
