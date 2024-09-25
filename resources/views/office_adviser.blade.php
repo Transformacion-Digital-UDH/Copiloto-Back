@@ -16,6 +16,7 @@
         body {
             font-family: "Noto Serif Old Uyghur", serif;
             margin: 20mm;
+            
         }
 
         .cabecera {
@@ -31,7 +32,16 @@
             height: auto; /* Mantiene la proporción de la imagen */
             margin-left: -90px;
         }
-
+        .fecha{
+            text-align: right;
+            
+        }
+        .parrafo{
+            text-indent: 20mm;
+            text-align: justify;
+            line-height: 5mm;
+            
+        }
         .firma {
             display: flex;
             justify-content: center;
@@ -47,43 +57,15 @@
             margin-top: -10px;
         }
 
-        .data-oficio {
-            text-align: left;
-            text-decoration: underline;
-        }
-
-        .content {
-            text-align: justify;
-            line-height: 5mm;
-        }
-
-        .titulo-tesis {
-            text-indent: 40px;
-            text-align: justify;
-            line-height: 5mm;
-            margin-left: 7mm;
-        }
-
-        .estudiante {
-            text-indent: 40px;
-            text-align: justify;
-            line-height: 5mm;
-            margin-left: 7mm;
-        }
-
-        .header {
+        .coordinador{
+            margin-top: -90px;
             text-align: center;
         }
-
-        .signature {
-            margin-top: -50px;
-            text-align: center;
+        .info{
+            font-size: 11px;
         }
 
-        .fecha-hoy {
-            margin-top: auto;
-            text-align: right;
-        }
+
     </style>
 </head>
 <body>
@@ -91,33 +73,51 @@
             <img src="{{ public_path('/img/portada.jpg') }}" alt="Cabecera Programa Académico Ingeniería de Sistemas">
     </div>
 
-    <!-- <div class="header">
-            <p class="fecha-hoy">
-                Huánuco, 
-            </p>
-            <p class="data-oficio"><strong> N° -ARC-PAISI-FI-UDH</strong></p>
+    <div class="fecha" >Huánuco, 17 de julio de 2024.</div>
+    <div class="premisa">
+        <p style="text-decoration: underline; font-weight: bold; ">OFICIO N° 156-2024-CA-PAISI-FI-UDH</p>
+        <p style="font-weight: bold;">
+            SEÑORA:
+            MG. BERTHA LUCILA CAMPOS RIOS <br> 
+            DECANA (E) DE LA FACULTAD DE INGENIERÍA <br>
+            UNIVERSIDAD DE HUÁNUCO
+        </p>
+        <p>Presente. –</p>
+        <p style="text-indent: 20mm;">De mi consideración:</p>
+
     </div>
-
-
-    <h3 class="center">INFORME N°001-2023-PESJ-DO-PAISI-FI-UDH</h3>
+    <div class="parrafo">
+        <p>Por medio del presente me dirijo a usted para saludarlo cordialmente y a la vez para hacer llegar adjunto al presente lo siguiente:</p>
+    </div>
+    <p style="margin-left: 20mm;">
+        <strong>Exp. N° 497928-0000003810</strong>
+        del Bachiller: 
+        <strong>MACHUCA SAN MARTIN, ROLLY ENRIQUE</strong>
+        en el que solicita: Designación de Asesor para el trabajo de investigación de Tesis. Se designa al 
+        <strong>Dr. Freddy Ronald Huapaya Condori</strong>
+        para asumir la asesoría. Por lo que se remite a su Despacho para su conocimiento y fines.
+    </p>
+    <div class="parrafo">
+        <p>Sin otro en particular, me despido recordándole las muestras de mi especial consideración y estima personal.</p>
+    </div>
+    <p style="text-align: center;">Atentamente,</p>  
     
-    <p><span class="bold">A:</span> Ing. Paolo E. Solís Jara<br>
-    <span class="bold">Coordinador Académico</span></p>
+    <div class="firma">
+        <img src="{{ public_path('/img/firma.jpg') }}" alt="Cabecera Programa Académico Ingeniería de Sistemas">
+    </div>
+    <div class="coordinador">
+        <p>
+            ____________________________ <br>
+            Ing. Paolo E. Solis Jara <br>
+            Coordinador Académico
+        </p>
+    </div>
+    <div class="info">
+        c.c. <br>
+        Archivo <br>
+        PESJ/dnmr
+    </div>
+     
 
-    <p><span class="bold">DE:</span> Ing. Paolo E. Solís Jara<br>
-    <span class="bold">Jurado</span></p>
-
-    <p><span class="bold">ASUNTO:</span> Informe de Aprobación del proyecto de tesis <span class="bold">"SISTEMA DE REGISTRO CIVIL Y SU INFLUENCIA EN LA CALIDAD DE ATENCIÓN A LOS USUARIOS DEL DISTRITO DE TAHUANÍA – ATALAYA - UCAYALI 2023"</span></p>
-
-    <p><span class="bold">FECHA:</span> Huánuco, 20 de febrero de 2023</p>
-
-    <p>Es grato dirigirme a usted con la finalidad de saludarle cordialmente y a la vez hacer de su conocimiento la <span class="bold">APROBACIÓN</span> del proyecto de tesis titulada: <span class="bold">SISTEMA DE REGISTRO CIVIL Y SU INFLUENCIA EN LA CALIDAD DE ATENCIÓN A LOS USUARIOS DEL DISTRITO DE TAHUANÍA – ATALAYA - UCAYALI 2023</span> presentado por el Bach. <span class="bold">FRANCISCO FRANCO PALOMINO CRISANTO.</span></p>
-
-    <p>Realizada la revisión del proyecto se sugiere al interesado seguir con los trámites que establece el Reglamento de Grados y Títulos de la UDH; por lo que informo a usted para los fines pertinentes.</p>
-
-    <p class="signature">Atentamente,</p> -->
-
-    Aqui va el texto :v pero <h1>NO </h1> colaboran con proporcionar el recurso
-    <H1>Oficio de paisi - solicitud de resolucion de designacion de asesor</H1> 
 </body>
 </html>
