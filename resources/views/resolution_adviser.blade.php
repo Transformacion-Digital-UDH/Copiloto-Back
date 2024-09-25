@@ -21,6 +21,7 @@
             justify-content: center;
             align-items: center;
             height: 100vh; /* Centra verticalmente */
+            color: #012160;
         }
 
         .container {
@@ -57,12 +58,17 @@
             margin-top: 15px; /* Espaciado entre los elementos */
         }
 
-        .relleno{
+        .parrafo{
             text-indent: 20mm;
             text-align: justify;
             line-height: 5mm;
             margin-left: 7mm;
         }
+
+        .subtitulo{
+            text-bo
+        }
+
     </style>
 </head>
 <body>
@@ -73,12 +79,13 @@
     <div class="res-date">
         <div class="">RESOLUCIÓN Nº 1580-2024-D-FI-UDH</div>
         <div class="fecha">Huánuco, 16 de julio de 2024</div>
-        <div class="relleno">
+        <div class="parrafo">
             Visto, el Oficio N° 152-2024-CA-PAISI-FI-UDH presentado por el Coordinador
             del Programa Académico de Ingeniería de Sistemas e Informática y el Expediente N°
             498351-0000003820, del Bach. <strong>Joel Josue INQUIEL CALDERON</strong>, quién solicita Asesor de
             Tesis, para desarrollar el trabajo de investigación (Tesis).
         </div>
+        <div class="sub-titulo">CONSIDERANDO:</div>
     </div>
 </body>
 </html>

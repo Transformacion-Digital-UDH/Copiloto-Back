@@ -3,6 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Old+Uyghur&display=swap" rel="stylesheet">
     <title>Informe</title>
     <style>
         @page {
@@ -11,7 +14,7 @@
         }
 
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Noto Serif Old Uyghur", serif;
             margin: 20mm;
         }
 
