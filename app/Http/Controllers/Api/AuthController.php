@@ -177,7 +177,7 @@ class AuthController extends Controller
             'stu_latsname_f' => '',
             'stu_dni' => '',
             'stu_code' => '',
-            'stu_user_id' => $user->_id
+            'user_id' => $user->_id
         ]);
 
         return response()->json([
@@ -228,7 +228,7 @@ class AuthController extends Controller
             'stu_latsname_f' => '',
             'stu_dni' => '',
             'stu_code' => '',
-            'stu_user_id' => $user->_id
+            'user_id' => $user->_id
         ]);
 
         return response()->json([
