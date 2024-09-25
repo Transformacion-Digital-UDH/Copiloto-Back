@@ -98,7 +98,8 @@ class SolicitudeController extends Controller
         // Validar la entrada
         $rules = [
             'sol_status' => 'required|string|in:pendiente,aceptado,rechazado',
-            'sol_observation' => 'nullable|string'
+            'sol_observation' => 'nullable|string',
+            'sol_num' => 'nullable|string'
         ];
 
         // Si el estado es "rechazado", la observación debe ser obligatoria
@@ -147,7 +148,8 @@ class SolicitudeController extends Controller
         } else {
             // Solo actualizar estado si no es rechazo, y no tocar la observación
             $solicitude->update([
-                'sol_status' => $request->input('sol_status')
+                'sol_status' => $request->input('sol_status'),
+                'sol_num' => $request->input('sol_num')
             ]);
         }
 
