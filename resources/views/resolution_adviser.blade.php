@@ -76,7 +76,7 @@
         <div class="relleno">
             Visto, el Oficio N° 152-2024-CA-PAISI-FI-UDH presentado por el Coordinador
             del Programa Académico de Ingeniería de Sistemas e Informática y el Expediente N°
-            498351-0000003820, del Bach. Joel Josue INQUIEL CALDERON, quién solicita Asesor de
+            498351-0000003820, del Bach. <strong>Joel Josue INQUIEL CALDERON</strong>, quién solicita Asesor de
             Tesis, para desarrollar el trabajo de investigación (Tesis).
         </div>
     </div>
