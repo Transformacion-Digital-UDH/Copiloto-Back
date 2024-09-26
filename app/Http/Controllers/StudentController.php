@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\DocOfResource;
+use App\Http\Resources\DocResolutionResource;
+use App\Http\Resources\HistoryResource;
 use App\Models\DocOf;
 use App\Models\DocResolution;
 use App\Models\Solicitude;
@@ -38,6 +41,14 @@ class StudentController extends Controller
             ], 404);
         }
 
+        if ($solicitude->docof) {
+            $resolution = new DocResolutionResource(DocResolution::where('docof_id', $solicitude->docof->_id)->first());
+            $office = new DocOfResource($solicitude->docof);
+        } else {
+            $resolution = [];
+            $office = [];
+        }
+
         // Devolver los datos del estudiante junto con sus solicitudes
         return response()->json([
             'status' => true,
@@ -49,8 +60,9 @@ class StudentController extends Controller
                 "observacion" => $solicitude->sol_observation,
                 "link" => $solicitude->document_link,
             ],
-            'oficio' => $solicitude->docof,
-            'resolucion' => $solicitude->docresolution,
+            'historial' => HistoryResource::collection($solicitude->history),
+            'oficio' => $office,
+            'resolucion' => $resolution
         ], 200);
     }
 }
