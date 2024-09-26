@@ -21,6 +21,7 @@ class DocOf extends Model
         "of_num_of",
         "of_num_exp",
         "of_status",
+        "of_observation"
     ];
     
     public function solicitude(): HasOne

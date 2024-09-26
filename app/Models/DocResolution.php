@@ -17,8 +17,11 @@ class DocResolution extends Model
     protected $fillable = [
         "docof_id",
         "docres_name",
+        'docres_observation',
         "docres_status",
         "docres_num_res",
+        "docres_date_emit",
+        "docres_observation"
     ];
 
     public function docof(): BelongsTo

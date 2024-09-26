@@ -23,13 +23,13 @@ class DocResolutionSeeder extends Seeder
                 'docres_status' => 'tramitado',
             ],
             [
-                'docof_id' => $office[0]->_id,
+                'docof_id' => $office[1]->_id,
                 'docres_name' => 'Resolución de designación de asesor',
                 'docres_num_res' => '2222',
                 'docres_status' => 'pendiente',
             ],
             [
-                'docof_id' => $office[0]->_id,
+                'docof_id' => $office[2]->_id,
                 'docres_name' => 'Resolución de designación de asesor',
                 'docres_num_res' => '3333',
                 'docres_status' => 'observado',
