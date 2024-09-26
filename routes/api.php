@@ -71,20 +71,22 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::post('/create-document', [GoogleDocumentController::class, 'createDocument']); //Crear gocumento de google docs (Tesis)
 Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'getDocumentLink']); //Obtener link del documento de google docs (Tesis)
 
-Route::middleware(['auth:sanctum'])->group(function () {   
-    //Ruta para ver y generar PDF de carta de aceptacion -----> Asesor
-    Route::get('/view-letter/{id}', [SolicitudeController::class, 'viewPDF']);
-    //Ruta para ver y generar PDF de oficio -----> PAISI
-    Route::get('/view-office/{id}', [DocOfController::class, 'offPDF']);
-    //Ruta para ver y generar PDF de Resolucion -------> FACULTAD  
-    Route::get('/view-resolution/{id}', [DocResolutionController::class, 'resPDF']);
-});
+
+
+//Ruta para ver y generar PDF de carta de aceptacion -----> Asesor
+Route::get('/view-letter/{id}', [SolicitudeController::class, 'viewPDF']);
+//Ruta para ver y generar PDF de oficio -----> PAISI
+Route::get('/view-office/{id}', [DocOfController::class, 'offPDF']);
+//Ruta para ver y generar PDF de Resolucion -------> FACULTAD  
+Route::get('/view-resolution/{id}', [DocResolutionController::class, 'resPDF']);
 
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
+
 
 //RUTAS PARA FACULTAD
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Actualizar estado para Resolucion ----> FACULTAD
     Route::put('/resolution/{id}/status', [DocResolutionController::class, 'updateStatus']);
 });
+
