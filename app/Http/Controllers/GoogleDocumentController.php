@@ -36,7 +36,7 @@ class GoogleDocumentController extends Controller
     {
         $solicitudeId = $request->input('solicitude_id');
         $title = "Documento para Solicitud $solicitudeId";
-        $defaultOwnerEmail = 'jonathan.trujillor@gmail.com'; // el editor predeterminado
+        $defaultOwnerEmail = 'paisi.udh@gmail.com'; // el editor predeterminado
 
         // Crear el documento en Google Docs
         $document = new Google_Service_Docs_Document([
@@ -61,7 +61,7 @@ class GoogleDocumentController extends Controller
             $this->driveService->permissions->create($documentId, $editorPermission);
 
             // Mover documento a una carpeta del drive
-            $folderId = '1mdgGSEsnin24KVB7LAq6Z3kOlmf3PlOE'; // Reemplaza con el folderId
+            $folderId = '1Diiq8CbTzB5EdXvZCJnEEq4MEMOUiA8I'; // Reemplaza con el folderId
             $emptyFileMetadata = new Google_Service_Drive_DriveFile();
             $this->driveService->files->update($documentId, $emptyFileMetadata, [
                 'addParents' => $folderId,
