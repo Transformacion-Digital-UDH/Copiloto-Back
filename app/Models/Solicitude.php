@@ -38,4 +38,8 @@ class Solicitude extends Model
         return $this->hasOne(DocOf::class);
     }
 
+    public function history()
+    {
+        return $this->hasMany(History::class);
+    }
 }

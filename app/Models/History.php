@@ -16,4 +16,13 @@ class History extends Model
         'observation',
         'adviser_id'
     ];
+    
+    public function getCreatedFormattedAttribute(){ 
+        return $this->created_at->format('d-m-Y');
+    }
+
+    public function adviser()
+    {
+        return $this->belongsTo(Adviser::class, 'adviser_id');
+    }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Relations\BelongsTo;
 use MongoDB\Laravel\Relations\HasOne;
 
 class DocOf extends Model
@@ -26,6 +27,11 @@ class DocOf extends Model
     public function solicitude(): HasOne
     {
         return $this->hasOne(Solicitude::class, '_id', 'solicitude_id');
+    }
+
+    public function docresolution(): BelongsTo
+    {
+        return $this->belongsTo(DocResolution::class);
     }
 
     public function getCreatedFormattedAttribute(){ 
