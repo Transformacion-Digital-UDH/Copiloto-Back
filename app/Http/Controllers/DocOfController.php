@@ -6,19 +6,21 @@ use App\Http\Resources\DocOfResource;
 use App\Models\DocOf;
 use App\Models\Solicitude;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class DocOfController extends Controller
 {
     public function offPDF($id) {
 
-        $solicitude = Solicitude::where('_id', $id)->first();
+        $office = DocOf::where('_id', $id)->first();
     
         // Verifica si el registro no se encuentra
-        if (!$solicitude) {
+        if (!$office) {
             return redirect()->back()->with('error', 'Solicitud no encontrada');
         }
 
+        $formattedDate = Carbon::parse($office->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
         // Asegúrate de que tu vista se llame 'off.blade.php'
         $pdf = Pdf::loadView('office_adviser');
     
