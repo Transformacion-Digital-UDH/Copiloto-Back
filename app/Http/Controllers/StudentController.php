@@ -28,54 +28,29 @@ class StudentController extends Controller
         }
 
         // Obtener la ultima solicitud creada por el estudiante
-        $solicitudes = Solicitude::where('student_id', $student->_id)->get();
+        $solicitude = Solicitude::where('student_id', $student->_id)
+            ->first();
 
-        $solicitudePending = Solicitude::where('student_id', $student->_id)
-                            ->first();
-
-        if (!$solicitudePending) {
+        if (!$solicitude) {
             return response()->json([
                 'status' => false,
                 'message' => 'Este estudiante no inició su trámite'
             ], 404);
         }
 
-        // // Busca Documentos Oficio por id del estudiante
-        // $doc_of = DocOf::where('docof_student_id', $student->_id)->get();
-
-        // if ($doc_of->isEmpty()) {
-        //     return response()->json([
-        //         'student' => $student,
-        //         'solicitudes' => $solicitudes,
-        //         'message' => 'Este estudiante no tiene oficios ni resoluciones'
-        //     ], 200);
-        // }
-
-        // // Busca Documentos Resolucion por id del estudiante
-        // $doc_resolutions = DocResolution::where('docres_student_id', $student->_id)->get();
-
-        // if ($doc_resolutions->isEmpty()) {
-        //         return response()->json([
-        //             'student' => $student,
-        //             'solicitudes' => $solicitudes,
-        //             'oficios' => $doc_of,
-        //             'message' => 'Este estudiante no tiene resoluciones'
-        //         ], 200);
-        // }
-
-
         // Devolver los datos del estudiante junto con sus solicitudes
         return response()->json([
             'status' => true,
-            'solicitude_pendiente' => [
-                "id" => $solicitudePending->_id,
-                "titulo" => $solicitudePending->sol_title_inve,
-                "asesor_id" => $solicitudePending->adviser_id,
-                "estado" => $solicitudePending->sol_status,
+            'solicitud' => [
+                "id" => $solicitude->_id,
+                "titulo" => $solicitude->sol_title_inve,
+                "asesor_id" => $solicitude->adviser_id,
+                "estado" => $solicitude->sol_status,
+                "observacion" => $solicitude->sol_observation,
+                "link" => $solicitude->document_link,
             ],
-            'solicitudes' => $solicitudes,
-            // 'oficios' => $doc_of,
-            // 'resoluciones' => $doc_resolutions,
+            'oficio' => $solicitude->docof,
+            'resolucion' => $solicitude->docresolution,
         ], 200);
     }
 }
