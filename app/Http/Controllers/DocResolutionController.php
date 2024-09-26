@@ -10,6 +10,7 @@ use App\Models\Student;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class DocResolutionController extends Controller
 {
@@ -56,5 +57,71 @@ class DocResolutionController extends Controller
         $pdf = Pdf::loadView('resolution_adviser', compact('resolution', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year_of', 'year_res'));
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
 }
+
+public function updateStatus(Request $request, $id)
+    {
+        // Validar la entrada
+        $rules = [
+            'docres_status' => 'required|string|in:pendiente,tramitado,observado',
+            'docres_observation' => 'nullable|string',
+            'docres_num_res' => 'nullable|string'
+        ];
+
+        // Si el estado es "rechazado", la observación debe ser obligatoria
+        if ($request->input('docres_status') === 'observado') {
+            $rules['docres_observation'] = 'required|string';
+        }
+
+        if ($request->input('docres_status') === 'tramitado') {
+            $rules['docres_num_res'] = 'required|string';
+        }
+
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        // Buscar la solicitud por ID
+        $resolution = DocResolution::find($id);
+
+        if (!$resolution) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Resolucion no encontrada'
+            ], 404);
+        }
+
+        // Acciones en función del estado
+        if ($request->input('docres_status') === 'observado') {
+            // Actualizar estado a Observado y actualizar docres_observation
+            
+            $resolution->update([
+                'docres_status' => 'observado',
+                // Actualizar la observación
+                'docres_observation' => $request->input('docres_observation')
+            ]);
+        
+        }
+        elseif ($request->input('docres_status') === 'tramitado') {
+                // Actualizar estado a Tramitado y limpiar docres_observation
+                $resolution->update([
+                    'docres_status' => 'tramitado',
+                    'docres_num_res' => $request->input('docres_num_res'),
+                    'docres_observation' => null
+                ]);
+            }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Estado de la resolución actualizado correctamente',
+            'resolution' => $resolution
+        ], 200);
+    }
+
 
 }
