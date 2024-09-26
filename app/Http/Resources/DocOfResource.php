@@ -20,7 +20,7 @@ class DocOfResource extends JsonResource
             'nombre_de_oficio' => $this->of_name,
             'estado' => $this->of_status,
             'numero_de_oficio' => $this->of_num_of,
-            'fecha_creado' => $this->created_at,
+            'fecha_creado' => $this->getCreatedFormattedAttribute(),
             'estudiante_nombre' => $this->solicitude->student->getFullName(),
             'asesor_nombre' => $this->solicitude->adviser ? $this->solicitude->adviser->getFullName() : null,
         ];
