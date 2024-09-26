@@ -76,10 +76,10 @@ Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'ge
 Route::get('/view-letter/{id}', [SolicitudeController::class, 'viewPDF']);
 
 
-//Ruta para ver y generar PDF de carta de aceptacion
+//Ruta para ver y generar PDF de oficio -----> PAISI
 Route::get('/view-office/{id}', [DocOfController::class, 'offPDF']);
 
-//Ruta para ver y generar PDF de carta de aceptacion
+//Ruta para ver y generar PDF de Resolucion -------> FACULTAD  
 Route::get('/view-resolution/{id}', [DocResolutionController::class, 'resPDF']);
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
