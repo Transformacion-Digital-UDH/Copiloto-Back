@@ -19,19 +19,19 @@ class DocResolutionSeeder extends Seeder
             [
                 'docof_id' => $office[0]->_id,
                 'docres_name' => 'Resolución de designación de asesor',
-                'docres_num_res' => '0000011',
+                'docres_num_res' => '1111',
                 'docres_status' => 'tramitado',
             ],
             [
                 'docof_id' => $office[0]->_id,
                 'docres_name' => 'Resolución de designación de asesor',
-                'docres_num_res' => '0000022',
+                'docres_num_res' => '2222',
                 'docres_status' => 'pendiente',
             ],
             [
                 'docof_id' => $office[0]->_id,
                 'docres_name' => 'Resolución de designación de asesor',
-                'docres_num_res' => '0000033',
+                'docres_num_res' => '3333',
                 'docres_status' => 'observado',
             ],
             

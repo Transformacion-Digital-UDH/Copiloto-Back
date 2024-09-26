@@ -19,25 +19,29 @@ class DocOfSeeder extends Seeder
             [
                 'of_name' => 'Solicitud de resolución de designación de asesor',
                 'solicitude_id' => $solicitudes[0]->_id,
-                'of_num_of' => '0000011',
+                'of_num_of' => '111',
+                'of_num_exp' => '498351-0000003820',
                 'of_status' => 'tramitado',
             ],
             [
                 'of_name' => 'Solicitud de resolución de designación de asesor',
                 'solicitude_id' => $solicitudes[2]->_id,
-                'of_num_of' => '0000022',
+                'of_num_of' => '222',
+                'of_num_exp' => '498351-0000003821',
                 'of_status' => 'tramitado',
             ],
             [
                 'of_name' => 'Solicitud de resolución de designación de asesor',
                 'solicitude_id' => $solicitudes[3]->_id,
-                'of_num_of' => '0000033',
+                'of_num_of' => '333',
+                'of_num_exp' => '498351-0000003822',
                 'of_status' => 'observado',
             ],
             [
                 'of_name' => 'Solicitud de resolución de designación de asesor',
                 'solicitude_id' => $solicitudes[4]->_id,
-                'of_num_of' => '0000033',
+                'of_num_of' => '444',
+                'of_num_exp' => '498351-0000003823',
                 'of_status' => 'observado',
             ],
             
