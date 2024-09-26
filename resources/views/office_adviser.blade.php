@@ -6,7 +6,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Old+Uyghur&display=swap" rel="stylesheet">
-    <title>Informe</title>
+    <title>OFICIO N° {{$office->of_num_of}}-{{$year}}-CA-PAISI-FI-UDH</title>
     <style>
         @page {
             size: A4;
@@ -73,9 +73,9 @@
             <img src="{{ public_path('/img/portada.jpg') }}" alt="Cabecera Programa Académico Ingeniería de Sistemas">
     </div>
 
-    <div class="fecha" >Huánuco, 17 de julio de 2024.</div>
+    <div class="fecha" >Huánuco, {{$formattedDate}}.</div>
     <div class="premisa">
-        <p style="text-decoration: underline; font-weight: bold; ">OFICIO N° 156-2024-CA-PAISI-FI-UDH</p>
+        <p style="text-decoration: underline; font-weight: bold; ">OFICIO N° {{$office->of_num_of}}-{{$year}}-CA-PAISI-FI-UDH</p>
         <p style="font-weight: bold;">
             SEÑORA:
             MG. BERTHA LUCILA CAMPOS RIOS <br> 
@@ -90,11 +90,11 @@
         <p>Por medio del presente me dirijo a usted para saludarlo cordialmente y a la vez para hacer llegar adjunto al presente lo siguiente:</p>
     </div>
     <p style="margin-left: 20mm;">
-        <strong>Exp. N° 497928-0000003810</strong>
+        <strong>Exp. N° {{$office->of_num_exp}}</strong>
         del Bachiller: 
-        <strong>MACHUCA SAN MARTIN, ROLLY ENRIQUE</strong>
+        <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_latsname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>
         en el que solicita: Designación de Asesor para el trabajo de investigación de Tesis. Se designa al 
-        <strong>Dr. Freddy Ronald Huapaya Condori</strong>
+        <strong>Ing. {{ $adviserFormatted['adv_name'] }} {{ $adviserFormatted['adv_lastname_m'] }} {{ $adviserFormatted['adv_latsname_f'] }}</strong>
         para asumir la asesoría. Por lo que se remite a su Despacho para su conocimiento y fines.
     </p>
     <div class="parrafo">

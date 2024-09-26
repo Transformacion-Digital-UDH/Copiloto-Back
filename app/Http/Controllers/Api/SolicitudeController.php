@@ -255,8 +255,8 @@ class SolicitudeController extends Controller
             // Formatear los nombres del estudiante
             $studentFormatted = [
                 'stu_name' => ucwords(strtolower($student->stu_name)),
-                'stu_lastname_m' => ucwords(strtolower($student->stu_lastname_m)),
-                'stu_latsname_f' => ucwords(strtolower($student->stu_latsname_f)),
+                'stu_lastname_m' => strtoupper($student->stu_lastname_m),
+                'stu_latsname_f' => strtoupper($student->stu_latsname_f),
             ];
         } else {
             $studentFormatted = null; 

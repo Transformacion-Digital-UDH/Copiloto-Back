@@ -19,11 +19,14 @@ class DocOfController extends Controller
     
         // Verifica si el registro no se encuentra
         if (!$office) {
-            return redirect()->back()->with('error', 'Oficio no encontrado');
+            return redirect()->back()->with('error', 'Solicitud no encontrada');
         }
-    
+        
         // Formatear la fecha updated_at como "11 de julio de 2024"
         $formattedDate = Carbon::parse($office->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+        $year = Carbon::parse($office->updated_at)->locale('es')->isoFormat('YYYY');
+
+
 
         $solicitude = Solicitude::where('_id', $office->solicitude_id)->first();
     
@@ -49,15 +52,15 @@ class DocOfController extends Controller
             // Formatear los nombres del estudiante
             $studentFormatted = [
                 'stu_name' => ucwords(strtolower($student->stu_name)),
-                'stu_lastname_m' => ucwords(strtolower($student->stu_lastname_m)),
-                'stu_latsname_f' => ucwords(strtolower($student->stu_latsname_f)),
+                'stu_lastname_m' => strtoupper($student->stu_lastname_m),
+                'stu_latsname_f' => strtoupper($student->stu_latsname_f),
             ];
         } else {
             $studentFormatted = null; 
         }
     
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('office_adviser', compact('solicitude', 'formattedDate', 'adviserFormatted', 'studentFormatted'));
+        $pdf = Pdf::loadView('office_adviser', compact('office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
     
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
     }
