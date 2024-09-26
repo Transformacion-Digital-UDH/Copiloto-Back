@@ -25,5 +25,9 @@ class DocOf extends Model
     {
         return $this->hasOne(Solicitude::class, '_id', 'solicitude_id');
     }
+
+    public function getCreatedFormattedAttribute(){ 
+        return $this->created_at->format('d-m-Y');
+    }
     
 }
