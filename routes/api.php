@@ -50,6 +50,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para ver solicitudes aceptadas para -> PAISI
     Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
 });
+    //Ruta para actualizar el estado de la solicitud de PAISI
+    Route::put('/offices/{id}/update-status-paisi', [SolicitudeController::class, 'updateStatusPaisi']);
+
     // Ruta para actualizar el estado de una solicitud
     Route::patch('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
     

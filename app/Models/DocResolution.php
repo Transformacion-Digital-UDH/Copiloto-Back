@@ -18,5 +18,7 @@ class DocResolution extends Model
         "docres_name",
         "docres_status",
         "docres_num_res",
+        "docres_date_emit",
+        "docres_observation"
     ];
 }
