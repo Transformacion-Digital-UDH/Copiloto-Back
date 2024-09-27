@@ -342,7 +342,7 @@ class SolicitudeController extends Controller
             $docResolution->save();
 
             // Asegurarse de que of_num_of y of_num_exp estén presentes
-            $docResolution->update([
+            $docOf->update([
                 'of_name' => 'Solicitud de resolución de designación de asesor',
                 'of_status' => 'tramitado',
                 'of_num_of' => $request->input('of_num_of'),
