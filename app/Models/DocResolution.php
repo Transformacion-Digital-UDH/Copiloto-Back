@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
-use MongoDB\Laravel\Relations\BelongsTo;
+use MongoDB\Laravel\Relations\HasOne;
 
 class DocResolution extends Model
 {
@@ -24,11 +24,11 @@ class DocResolution extends Model
         "docres_observation"
     ];
 
-    public function docof(): BelongsTo
+    public function docof(): HasOne
     {
-        return $this->belongsTo(DocOf::class);
+        return $this->hasOne(DocOf::class, '_id', 'docof_id');
     }
-    
+
     public function getCreatedFormattedAttribute(){ 
         return $this->created_at->format('d-m-Y');
     }
