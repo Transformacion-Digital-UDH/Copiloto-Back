@@ -87,7 +87,7 @@ public function updateStatus(Request $request, $id)
         }
 
         // Buscar la solicitud por ID
-        $resolution = DocResolution::find($id);
+        $resolution = DocResolution::where('docof_id', $id)->first();
 
         if (!$resolution) {
             return response()->json([
