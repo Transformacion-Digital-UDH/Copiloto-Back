@@ -19,7 +19,8 @@ class DocResolutionResource extends JsonResource
             'nombre' => $this->docres_name,
             'fecha_creado' => $this->getCreatedFormattedAttribute(),
             'numero_resolucion' => $this->docres_num_res,
-            'estado' => $this->docres_status
+            'estado' => $this->docres_status,
+            'observacion' => $this->docres_observation,
         ];
     }
 }
