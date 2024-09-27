@@ -24,8 +24,8 @@ class DocOfResource extends JsonResource
             'fecha_creado' => $this->getCreatedFormattedAttribute(),
             'estudiante_nombre' => $this->solicitude->student->getFullName(),
             'asesor_nombre' => $this->solicitude->adviser ? $this->solicitude->adviser->getFullName() : null,
-            'resolucion_estado' => DocResolution::where('docof_id', $this->_id)->first()->docres_status,
-            'resolucion_id' => DocResolution::where('docof_id', $this->_id)->first()->_id,
+            'resolucion_estado' => DocResolution::where('docof_id', $this->_id)->first()?->docres_status,
+            'resolucion_id' => DocResolution::where('docof_id', $this->_id)->first()?->_id,
         ];
     }
 }

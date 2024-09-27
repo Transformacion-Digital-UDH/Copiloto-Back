@@ -40,13 +40,19 @@ class StudentController extends Controller
                 'message' => 'Este estudiante no inició su trámite'
             ], 404);
         }
+        
+        $docof = DocOf::where('solicitude_id', $solicitude->_id)->first();
+        $resolution = [];
 
-        if ($solicitude->docof) {
-            $resolution = new DocResolutionResource(DocResolution::where('docof_id', $solicitude->docof->_id)->first());
-            $office = new DocOfResource($solicitude->docof);
-        } else {
-            $resolution = [];
+        if(!$docof){
             $office = [];
+        }else{
+            $office = new DocOfResource($solicitude->docof);
+            $resdoc = DocResolution::where('docof_id', $docof->_id)->first();
+           
+            if($resdoc){
+                $resolution = new DocResolutionResource(DocResolution::where('docof_id', $docof->_id)->first());
+            }
         }
 
         // Devolver los datos del estudiante junto con sus solicitudes
