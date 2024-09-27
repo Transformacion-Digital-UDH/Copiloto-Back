@@ -333,7 +333,7 @@ class SolicitudeController extends Controller
         } elseif ($request->input('of_status') === 'tramitado') {
             // Crear un nuevo registro en la colección docOf si no es "rechazado"
             $docResolution = new DocResolution([
-                'docOf' => $docOf->_id,
+                'docof_id' => $docOf->_id,
                 'docres_name' => 'Resolución de designación de asesor',  // Inicializado como null
                 'docres_num_res' => null,  // Inicializado como null
                 'docres_status' => 'pendiente',  // Estado fijo en "pendiente"
