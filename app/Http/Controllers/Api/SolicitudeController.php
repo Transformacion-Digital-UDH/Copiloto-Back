@@ -10,7 +10,6 @@ use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\History;
 use App\Models\DocOf;
-use App\Models\DocResolution;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -271,91 +270,6 @@ class SolicitudeController extends Controller
     public function getAll(){
         $solicitudes = Solicitude::get()->toArray();
         return response()->json($solicitudes);
-    }
-
-   public function updateStatusPaisi(Request $request, $id)
-    {
-        // Validar la entrada
-        $rules = [
-            'of_status' => 'required|string|in:pendiente,observado,tramitado',
-            'of_observation' => 'nullable|string',  // Solo obligatorio si es observado
-            'of_num_of' => 'nullable|string',       // Solo obligatorio si es tramitado
-            'of_num_exp' => 'nullable|string'       // Solo obligatorio si es tramitado
-        ];
-
-        // Si el estado es "observado", la observación debe ser obligatoria
-        if ($request->input('of_status') === 'observado') {
-            $rules['of_observation'] = 'required|string';
-        }
-
-        // Si el estado es "tramitado", of_num_of y of_num_exp deben ser obligatorios
-        if ($request->input('of_status') === 'tramitado') {
-            $rules['of_num_of'] = 'required|string';
-            $rules['of_num_exp'] = 'required|string';
-        }
-
-        $validator = Validator::make($request->all(), $rules);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => false,
-                'errors' => $validator->errors()
-            ], 400);
-        }
-
-        // Buscar el oficio por ID
-        $docOf = DocOf::find($id);
-
-        if (!$docOf) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Oficio no encontrado'
-            ], 404);
-        }
-
-        // Acciones en función del estado
-        if ($request->input('of_status') === 'observado') {
-            // Guardar en History
-            History::create([
-                'solicitude_id' => $docOf->solicitude_id,
-                'action' => 'observado por PAISI',
-                'of_num_of' => $docOf->of_num_of,
-                'of_num_exp' => $docOf->of_num_exp,
-                'observation' => $request->input('of_observation')
-            ]);
-
-            // Actualizar la observación y estado en el oficio
-            $docOf->update([
-                'of_status' => 'observado',
-                'of_observation' => $request->input('of_observation')
-            ]);
-
-        } elseif ($request->input('of_status') === 'tramitado') {
-            // Crear un nuevo registro en la colección docOf si no es "rechazado"
-            $docResolution = new DocResolution([
-                'docof_id' => $docOf->_id,
-                'docres_name' => 'Resolución de designación de asesor',  // Inicializado como null
-                'docres_num_res' => null,  // Inicializado como null
-                'docres_status' => 'pendiente',  // Estado fijo en "pendiente"
-                'docres_observation' => null  // Inicializado como null
-            ]);
-            $docResolution->save();
-
-            // Asegurarse de que of_num_of y of_num_exp estén presentes
-            $docOf->update([
-                'of_name' => 'Solicitud de resolución de designación de asesor',
-                'of_status' => 'tramitado',
-                'of_num_of' => $request->input('of_num_of'),
-                'of_num_exp' => $request->input('of_num_exp')
-            ]);
-
-        }
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Estado del oficio actualizado correctamente',
-            'docOf' => $docOf
-        ], 200);
     }
 
             

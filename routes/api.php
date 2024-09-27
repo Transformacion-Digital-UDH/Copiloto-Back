@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\AdviserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\RoleController;
@@ -51,7 +50,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
 });
     //Ruta para actualizar el estado de la solicitud de PAISI
-    Route::put('/offices/{id}/update-status-paisi', [SolicitudeController::class, 'updateStatusPaisi']);
+    Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']);
 
     // Ruta para actualizar el estado de una solicitud
     Route::patch('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
