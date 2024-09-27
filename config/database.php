@@ -34,25 +34,28 @@ return [
     */
 
     'connections' => [
+        
         'mongodb' => [
-            'driver'   => 'mongodb',
-            'dsn'      => 'mongodb://127.0.0.1:27017',
-            'database' => 'c3MongoDBLaravel',
+            'driver' => 'mongodb',
+            'dsn' => env('DB_HOST'), 
+            'database' => env('DB_DATABASE'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'options' => [
+                'database' => 'admin',
+                'retryWrites' => true,
+                'w' => 'majority',
+            ],
         ],
 
-
+        //// Conexion Local
+        
         // 'mongodb' => [
-        //     'driver' => 'mongodb',
-        //     'dsn' => env('DB_HOST'), 
-        //     'database' => env('DB_DATABASE'),
-        //     'username' => env('DB_USERNAME'),
-        //     'password' => env('DB_PASSWORD'),
-        //     'options' => [
-        //         'database' => 'admin',
-        //         'retryWrites' => true,
-        //         'w' => 'majority',
-        //     ],
+        //     'driver'   => 'mongodb',
+        //     'dsn'      => 'mongodb://127.0.0.1:27017',
+        //     'database' => 'c3MongoDBLaravel',
         // ],
+
 
         'sqlite' => [
             'driver' => 'sqlite',
