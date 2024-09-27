@@ -29,9 +29,9 @@ class DocOf extends Model
         return $this->hasOne(Solicitude::class, '_id', 'solicitude_id');
     }
 
-    public function docresolution(): BelongsTo
+    public function docresolution(): HasOne
     {
-        return $this->belongsTo(DocResolution::class);
+        return $this->hasOne(DocResolution::class);
     }
 
     public function getCreatedFormattedAttribute(){ 
