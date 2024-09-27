@@ -35,6 +35,7 @@ return [
 
     'connections' => [
         
+        
         'mongodb' => [
             'driver' => 'mongodb',
             'dsn' => env('DB_HOST'), 
@@ -47,14 +48,15 @@ return [
                 'w' => 'majority',
             ],
         ],
-        
-        //Conexion local
 
+        //// Conexion Local
+        
         // 'mongodb' => [
         //     'driver'   => 'mongodb',
         //     'dsn'      => 'mongodb://127.0.0.1:27017',
         //     'database' => 'c3MongoDBLaravel',
         // ],
+
 
         'sqlite' => [
             'driver' => 'sqlite',
