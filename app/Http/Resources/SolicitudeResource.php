@@ -26,7 +26,9 @@ class SolicitudeResource extends JsonResource
                 'nombre_completo' => $this->student->stu_name . ' ' . $this->student->stu_lastname_m . ' ' . $this->student->stu_latsname_f,
             ],
             'estado' => $this->sol_status,
-            'link' => $this->document_link
+            'link' => $this->document_link,
+            'oficio_id' => $this->docof?->_id,
+            'oficio_estado' => $this->docof?->of_status
         ];
     }
 }
