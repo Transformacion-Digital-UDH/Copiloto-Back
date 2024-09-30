@@ -99,7 +99,7 @@ class DocResolutionController extends Controller
         }
         // Pasar los datos a la vista
         $pdf = Pdf::loadView('resolution_adviser', compact('resolution', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year_of', 'year_res'));
-        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_latsname_f . ' ' . $student->stu_name . ' Resolución de designacion de asesor.pdf'); // Puedes especificar un nombre para el archivo PDF
+        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_latsname_f . ' ' . $student->stu_name . ' RES-DA.pdf'); // Puedes especificar un nombre para el archivo PDF
     }
 
     public function updateStatus(Request $request, $id)

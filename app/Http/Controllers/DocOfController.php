@@ -117,7 +117,7 @@ class DocOfController extends Controller
         // Pasar los datos a la vista
         $pdf = Pdf::loadView('office_adviser', compact('office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
     
-        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_latsname_f . ' ' . $student->stu_name . ' Oficio Desigancion de Asesor.pdf'); // Puedes especificar un nombre para el archivo PDF
+        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_latsname_f . ' ' . $student->stu_name . ' OFF-DA.pdf'); // Puedes especificar un nombre para el archivo PDF
     }
 
     public function getOffices(){

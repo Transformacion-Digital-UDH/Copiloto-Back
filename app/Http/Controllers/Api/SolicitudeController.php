@@ -316,7 +316,7 @@ class SolicitudeController extends Controller
         // Pasar los datos a la vista
         $pdf = Pdf::loadView('letter', compact('solicitude', 'formattedDate', 'adviserFormatted', 'studentFormatted'));
     
-        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_latsname_f . ' ' . $student->stu_name . ' Carta de Aceptación.pdf'); // Puedes especificar un nombre para el archivo PDF
+        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_latsname_f . ' ' . $student->stu_name . ' CA-DA.pdf'); // Puedes especificar un nombre para el archivo PDF
     }
             
 }
