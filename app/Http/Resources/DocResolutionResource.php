@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AdviserResource extends JsonResource
+class DocResolutionResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,7 +16,11 @@ class AdviserResource extends JsonResource
     {
         return [
             'id' => $this->_id,
-            'nombre' => $this->adv_name . ' ' . $this->adv_lastname_m . ' ' . $this->adv_latsname_f
+            'nombre' => $this->docres_name,
+            'fecha_creado' => $this->getCreatedFormattedAttribute(),
+            'numero_resolucion' => $this->docres_num_res,
+            'estado' => $this->docres_status,
+            'observacion' => $this->docres_observation,
         ];
     }
 }

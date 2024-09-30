@@ -4,11 +4,13 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use App\Models\Student;
 
 class AuthController extends Controller
 {
@@ -41,7 +43,7 @@ class AuthController extends Controller
         }
 
         $user = User::where('email', $request->email)->first();
-        $token = $user->createToken('auth_token')->plainTextToken;
+        $token = $user->createToken('api_token')->plainTextToken;
 
         return response()->json([
             'status' => true,
@@ -83,20 +85,31 @@ class AuthController extends Controller
             ], 401);
         }
 
-        $user = Auth::user();
-        $token = $user->createToken('api_token')->plainTextToken;
+        if (Auth::attempt($request->only('email', 'password'))) {
+            $user = Auth::user();
+            $token = $user->createToken('api_token')->plainTextToken;
 
-        return response()->json([
-            'status' => true,
-            'message' => 'Usuario autenticado correctamente.',
-            'token' => $token,
-            'data' =>  new UserResource($user)
-        ], 200);
+            return response()->json([
+                'status' => true,
+                'message' => 'Usuario autenticado correctamente.',
+                'token' => $token,
+                'data' =>  new UserResource($user)
+            ], 200);
+        }
     }
 
-    public function logout()
-    {
-        auth()->user()->tokens()->delete();
+    public function logout(Request $request)
+    {   
+        $user = $request->user();
+        
+        if(!$user){
+            return response()->json([
+                'status' => false,
+                'message' => 'No se encontro el usuario'
+            ], 404);
+        }
+
+        $user->currentAccessToken()->delete();
 
         return response()->json([
             'status' => true,
@@ -106,12 +119,20 @@ class AuthController extends Controller
 
     public function me(Request $request)
     {
+        if (!$request->user()) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No se encontro el usuario'
+            ], 404);
+        }
+        
         return response()->json([
             'status' => true,
-            'user' => [
-                'name' => $request->user()->name,
-                'email' => $request->user()->email,
-                'role' => $request->user()->role_id,
+            'data' => [
+                'estudiante_id' => $request->user()->student->_id,
+                'nombre' => $request->user()->name,
+                'correo' => $request->user()->email,
+                'rol' => $request->user()->role->name,
             ],
         ], 200);
     }
@@ -120,7 +141,7 @@ class AuthController extends Controller
     {
         $rules = [
             'email' => 'required|string|email|max:100|unique:users',
-            'password' => 'required|string|min:8|max:15',
+            'password' => 'required|string|min:6|max:15',
         ];
 
         $messages = [
@@ -146,7 +167,68 @@ class AuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'role_id' => 'estudiante'
+            'role_id' => Role::where('name', 'estudiante')->value('_id'),
+        ]);
+
+        // Crea el registro en la colección students
+        Student::create([
+            'stu_name' => '',
+            'stu_lastname_m' => '',
+            'stu_latsname_f' => '',
+            'stu_dni' => '',
+            'stu_code' => '',
+            'user_id' => $user->_id
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Usuario registrado correctamente',
+            'token' => $user->createToken('api_token')->plainTextToken,
+            'data' => new UserResource($user)
+        ], 200);
+    }
+
+    public function registerGoogle(Request $request)
+    {
+        $rules = [
+            'email' => 'required|string|email|max:100|unique:users',
+            'password' => 'required|string|min:6|max:15',
+        ];
+
+        $messages = [
+            'email.required' => 'El correo electrónico es requerido',
+            'email.email' => 'El correo electrónico no es un correo electronico',
+            'email.unique' => 'El correo electrónico ya se encuentra registrado',
+            'email.max' => 'El correo electrónico debe tener como maximo :max caracteres',
+            'password.required' => 'La contraseña es requerido',
+            'password.min' => 'La contraseña debe tener al menos :min caracteres',
+            'password.max' => 'La contraseña debe tener como maximo :max caracteres',
+        ];
+
+        $validator = Validator::make($request->input(), $rules, $messages);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'error' => $validator->errors()->all()
+            ], 400);
+        }
+
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role_id' => Role::where('name', 'estudiante')->value('_id'),
+        ]);
+
+        // Crea el registro en la colección students 
+        Student::create([
+            'stu_name' => '',
+            'stu_lastname_m' => '',
+            'stu_latsname_f' => '',
+            'stu_dni' => '',
+            'stu_code' => '',
+            'user_id' => $user->_id
         ]);
 
         return response()->json([

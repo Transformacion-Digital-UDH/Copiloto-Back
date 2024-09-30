@@ -4,70 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\AdviserResource;
 use App\Models\Adviser;
+use App\Models\Solicitude;
 use Illuminate\Http\Request;
 
 class AdviserController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function getToSelect()
     {
-        $adviser = Adviser::get();
-        return AdviserResource::collection($adviser);
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        $adviser = Adviser::create($request->all());
-
+        $advisers = Adviser::get();
         return response()->json([
-            'status' => true,
-                'message' => "Adviser Created successfully!",
-            'user' => $adviser
-        ], 201);
+           'data' =>AdviserResource::collection($advisers)
+        ],  200);   
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Adviser $adviser)
+    public function getAll()
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Adviser $adviser)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Adviser $adviser)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Adviser $adviser)
-    {
-        //
+        $advisers = Adviser::get();
+        return response()->json([
+            'data' => $advisers
+        ],  200);
     }
 }

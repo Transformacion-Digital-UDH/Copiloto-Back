@@ -1,0 +1,205 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Http\Resources\DocOfResource;
+use App\Models\Adviser;
+use App\Models\DocOf;
+use App\Models\DocResolution;
+use App\Models\History;
+use App\Models\Solicitude;
+use App\Models\Student;
+use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+
+class DocOfController extends Controller
+{
+    public function offPDF($id) {
+
+        $office = DocOf::where('_id', $id)->first();
+    
+        // Verifica si el registro no se encuentra
+        if (!$office) {
+            return redirect()->back()->with('error', 'Solicitud no encontrada');
+        }
+        
+        // Formatear la fecha updated_at como "11 de julio de 2024"
+        $formattedDate = Carbon::parse($office->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+        $year = Carbon::parse($office->updated_at)->locale('es')->isoFormat('YYYY');
+
+
+
+        $solicitude = Solicitude::where('_id', $office->solicitude_id)->first();
+    
+        // Recibe el id del Asesor
+        $adviser = Adviser::where('_id', $solicitude->adviser_id)->first();
+    
+        // Verifica si el asesor existe
+        if ($adviser) {
+            // Formatear los nombres del asesor
+            $adviserFormatted = [
+                'adv_name' => ucwords(strtolower($adviser->adv_name)),
+                'adv_lastname_m' => ucwords(strtolower($adviser->adv_lastname_m)),
+                'adv_latsname_f' => ucwords(strtolower($adviser->adv_latsname_f)),
+            ];
+        } else {
+            $adviserFormatted = null;
+        }
+
+        $student = Student::where('_id', $solicitude->student_id)->first();
+    
+        // Verifica si el estudiante existe
+        if ($student) {
+            // Formatear los nombres del estudiante
+            $studentFormatted = [
+                'stu_name' => ucwords(strtolower($student->stu_name)),
+                'stu_lastname_m' => strtoupper($student->stu_lastname_m),
+                'stu_latsname_f' => strtoupper($student->stu_latsname_f),
+            ];
+        } else {
+            $studentFormatted = null; 
+        }
+    
+        // Pasar los datos a la vista
+        $pdf = Pdf::loadView('office_adviser', compact('office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
+    
+        return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
+    }
+
+    public function downloadOffice($id) {
+
+        $office = DocOf::where('_id', $id)->first();
+    
+        // Verifica si el registro no se encuentra
+        if (!$office) {
+            return redirect()->back()->with('error', 'Solicitud no encontrada');
+        }
+        
+        // Formatear la fecha updated_at como "11 de julio de 2024"
+        $formattedDate = Carbon::parse($office->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+        $year = Carbon::parse($office->updated_at)->locale('es')->isoFormat('YYYY');
+
+
+
+        $solicitude = Solicitude::where('_id', $office->solicitude_id)->first();
+    
+        // Recibe el id del Asesor
+        $adviser = Adviser::where('_id', $solicitude->adviser_id)->first();
+    
+        // Verifica si el asesor existe
+        if ($adviser) {
+            // Formatear los nombres del asesor
+            $adviserFormatted = [
+                'adv_name' => ucwords(strtolower($adviser->adv_name)),
+                'adv_lastname_m' => ucwords(strtolower($adviser->adv_lastname_m)),
+                'adv_latsname_f' => ucwords(strtolower($adviser->adv_latsname_f)),
+            ];
+        } else {
+            $adviserFormatted = null;
+        }
+
+        $student = Student::where('_id', $solicitude->student_id)->first();
+    
+        // Verifica si el estudiante existe
+        if ($student) {
+            // Formatear los nombres del estudiante
+            $studentFormatted = [
+                'stu_name' => ucwords(strtolower($student->stu_name)),
+                'stu_lastname_m' => strtoupper($student->stu_lastname_m),
+                'stu_latsname_f' => strtoupper($student->stu_latsname_f),
+            ];
+        } else {
+            $studentFormatted = null; 
+        }
+    
+        // Pasar los datos a la vista
+        $pdf = Pdf::loadView('office_adviser', compact('office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
+    
+        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_latsname_f . ' ' . $student->stu_name . ' Oficio Desigancion de Asesor.pdf'); // Puedes especificar un nombre para el archivo PDF
+    }
+
+    public function getOffices(){
+        $docs = DocOf::where('of_status', 'tramitado')->get();
+
+        return DocOfResource::collection($docs);
+    }
+    
+    public function updateStatusPaisi(Request $request, $id)
+    {
+        // Validar la entrada
+        $rules = [
+            'of_status' => 'required|string|in:pendiente,observado,tramitado',
+            'of_observation' => 'nullable|string',  // Solo obligatorio si es observado
+            'of_num_of' => 'nullable|string',       // Solo obligatorio si es tramitado
+            'of_num_exp' => 'nullable|string'       // Solo obligatorio si es tramitado
+        ];
+
+        // Si el estado es "observado", la observación debe ser obligatoria
+        if ($request->input('of_status') === 'observado') {
+            $rules['of_observation'] = 'required|string';
+        }
+
+        // Si el estado es "tramitado", of_num_of y of_num_exp deben ser obligatorios
+        if ($request->input('of_status') === 'tramitado') {
+            $rules['of_num_of'] = 'required|string';
+            $rules['of_num_exp'] = 'required|string';
+        }
+
+        $validator = Validator::make($request->all(), $rules);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => false,
+                'errors' => $validator->errors()
+            ], 400);
+        }
+
+        // Buscar el oficio por ID
+        $docOf = DocOf::find($id);
+
+        if (!$docOf) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Oficio no encontrado'
+            ], 404);
+        }
+
+        // Acciones en función del estado
+        if ($request->input('of_status') === 'observado') {
+            // Actualizar la observación y estado en el oficio
+            $docOf->update([
+                'of_status' => 'observado',
+                'of_observation' => $request->input('of_observation')
+            ]);
+
+        } elseif ($request->input('of_status') === 'tramitado') {
+            // Crear un nuevo registro en la colección docOf si no es "rechazado"
+            $docResolution = new DocResolution([
+                'docof_id' => $docOf->_id,
+                'docres_name' => 'Resolución de designación de asesor',  // Inicializado como null
+                'docres_num_res' => null,  // Inicializado como null
+                'docres_status' => 'pendiente',  // Estado fijo en "pendiente"
+                'docres_observation' => null  // Inicializado como null
+            ]);
+            $docResolution->save();
+
+            // Asegurarse de que of_num_of y of_num_exp estén presentes
+            $docOf->update([
+                'of_name' => 'Solicitud de resolución de designación de asesor',
+                'of_status' => 'tramitado',
+                'of_observation' => null,
+                'of_num_of' => $request->input('of_num_of'),
+                'of_num_exp' => $request->input('of_num_exp')
+            ]);
+
+        }
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Estado del oficio actualizado correctamente',
+            'docOf' => $docOf
+        ], 200);
+    }
+}

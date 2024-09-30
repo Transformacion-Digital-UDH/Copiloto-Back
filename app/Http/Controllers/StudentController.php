@@ -2,72 +2,73 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Resources\StudentResource;
+use App\Http\Resources\DocOfResource;
+use App\Http\Resources\DocResolutionResource;
+use App\Http\Resources\HistoryResource;
+use App\Models\DocOf;
+use App\Models\DocResolution;
+use App\Models\Solicitude;
 use App\Models\Student;
 use Illuminate\Http\Request;
+use MongoDB\Laravel\Eloquent\Casts\ObjectId;
 
 class StudentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function getAll()
     {
-        $student = Student::get();
-        return StudentResource::collection($student);
+        $student = Student::get()->toArray();
+        return response()->json($student);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function getInfoStudentById($student_id)
     {
-        $student = Student::create($request->all());
+        // Recibe el id del estudiante y busca
+        $student = Student::where('_id', $student_id)->first();
 
+        if (!$student) {
+            return response()->json(['message' => 'El estudiante no existe'], 404);
+        }
+
+        // Obtener la ultima solicitud creada por el estudiante
+        $solicitude = Solicitude::where('student_id', $student->_id)
+            ->first();
+
+        if (!$solicitude) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Este estudiante no inició su trámite'
+            ], 404);
+        }
+        
+        $docof = DocOf::where('solicitude_id', $solicitude->_id)->first();
+        $resolution = [];
+
+        if(!$docof){
+            $office = [];
+        }else{
+            $office = new DocOfResource($solicitude->docof);
+            $resdoc = DocResolution::where('docof_id', $docof->_id)->first();
+           
+            if($resdoc){
+                $resolution = new DocResolutionResource(DocResolution::where('docof_id', $docof->_id)->first());
+            }
+        }
+
+        // Devolver los datos del estudiante junto con sus solicitudes
         return response()->json([
             'status' => true,
-                'message' => "Student Created successfully!",
-            'user' => $student
-        ], 201);
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Student $student)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Student $student)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Student $student)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Student $student)
-    {
-        //
+            'solicitud' => [
+                "id" => $solicitude->_id,
+                "titulo" => $solicitude->sol_title_inve,
+                "asesor_id" => $solicitude->adviser_id,
+                "estado" => $solicitude->sol_status,
+                "observacion" => $solicitude->sol_observation,
+                "link" => $solicitude->document_link,
+            ],
+            'historial' => HistoryResource::collection($solicitude->history),
+            'oficio' => $office,
+            'resolucion' => $resolution
+        ], 200);
     }
 }

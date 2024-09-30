@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AdviserResource extends JsonResource
+class HistoryResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -15,8 +15,11 @@ class AdviserResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->_id,
-            'nombre' => $this->adv_name . ' ' . $this->adv_lastname_m . ' ' . $this->adv_latsname_f
+            'accion' => $this->action,
+            'fecha' => $this->getCreatedFormattedAttribute(),
+            'observacion' => $this->observation,
+            'titulo' => $this->sol_title_inve,
+            'asesor' => $this->adviser->getFullName(),
         ];
     }
 }

@@ -1,59 +1,98 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\AdviserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
+use App\Http\Controllers\Api\RoleController;
+use App\Http\Controllers\Api\PermissionController;
+use App\Http\Controllers\Api\SolicitudeController;
+use App\Http\Controllers\DocOfController;
+use App\Http\Controllers\DocResolutionController;
+use App\Http\Controllers\GoogleDocumentController;
+use App\Http\Controllers\StudentController;
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider and all of them will
-| be assigned to the "api" middleware group. Make something great!
-|
-*/
-
-// Rutas para AUTENTIFICACIÓN
-
+// rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
 Route::post('login/google', [AuthController::class, 'loginGoogle']); // inicio de sesión
 Route::post('register', [AuthController::class, 'register']); // registrar usuario
+Route::post('register/google', [AuthController::class, 'registerGoogle']); // inicio de sesión
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/logout', [AuthController::class, 'logout']); //cierre de sesión del token
-    Route::get('/me', [AuthController::class, 'me']); // obtener datos del usuario autenticado
+    Route::post('/logout', [AuthController::class, 'logout']); //cierre de sesión
+    Route::get('/me', [AuthController::class, 'me']);
 });
 
-// Rutas de recursos de USUARIO
+Route::apiResource('users', \App\Http\Controllers\UserController::class);
+Route::get('solicitudes', [SolicitudeController::class, 'getAll']);
+Route::get('students', [StudentController::class, 'getAll']);
+Route::get('advisers', [AdviserController::class, 'getAll']);
 
-Route::apiResource('users', \App\Http\Controllers\UserController::class); //Ver users
+//RUTAS PARA ROLES Y PERMISOS
+Route::middleware(['auth:sanctum'])->group(function () {
+    // Rutas para roles
+    Route::get('/roles', [RoleController::class, 'getAllRoles'])->middleware('permission:view-roles'); //Listar todos los Roles
+    Route::get('/roles/{roleId}/permissions', [RoleController::class, 'getRolePermissions'])->middleware('permission:view-role-permissions'); //Listar todos los permisos de un rol
+    Route::post('/roles', [RoleController::class, 'createRole'])->middleware('permission:create-roles'); //Crear rol
+    Route::post('/roles/{roleId}/permissions', [RoleController::class, 'assignPermissions'])->middleware('permission:assign-permissions'); //Asignar permisos a un rol 
+    // Rutas para permisos
+    Route::get('/permissions', [PermissionController::class, 'getAllPermissions'])->middleware('permission:view-permissions'); //Listar todos los permisos
+    Route::post('/permissions', [PermissionController::class, 'createPermission'])->middleware('permission:create-permissions'); //Crear permisos (Pueden ser muchos o un permiso)
+});
+    
+//RUTAS PARA SOLICITUDES
+Route::middleware(['auth:sanctum'])->group(function () {
+    // Ruta para crear una nueva solicitud
+    Route::post('/solicitudes-store', [SolicitudeController::class, 'store']);
+    // Actualizar título de tesis y asesor
+    Route::put('/solicitudes/{id}', [SolicitudeController::class, 'updateSolicitude'])->middleware('permission:update-solicitude');
 
-//Rutas para ROLES y PERMISOS
+    // Ruta para ver solicitudes aceptadas para -> PAISI
+    Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
+});
+    //Ruta para actualizar el estado de la solicitud de PAISI
+    Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']);
 
-Route::apiResource('roles', \App\Http\Controllers\RoleController::class); //Ver roles
-Route::apiResource('permissions', \App\Http\Controllers\PermissionController::class); //Ver permisos
-Route::apiResource('permissionroles', \App\Http\Controllers\PermissionRoleController::class); //Ver permisos con roles
-Route::apiResource('juries', \App\Http\Controllers\JuryController::class); //Ver permisos con roles
+    // Ruta para actualizar el estado de una solicitud
+    Route::patch('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
+    
+// RUTAS PARA ESTUDIANTES
+Route::middleware(['auth:sanctum'])->group(function () {   
+    // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
+    Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
 
-//Rutas para ESTUDIANTES
-Route::apiResource('students', \App\Http\Controllers\StudentController::class); //Ver estudiantes
-Route::apiResource('documents', \App\Http\Controllers\DocumentController::class); //Ver estudiantes
-Route::apiResource('applications', \App\Http\Controllers\ApplicationController::class); //Ver estudiantes
+});
+// RUTAS PARA ASESORES
+Route::middleware(['auth:sanctum'])->group(function () {   
+    // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
+    Route::get('/adviser/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
+    // Ruta para listar solicitudes ordenando por estado (PENDIENTE, ACEPTADO, RECHAZADO) por id de asesor    
+    Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
+});
 
-//Rutas para ADVISER (ASESORES Y JURADOS)
-Route::apiResource('advisers', \App\Http\Controllers\AdviserController::class); //Ver revisores (asesores)
+//RUTA PARA DOCUMENTO GOOGLE
+Route::post('/create-document', [GoogleDocumentController::class, 'createDocument']); //Crear gocumento de google docs (Tesis)
+Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'getDocumentLink']); //Obtener link del documento de google docs (Tesis)
 
-//Rutas para INVESTIGACIONES(TESIS, E INFORME FINAL)
-Route::apiResource('investigations', \App\Http\Controllers\InvestigationController::class); //Ver revisores (asesores)
-Route::apiResource('tipeinvestigations', \App\Http\Controllers\TipeInvestigationController::class); //Ver revisores (asesores)
-Route::apiResource('corrections', \App\Http\Controllers\CorrectionController::class); //Ver revisores (asesores)
 
-//Rutas para Status
-Route::apiResource('status', \App\Http\Controllers\StatusController::class); //Ver revisores (asesores)
 
-//Rutas para trámites
-Route::apiResource('requirements', \App\Http\Controllers\RequirementController::class); //Ver revisores (asesores)
-Route::apiResource('procedures', \App\Http\Controllers\ProcedureController::class); //Ver revisores (asesores)
+//Ruta para ver y generar PDF de carta de aceptacion -----> Asesor
+Route::get('/view-letter/{id}', [SolicitudeController::class, 'viewPDF']);
+Route::get('/download-letter/{id}', [SolicitudeController::class, 'downloadLetter']);
+//Ruta para ver y generar PDF de oficio -----> PAISI
+Route::get('/view-office/{id}', [DocOfController::class, 'offPDF']); 
+Route::get('/download-office/{id}', [DocOfController::class, 'downloadOffice']);
+
+//Ruta para ver y generar PDF de Resolucion -------> FACULTAD  
+Route::get('/view-resolution/{id}', [DocResolutionController::class, 'resPDF']);
+Route::get('/download-resolution/{id}', [DocResolutionController::class, 'downloadResolution']);
+
+
+Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
+
+
+//RUTAS PARA FACULTAD
+Route::middleware(['auth:sanctum'])->group(function () {   
+    // Actualizar estado para Resolucion ----> FACULTAD
+    Route::put('/resolution/{id}/status', [DocResolutionController::class, 'updateStatus']);
+});
 

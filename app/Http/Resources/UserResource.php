@@ -13,13 +13,25 @@ class UserResource extends JsonResource
      * @return array<string, mixed>
      */
     public function toArray(Request $request): array
-    {
+    {   
+        $role = $this->role->name;
+        $id = null;
+
+        if($role == 'estudiante'){
+            $id = $this->student->_id;
+        }
+
+        if($role == 'asesor'){
+            $id = $this->adviser->_id;
+        }
+
         return [
+            'id' => $id,
             'nombre' => $this->name,
             'correo' => $this->email,
-            'rol' => $this->role_id,
-            'facultad' => $this->faculty,
-            'programa' => $this->program,
+            'rol' => $this->role->name,
+            'facultad' => $this->us_faculty,
+            'programa' => $this->us_program,
         ];
     }
 }

@@ -4,20 +4,56 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
+use MongoDB\Laravel\Relations\BelongsTo;
 
 class Student extends Model
 {
     use HasFactory;
-
-    protected $connecion = 'mongodb';
-
+    
+    protected $connection = 'mongodb';
+    protected $collection = 'students';
+    
     protected $fillable = [
-        'name',
-        'lastname_f', //apellido paterno
-        'lastname_m', //apellido materno
-        'dni',
-        'code',
-        'investigation_title',
-        'adviser_id',
+        'stu_name',
+        'stu_lastname_m',
+        'stu_latsname_f',
+        'stu_dni',
+        'stu_code',
+        'user_id',
     ];
+
+    // Relación con el usuario
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    // Relación con el asesor (otro usuario)
+    public function advisor()
+    {
+        return $this->belongsTo(User::class, 'advisor_id');
+    }
+
+    // Relación con solicitude (Muchos - Solicitudes)
+    public function solicitude(): BelongsTo
+    {
+        return $this->belongsTo(Solicitude::class);
+    }
+
+    // Relación con DocResolution (Muchos - Documentos Resolucion)
+    public function DocResolution(): BelongsTo
+    {
+        return $this->belongsTo(Solicitude::class);
+    }
+
+    // Relación con DoCof (Muchos - Documentos Oficio)
+    public function DoCof(): BelongsTo
+    {
+        return $this->belongsTo(Solicitude::class);
+    }
+
+    // Función para obtener el nombre completo
+    public function getFullName(){
+        return $this->stu_name . ' ' . $this->stu_lastname_m . ' ' . $this->stu_latsname_f;
+    }
 }
