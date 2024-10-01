@@ -31,7 +31,7 @@ class ReviewController extends Controller
    if (!$docof) {
        return response()->json([
            'status' => false,
-           'message' => 'Documento de officio no encontrado.'
+           'message' => 'Documento de oficio no encontrado.'
        ], 404);
    }
 
