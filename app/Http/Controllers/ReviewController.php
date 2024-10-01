@@ -47,14 +47,13 @@ class ReviewController extends Controller
     }
 
 
-    // Contar cuántas revisiones tiene el estudiante
-    $count = HistoryReview::where('student_id', $student_id)->count();
+   
 
     // Crear la revisión
-    $review = Review::create([
+    Review::create([
         'student_id' => $student_id,
         'adviser_id' => $solicitude->adviser_id, // Accediendo a adviser_id desde la relación
-        'rev_count' => $count + 1, // Incrementa el contador de revisiones
+        'rev_count' => 1, // Incrementa el contador de revisiones
         'rev_file' => null,
         'rev_status' => 'pendiente',
         'rev_type' => 'tesis'
@@ -63,9 +62,12 @@ class ReviewController extends Controller
     return response()->json([
         'status' => true,
         'message' => 'Su solicitud de revisión fue enviada',
-        'data' => $review
     ], 201);
 }
+
+
+ // Contar cuántas revisiones tiene el estudiante
+ //$count = HistoryReview::where('student_id', $student_id)->count();
 
     
 }

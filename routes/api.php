@@ -61,9 +61,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
     Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
     // Ruta para que el estudiante solicite la primera revision a su asesor
-    Route::post('/student/first-review/{student_id}', [ReviewController::class, 'createReview']);
 
 });
+Route::post('/student/first-review/{student_id}', [ReviewController::class, 'createReview']);
+
 
 
 // RUTAS PARA ASESORES
