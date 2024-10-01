@@ -85,6 +85,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 
+
 // RUTAS PARA ASESORES
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
@@ -99,15 +100,18 @@ Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'ge
 
 
 
-//Ruta para ver y generar PDF de carta de aceptacion [DA]-----> Asesor
+// Ruta para ver y generar PDF de carta de aceptacion [DA]-----> Asesor
 Route::get('/view-letter/{id}', [SolicitudeController::class, 'viewPDF']);
 Route::get('/download-letter/{id}', [SolicitudeController::class, 'downloadLetter']);
-//Ruta para ver y generar PDF de oficio [DA]-----> PAISI
+// Ruta para ver y generar PDF de oficio [DA]-----> PAISI
 Route::get('/view-office/{id}', [DocOfController::class, 'offPDF']); 
 Route::get('/download-office/{id}', [DocOfController::class, 'downloadOffice']);
-//Ruta para ver y generar PDF de Resolucion [DA]-------> FACULTAD  
+// Ruta para ver y generar PDF de Resolucion [DA]-------> FACULTAD  
 Route::get('/view-resolution/{id}', [DocResolutionController::class, 'resPDF']);
 Route::get('/download-resolution/{id}', [DocResolutionController::class, 'downloadResolution']);
+// Ruta para ver conformidad del proyecto de tesis por el asesor ---> ESTUDIANTE, ASESOR 
+Route::get('/view-cpa/{id}', [HistoryReviewController::class, 'viewConfAdviser']);
+Route::get('/download-cpa/{id}', [HistoryReviewController::class, 'downloadConfAdviser']);
 
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);

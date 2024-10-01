@@ -42,10 +42,20 @@ class DocOfController extends Controller
             $adviserFormatted = [
                 'adv_name' => ucwords(strtolower($adviser->adv_name)),
                 'adv_lastname_m' => ucwords(strtolower($adviser->adv_lastname_m)),
-                'adv_latsname_f' => ucwords(strtolower($adviser->adv_latsname_f)),
+                'adv_lastname_f' => ucwords(strtolower($adviser->adv_lastname_f)),
             ];
         } else {
             $adviserFormatted = null;
+        }
+        if ($adviser) {
+            // Concatenar las primeras letras de los nombres y apellidos
+            $siglas = strtoupper(
+                mb_substr($adviser->adv_name, 0, 1) .
+                mb_substr($adviser->adv_lastname_m, 0, 1) .
+                mb_substr($adviser->adv_lastname_f, 0, 1)
+            );
+        } else {
+            $siglas = null;
         }
 
         $student = Student::where('_id', $solicitude->student_id)->first();
@@ -56,14 +66,14 @@ class DocOfController extends Controller
             $studentFormatted = [
                 'stu_name' => ucwords(strtolower($student->stu_name)),
                 'stu_lastname_m' => strtoupper($student->stu_lastname_m),
-                'stu_latsname_f' => strtoupper($student->stu_latsname_f),
+                'stu_lastname_f' => strtoupper($student->stu_lastname_f),
             ];
         } else {
             $studentFormatted = null; 
         }
     
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('office_adviser', compact('office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
+        $pdf = Pdf::loadView('office_adviser', compact('siglas', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
     
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
     }
@@ -94,30 +104,41 @@ class DocOfController extends Controller
             $adviserFormatted = [
                 'adv_name' => ucwords(strtolower($adviser->adv_name)),
                 'adv_lastname_m' => ucwords(strtolower($adviser->adv_lastname_m)),
-                'adv_latsname_f' => ucwords(strtolower($adviser->adv_latsname_f)),
+                'adv_lastname_f' => ucwords(strtolower($adviser->adv_lastname_f)),
             ];
         } else {
             $adviserFormatted = null;
         }
 
         $student = Student::where('_id', $solicitude->student_id)->first();
-    
+
+        if ($adviser) {
+            // Concatenar las primeras letras de los nombres y apellidos
+            $siglas = strtoupper(
+                mb_substr($adviser->adv_name, 0, 1) .
+                mb_substr($adviser->adv_lastname_m, 0, 1) .
+                mb_substr($adviser->adv_lastname_f, 0, 1)
+            );
+        } else {
+            $siglas = null;
+        }
+
         // Verifica si el estudiante existe
         if ($student) {
             // Formatear los nombres del estudiante
             $studentFormatted = [
                 'stu_name' => ucwords(strtolower($student->stu_name)),
                 'stu_lastname_m' => strtoupper($student->stu_lastname_m),
-                'stu_latsname_f' => strtoupper($student->stu_latsname_f),
+                'stu_lastname_f' => strtoupper($student->stu_lastname_f),
             ];
         } else {
             $studentFormatted = null; 
         }
     
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('office_adviser', compact('office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
+        $pdf = Pdf::loadView('office_adviser', compact('siglas', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
     
-        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_latsname_f . ' ' . $student->stu_name . ' OFF-DA.pdf'); // Puedes especificar un nombre para el archivo PDF
+        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ' ' . $student->stu_name . ' OFF-DA.pdf'); // Puedes especificar un nombre para el archivo PDF
     }
 
     public function getOffices(){

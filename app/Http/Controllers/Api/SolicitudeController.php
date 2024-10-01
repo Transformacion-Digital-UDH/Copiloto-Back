@@ -241,10 +241,20 @@ class SolicitudeController extends Controller
             $adviserFormatted = [
                 'adv_name' => ucwords(strtolower($adviser->adv_name)),
                 'adv_lastname_m' => ucwords(strtolower($adviser->adv_lastname_m)),
-                'adv_latsname_f' => ucwords(strtolower($adviser->adv_latsname_f)),
+                'adv_lastname_f' => ucwords(strtolower($adviser->adv_lastname_f)),
             ];
         } else {
             $adviserFormatted = null;
+        }
+        if ($adviser) {
+            // Concatenar las primeras letras de los nombres y apellidos
+            $siglas = strtoupper(
+                mb_substr($adviser->adv_name, 0, 1) .
+                mb_substr($adviser->adv_lastname_m, 0, 1) .
+                mb_substr($adviser->adv_lastname_f, 0, 1)
+            );
+        } else {
+            $siglas = null;
         }
 
         $student = Student::where('_id', $solicitude->student_id)->first();
@@ -255,14 +265,15 @@ class SolicitudeController extends Controller
             $studentFormatted = [
                 'stu_name' => ucwords(strtolower($student->stu_name)),
                 'stu_lastname_m' => strtoupper($student->stu_lastname_m),
-                'stu_latsname_f' => strtoupper($student->stu_latsname_f),
+                'stu_lastname_f' => strtoupper($student->stu_lastname_f),
             ];
         } else {
             $studentFormatted = null; 
         }
+        
     
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('letter', compact('solicitude', 'formattedDate', 'adviserFormatted', 'studentFormatted'));
+        $pdf = Pdf::loadView('letter', compact('siglas', 'solicitude', 'formattedDate', 'adviserFormatted', 'studentFormatted'));
     
         return $pdf->stream();
     }
@@ -293,10 +304,20 @@ class SolicitudeController extends Controller
             $adviserFormatted = [
                 'adv_name' => ucwords(strtolower($adviser->adv_name)),
                 'adv_lastname_m' => ucwords(strtolower($adviser->adv_lastname_m)),
-                'adv_latsname_f' => ucwords(strtolower($adviser->adv_latsname_f)),
+                'adv_lastname_f' => ucwords(strtolower($adviser->adv_lastname_f)),
             ];
         } else {
             $adviserFormatted = null;
+        }
+        if ($adviser) {
+            // Concatenar las primeras letras de los nombres y apellidos
+            $siglas = strtoupper(
+                mb_substr($adviser->adv_name, 0, 1) .
+                mb_substr($adviser->adv_lastname_m, 0, 1) .
+                mb_substr($adviser->adv_lastname_f, 0, 1)
+            );
+        } else {
+            $siglas = null;
         }
 
         $student = Student::where('_id', $solicitude->student_id)->first();
@@ -307,16 +328,16 @@ class SolicitudeController extends Controller
             $studentFormatted = [
                 'stu_name' => ucwords(strtolower($student->stu_name)),
                 'stu_lastname_m' => strtoupper($student->stu_lastname_m),
-                'stu_latsname_f' => strtoupper($student->stu_latsname_f),
+                'stu_lastname_f' => strtoupper($student->stu_lastname_f),
             ];
         } else {
             $studentFormatted = null; 
         }
     
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('letter', compact('solicitude', 'formattedDate', 'adviserFormatted', 'studentFormatted'));
+        $pdf = Pdf::loadView('letter', compact('siglas', 'solicitude', 'formattedDate', 'adviserFormatted', 'studentFormatted'));
     
-        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_latsname_f . ' ' . $student->stu_name . ' CA-DA.pdf'); // Puedes especificar un nombre para el archivo PDF
+        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ' ' . $student->stu_name . ' CA-DA.pdf'); // Puedes especificar un nombre para el archivo PDF
     }
             
 }

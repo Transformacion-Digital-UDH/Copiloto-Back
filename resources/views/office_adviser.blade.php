@@ -92,9 +92,9 @@
     <p style="margin-left: 20mm;">
         <strong>Exp. N° {{$office->of_num_exp}}</strong>
         del Bachiller: 
-        <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_latsname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>
+        <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>
         en el que solicita: Designación de Asesor para el trabajo de investigación de Tesis. Se designa al 
-        <strong>Ing. {{ $adviserFormatted['adv_name'] }} {{ $adviserFormatted['adv_lastname_m'] }} {{ $adviserFormatted['adv_latsname_f'] }}</strong>
+        <strong>Ing. {{ $adviserFormatted['adv_name'] }} {{ $adviserFormatted['adv_lastname_m'] }} {{ $adviserFormatted['adv_lastname_f'] }}</strong>
         para asumir la asesoría. Por lo que se remite a su Despacho para su conocimiento y fines.
     </p>
     <div class="parrafo">

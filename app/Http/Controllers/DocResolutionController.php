@@ -36,10 +36,20 @@ class DocResolutionController extends Controller
             $adviserFormatted = [
                 'adv_name' => ucwords(strtolower($adviser->adv_name)),
                 'adv_lastname_m' => ucwords(strtolower($adviser->adv_lastname_m)),
-                'adv_latsname_f' => ucwords(strtolower($adviser->adv_latsname_f)),
+                'adv_lastname_f' => ucwords(strtolower($adviser->adv_lastname_f)),
             ];
         } else {
             $adviserFormatted = null;
+        }
+        if ($adviser) {
+            // Concatenar las primeras letras de los nombres y apellidos
+            $siglas = strtoupper(
+                mb_substr($adviser->adv_name, 0, 1) .
+                mb_substr($adviser->adv_lastname_m, 0, 1) .
+                mb_substr($adviser->adv_lastname_f, 0, 1)
+            );
+        } else {
+            $siglas = null;
         }
         $student = Student::where('_id', $solicitude->student_id)->first();
         // Verifica si el estudiante existe
@@ -48,13 +58,13 @@ class DocResolutionController extends Controller
             $studentFormatted = [
                 'stu_name' => ucwords(strtolower($student->stu_name)),
                 'stu_lastname_m' => strtoupper($student->stu_lastname_m),
-                'stu_latsname_f' => strtoupper($student->stu_latsname_f),
+                'stu_lastname_f' => strtoupper($student->stu_lastname_f),
             ];
         } else {
             $studentFormatted = null; 
         }
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('resolution_adviser', compact('resolution', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year_of', 'year_res'));
+        $pdf = Pdf::loadView('resolution_adviser', compact('siglas', 'resolution', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year_of', 'year_res'));
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
 }
 
@@ -80,10 +90,20 @@ class DocResolutionController extends Controller
             $adviserFormatted = [
                 'adv_name' => ucwords(strtolower($adviser->adv_name)),
                 'adv_lastname_m' => ucwords(strtolower($adviser->adv_lastname_m)),
-                'adv_latsname_f' => ucwords(strtolower($adviser->adv_latsname_f)),
+                'adv_lastname_f' => ucwords(strtolower($adviser->adv_lastname_f)),
             ];
         } else {
             $adviserFormatted = null;
+        }
+        if ($adviser) {
+            // Concatenar las primeras letras de los nombres y apellidos
+            $siglas = strtoupper(
+                mb_substr($adviser->adv_name, 0, 1) .
+                mb_substr($adviser->adv_lastname_m, 0, 1) .
+                mb_substr($adviser->adv_lastname_f, 0, 1)
+            );
+        } else {
+            $siglas = null;
         }
         $student = Student::where('_id', $solicitude->student_id)->first();
         // Verifica si el estudiante existe
@@ -92,14 +112,14 @@ class DocResolutionController extends Controller
             $studentFormatted = [
                 'stu_name' => ucwords(strtolower($student->stu_name)),
                 'stu_lastname_m' => strtoupper($student->stu_lastname_m),
-                'stu_latsname_f' => strtoupper($student->stu_latsname_f),
+                'stu_lastname_f' => strtoupper($student->stu_lastname_f),
             ];
         } else {
             $studentFormatted = null; 
         }
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('resolution_adviser', compact('resolution', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year_of', 'year_res'));
-        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_latsname_f . ' ' . $student->stu_name . ' RES-DA.pdf'); // Puedes especificar un nombre para el archivo PDF
+        $pdf = Pdf::loadView('resolution_adviser', compact('siglas', 'resolution', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year_of', 'year_res'));
+        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ' ' . $student->stu_name . ' RES-DA.pdf'); // Puedes especificar un nombre para el archivo PDF
     }
 
     public function updateStatus(Request $request, $id)

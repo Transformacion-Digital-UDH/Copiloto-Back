@@ -77,7 +77,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'stu_name' => 'estudiante',
                     'stu_lastname_m' => 'udeachino',
-                    'stu_latsname_f' => 'forever',
+                    'stu_lastname_f' => 'forever',
                     'stu_dni' => '27137222',
                     'stu_code' => '2020203012',
                 ]
@@ -89,7 +89,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'stu_name' => 'KEVIN ARNOLD',
                     'stu_lastname_m' => 'FLORES',
-                    'stu_latsname_f' => 'PACHECO',
+                    'stu_lastname_f' => 'PACHECO',
                     'stu_dni' => '76370345',
                     'stu_code' => '2018110451',
                 ]
@@ -101,7 +101,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'stu_name' => 'RENZO PAOLO',
                     'stu_lastname_m' => 'LUCIANO',
-                    'stu_latsname_f' => 'ESTELA',
+                    'stu_lastname_f' => 'ESTELA',
                     'stu_dni' => '72269360',
                     'stu_code' => '2018110461',
                 ]
@@ -113,7 +113,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'stu_name' => 'JOEL JOSUE',
                     'stu_lastname_m' => 'INQUIEL',
-                    'stu_latsname_f' => 'CALDERON',
+                    'stu_lastname_f' => 'CALDERON',
                     'stu_dni' => '70220442',
                     'stu_code' => '2018110397',
                 ]
@@ -125,7 +125,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'stu_name' => 'RENZO ANDRE',
                     'stu_lastname_m' => 'PANDURO',
-                    'stu_latsname_f' => 'MOSCOSO',
+                    'stu_lastname_f' => 'MOSCOSO',
                     'stu_dni' => '72938469',
                     'stu_code' => '2020160035',
                 ]
@@ -137,7 +137,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'stu_name' => 'MARYCIELO OLENKA',
                     'stu_lastname_m' => 'MARTEL',
-                    'stu_latsname_f' => 'NOEL',
+                    'stu_lastname_f' => 'NOEL',
                     'stu_dni' => '77327670',
                     'stu_code' => '2020210311',
                 ]
@@ -149,7 +149,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'stu_name' => 'JHONATAN',
                     'stu_lastname_m' => 'TRUJILLO',
-                    'stu_latsname_f' => 'ROSALES',
+                    'stu_lastname_f' => 'ROSALES',
                     'stu_dni' => '46695251',
                     'stu_code' => '0200811311',
                 ]
@@ -162,7 +162,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'adv_name' => 'asesor',
                     'adv_lastname_m' => 'fernandez',
-                    'adv_latsname_f' => 'panduro',
+                    'adv_lastname_f' => 'panduro',
                     'adv_orcid' => '1231493212314907',
                     'adv_is_jury' => true,
                 ]
@@ -174,7 +174,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'adv_name' => 'FREDDY RONALD',
                     'adv_lastname_m' => 'HUAPAYA',
-                    'adv_latsname_f' => 'CONDORI',
+                    'adv_lastname_f' => 'CONDORI',
                     'adv_orcid' => '000000249622314907',
                     'adv_is_jury' => false,
                 ]
@@ -186,7 +186,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'adv_name' => 'ALBERTO CARLOS',
                     'adv_lastname_m' => 'JARA',
-                    'adv_latsname_f' => 'TRUJILLO',
+                    'adv_lastname_f' => 'TRUJILLO',
                     'adv_orcid' => '0000002098',
                     'adv_is_jury' => false,
                 ]
@@ -198,7 +198,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'adv_name' => 'ALDO ENRIQUE',
                     'adv_lastname_m' => 'RAMIREZ',
-                    'adv_latsname_f' => 'CHAUPIS',
+                    'adv_lastname_f' => 'CHAUPIS',
                     'adv_orcid' => '0000003685',
                     'adv_is_jury' => false,
                 ]
@@ -210,7 +210,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'adv_name' => 'BERTHA LUCILA',
                     'adv_lastname_m' => 'CAMPOS',
-                    'adv_latsname_f' => 'RIOS',
+                    'adv_lastname_f' => 'RIOS',
                     'adv_orcid' => '0000000043',
                     'adv_is_jury' => false,
                 ]
@@ -222,7 +222,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'adv_name' => 'CARLOS ENRIQUE',
                     'adv_lastname_m' => 'SUAREZ',
-                    'adv_latsname_f' => 'PAUCAR',
+                    'adv_lastname_f' => 'PAUCAR',
                     'adv_orcid' => '0000001247',
                     'adv_is_jury' => false,
                 ]
@@ -234,7 +234,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'adv_name' => 'EDGARDO CRISTIAM IVAN',
                     'adv_lastname_m' => 'LOPEZ',
-                    'adv_latsname_f' => 'DE LA CRUZ',
+                    'adv_lastname_f' => 'DE LA CRUZ',
                     'adv_orcid' => '0000001378',
                     'adv_is_jury' => false,
                 ]
@@ -246,7 +246,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'adv_name' => 'JUAN MANUEL',
                     'adv_lastname_m' => 'HUAPALLA',
-                    'adv_latsname_f' => 'GARCIA',
+                    'adv_lastname_f' => 'GARCIA',
                     'adv_orcid' => '0000003284',
                     'adv_is_jury' => false,
                 ]
@@ -258,7 +258,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'adv_name' => 'WALTER TEOFILO',
                     'adv_lastname_m' => 'BALDEON',
-                    'adv_latsname_f' => 'CANCHAYA',
+                    'adv_lastname_f' => 'CANCHAYA',
                     'adv_orcid' => '0000001756',
                     'adv_is_jury' => false,
                 ]
@@ -271,7 +271,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'adv_name' => 'jurado',
                     'adv_lastname_m' => 'marcos',
-                    'adv_latsname_f' => 'antonio',
+                    'adv_lastname_f' => 'antonio',
                     'adv_orcid' => '1231493212314907',
                     'adv_is_jury' => true,
                 ]
@@ -313,7 +313,7 @@ class UserSeeder extends Seeder
                         'user_id' => $createdUser->_id,
                         'stu_name' => $user['role_data']['stu_name'],
                         'stu_lastname_m' => $user['role_data']['stu_lastname_m'],
-                        'stu_latsname_f' => $user['role_data']['stu_latsname_f'],
+                        'stu_lastname_f' => $user['role_data']['stu_lastname_f'],
                         'stu_dni' => $user['role_data']['stu_dni'],
                         'stu_code' => $user['role_data']['stu_code'],
                         // Otros campos específicos de la tabla `students`
@@ -324,7 +324,7 @@ class UserSeeder extends Seeder
                         'user_id' => $createdUser->_id,
                         'adv_name' => $user['role_data']['adv_name'],
                         'adv_lastname_m' => $user['role_data']['adv_lastname_m'],
-                        'adv_latsname_f' => $user['role_data']['adv_latsname_f'],
+                        'adv_lastname_f' => $user['role_data']['adv_lastname_f'],
                         'adv_orcid' => $user['role_data']['adv_orcid'],
                         'adv_is_jury' => $user['role_data']['adv_is_jury'],
                         // Otros campos específicos de la tabla `asesors`

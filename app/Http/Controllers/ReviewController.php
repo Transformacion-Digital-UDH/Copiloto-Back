@@ -199,5 +199,4 @@ class ReviewController extends Controller
         'data' => array_values($result),  // Asegúrate de devolver los datos con índices reorganizados
     ], 200);
 }
-    
 }
