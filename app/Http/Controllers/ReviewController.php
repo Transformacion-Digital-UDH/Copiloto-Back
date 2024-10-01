@@ -7,6 +7,8 @@ use App\Models\DocResolution;
 use App\Models\HistoryReview;
 use App\Models\Review;
 use App\Models\Solicitude;
+use App\Models\Student;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ReviewController extends Controller
@@ -148,6 +150,54 @@ class ReviewController extends Controller
     }
     
 
+    public function viewRevisionByAdviser($adviser_id) {
+    // Obtiene las revisiones del asesor
+    $reviews = Review::where('adviser_id', $adviser_id)->get();
 
+    // Mapear los resultados asignando prioridad al estado usando sortBy
+    $sortedReviews = $reviews->sortBy(function ($review) {
+        switch ($review->rev_status) {
+            case 'pendiente':
+                return 1;
+            case 'observado':
+                return 2;
+            case 'aprobado':
+                return 3;
+            default:
+                return 4;  // Si hay un estado no esperado
+        }
+    });
+
+    // Array donde almacenaremos los resultados formateados
+    $result = [];
+
+    foreach ($sortedReviews as $review) {
+        // Obtener la solicitud y el estudiante relacionado a la revisión actual
+        $solicitude = Solicitude::where('student_id', $review->student_id)->first();
+        $student = Student::where('_id', $review->student_id)->first();
+
+        // Manejar casos donde el estudiante no exista
+        if (!$student) {
+            continue;
+        }
+
+        // Formatear el nombre del estudiante correctamente
+        $studentName = $student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name;
+
+        // Agregar los datos de la revisión al array resultante
+        $result[] = [
+            'stu_name' => $studentName,
+            'sol_title_inve' => $solicitude ? $solicitude->sol_title_inve : 'No title', // Maneja si no hay solicitud
+            'rev_count' => $review->rev_count,
+            'rev_status' => $review->rev_status,
+            'updated_at' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
+        ];
+    }
+
+    // Retorna los datos ordenados y con los índices reorganizados
+    return response()->json([
+        'data' => array_values($result),  // Asegúrate de devolver los datos con índices reorganizados
+    ], 200);
+}
     
 }

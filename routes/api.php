@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\SolicitudeController;
 use App\Http\Controllers\DocOfController;
 use App\Http\Controllers\DocResolutionController;
 use App\Http\Controllers\GoogleDocumentController;
+use App\Http\Controllers\HistoryReviewController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StudentController;
 
@@ -76,6 +77,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/student/first-review/{student_id}', [ReviewController::class, 'createReview']);
     // Ruta para el actualizar estado de la revision ---> ESTUDIANTE, ASESOR
     Route::put('/student/review/{student_id}/status', [ReviewController::class, 'updateStatusReview']);
+    // Ruta para ver las correcciones observadas y aprobada en orden ---> ESTUDIANTE
+    Route::get('/student/get-review/{student_id}', [HistoryReviewController::class, 'viewRevisionByStudent']);   
+    // Ruta para ver las correcciones pendientes ---> ASESOR
+    Route::get('/adviser/get-review/{adviser_id}', [ReviewController::class, 'viewRevisionByAdviser']); 
 
 });
 
