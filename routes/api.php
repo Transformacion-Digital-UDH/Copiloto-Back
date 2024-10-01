@@ -9,6 +9,7 @@ use App\Http\Controllers\Api\SolicitudeController;
 use App\Http\Controllers\DocOfController;
 use App\Http\Controllers\DocResolutionController;
 use App\Http\Controllers\GoogleDocumentController;
+use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StudentController;
 
 // rutas para autenticacion
@@ -59,8 +60,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
     Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
+    // Ruta para que el estudiante solicite la primera revision a su asesor
+    Route::post('/student/first-review/{student_id}', [ReviewController::class, 'createReview']);
 
 });
+
+
 // RUTAS PARA ASESORES
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id

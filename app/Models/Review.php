@@ -17,7 +17,7 @@ class Review extends Model
         "student_id",
         "rev_count", // Comienza en 1
         "rev_file", //excel que sube asesor
-        "rev_status", // Pendiente || Aprobado || Observado
+        "rev_status", // pendiente || aprobado || observado
         "rev_type", //tesis || informe
     ];
 
