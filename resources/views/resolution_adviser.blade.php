@@ -97,22 +97,22 @@
             <p>
                 Visto, el Oficio N° {{$office->of_num_of}}-{{$year_res}}-CA-PAISI-FI-UDH presentado por el Coordinador
                 del Programa Académico de Ingeniería de Sistemas e Informática y el Expediente N°
-                {{$office->of_num_exp}}, del Bach. <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_latsname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>, quién solicita Asesor de
+                {{$office->of_num_exp}}, del Bach. <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>, quién solicita Asesor de
                 Tesis, para desarrollar el trabajo de investigación (Tesis).
             </p>
             <p><strong>CONSIDERANDO:</strong></p>
             <p>Que, de acuerdo a la Nueva Ley Universitaria 30220, Capítulo V, Art 45º inc.45.2, es procedente su atención, y;</p>
             <p>
                 Que, según el Expediente N° {{$office->of_num_exp}}, presentado por el (la) 
-                Bach. <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_latsname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>, 
-                quien solicita Asesor de Tesis, para desarrollar su trabajo de investigación, el mismo que propone al Ing. {{ $adviserFormatted['adv_name'] }} {{ $adviserFormatted['adv_lastname_m'] }} {{ $adviserFormatted['adv_latsname_f'] }}, como Asesor de Tesis, y;
+                Bach. <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>, 
+                quien solicita Asesor de Tesis, para desarrollar su trabajo de investigación, el mismo que propone al Ing. {{ $adviserFormatted['adv_name'] }} {{ $adviserFormatted['adv_lastname_m'] }} {{ $adviserFormatted['adv_lastname_f'] }}, como Asesor de Tesis, y;
             </p>
             <p>Que, según lo dispuesto en el Capítulo II, Art. 27 y 28 del Reglamento General de Grados y Títulos de la Universidad de Huánuco vigente, es procedente atender lo solicitado, y;</p>
             <p>Estando a Las atribuciones conferidas al Decano de la Facultad de Ingeniería y con cargo a dar cuenta en el próximo Consejo de Facultad.</p>
             <p><strong>SE RESUELVE:</strong></p>
             <p><strong style="text-decoration: underline;">Artículo Primero</strong><strong>.-. DESIGNAR,</strong> como Asesor de Tesis del 
-            Bach. <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_latsname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>,
-            al Ing. {{ $adviserFormatted['adv_name'] }} {{ $adviserFormatted['adv_lastname_m'] }} {{ $adviserFormatted['adv_latsname_f'] }}, Docente del Programa Académico de Ingeniería de Sistemas de Informática, Facultad de Ingeniería.</p>
+            Bach. <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>,
+            al Ing. {{ $adviserFormatted['adv_name'] }} {{ $adviserFormatted['adv_lastname_m'] }} {{ $adviserFormatted['adv_lastname_f'] }}, Docente del Programa Académico de Ingeniería de Sistemas de Informática, Facultad de Ingeniería.</p>
             <p><strong style="text-decoration: underline;">Artículo Segundo</strong>. - El interesado tendrá un plazo máximo de 6 meses para solicitar revisión del Trabajo de Investigación (Tesis). En todo caso deberá de solicitar nuevamente el trámite con el costo económico vigente.</p>
             <p style="text-align: center"><br><strong>REGÍSTRESE, COMUNÍQUESE Y ARCHÍVESE</strong></p>
             <br>

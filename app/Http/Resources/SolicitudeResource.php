@@ -19,11 +19,11 @@ class SolicitudeResource extends JsonResource
             'titulo' => $this->sol_title_inve,
             'asesor' => [
                 'id' => $this->adviser->_id,
-                'nombre_completo' => $this->adviser->adv_name . ' ' . $this->adviser->adv_lastname_m . ' ' . $this->adviser->adv_latsname_f,
+                'nombre_completo' => $this->adviser->adv_name . ' ' . $this->adviser->adv_lastname_m . ' ' . $this->adviser->adv_lastname_f,
             ],
             'estudiante' => [
                 'id' => $this->student->_id,
-                'nombre_completo' => $this->student->stu_name . ' ' . $this->student->stu_lastname_m . ' ' . $this->student->stu_latsname_f,
+                'nombre_completo' => $this->student->stu_name . ' ' . $this->student->stu_lastname_m . ' ' . $this->student->stu_lastname_f,
             ],
             'estado' => $this->sol_status,
             'link' => $this->document_link,

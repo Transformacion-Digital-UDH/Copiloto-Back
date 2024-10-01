@@ -16,7 +16,7 @@ class Student extends Model
     protected $fillable = [
         'stu_name',
         'stu_lastname_m',
-        'stu_latsname_f',
+        'stu_lastname_f',
         'stu_dni',
         'stu_code',
         'user_id',
@@ -54,6 +54,6 @@ class Student extends Model
 
     // Función para obtener el nombre completo
     public function getFullName(){
-        return $this->stu_name . ' ' . $this->stu_lastname_m . ' ' . $this->stu_latsname_f;
+        return $this->stu_name . ' ' . $this->stu_lastname_m . ' ' . $this->stu_lastname_f;
     }
 }

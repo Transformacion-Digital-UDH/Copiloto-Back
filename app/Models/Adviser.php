@@ -15,7 +15,7 @@ class Adviser extends Model
     protected $fillable = [
         'adv_name',
         'adv_lastname_m',
-        'adv_latsname_f',
+        'adv_lastname_f',
         'adv_orcid',
         'user_id',
         'adv_is_jury'
@@ -35,6 +35,6 @@ class Adviser extends Model
 
     // Función para obtener el nombre completo
     public function getFullName(){
-        return $this->adv_name . ' ' . $this->adv_lastname_m . ' ' . $this->adv_latsname_f;
+        return $this->adv_name . ' ' . $this->adv_lastname_m . ' ' . $this->adv_lastname_f;
     }
 }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oficio N° {{$solicitude->sol_num}}-ARC-PAISI-FI-UDH</title>
+    <title>Oficio N° {{$review->rev_num_of}}-ARC-PAISI-FI-UDH</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,7 +99,7 @@
         <p class="fecha-hoy">
             Huánuco, {{ $formattedDate }}
         </p>
-        <p class="data-oficio"><strong> N° {{$solicitude->sol_num}}-{{$siglas}}-PAISI-FI-UDH</strong></p>
+        <p class="data-oficio"><strong> N° {{$review->rev_num_of}}-{{$siglas}}-PAISI-FI-UDH</strong></p>
     </div>
 
     <div class="content">
@@ -110,7 +110,7 @@
             Universidad de Huánuco</p>
         <p><strong>Presente.</strong></p>
         <p>De mi consideración:</p>
-        <p>Tengo el agrado de dirigirme a usted para saludarlo cordialmente y a la vez comunicarle que he aceptado asesorar el siguiente trabajo de investigación:</p>
+        <p>Es grato dirigirme a usted para saludarlo cordialmente y hacerle de conocimiento la revisión y conformidad del proyecto</p>
         <strong>Titulo de tesis:</strong>
             <div class="titulo-tesis">
                 <p>
@@ -123,6 +123,9 @@
                         {{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}
                     </p>
                 </div>
+        <p>Realizada la revisión del proyecto de investigación se sugiere al
+            interesado siga con el trámite que establece el Reglamento General de Grados y Títulos de
+            la Universidad, por lo que informo a usted para los fines pertinentes.</p>
         <p>Sin otro particular, me despido recordándole las muestras de mi especial consideración y estima personal.</p>
         <p>Atentamente,</p>
     </div>

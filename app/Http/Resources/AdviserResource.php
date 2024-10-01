@@ -16,7 +16,7 @@ class AdviserResource extends JsonResource
     {
         return [
             'id' => $this->_id,
-            'nombre' => $this->adv_name . ' ' . $this->adv_lastname_m . ' ' . $this->adv_latsname_f
+            'nombre' => $this->adv_name . ' ' . $this->adv_lastname_m . ' ' . $this->adv_lastname_f
         ];
     }
 }

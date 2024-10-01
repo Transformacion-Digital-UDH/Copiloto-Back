@@ -15,6 +15,7 @@ class HistoryReview extends Model
     protected $fillable = [
         "adviser_id",
         "student_id",
+        "rev_num_of", // Numero de oficio con el que se acepta
         "rev_count", // Comienza en 1
         "rev_file", //excel que sube asesor
         "rev_status", // Pendiente || Aprobado || Observado
