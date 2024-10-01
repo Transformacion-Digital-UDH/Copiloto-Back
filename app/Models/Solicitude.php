@@ -18,6 +18,7 @@ class Solicitude extends Model
         'sol_status',
         'sol_num',
         'sol_observation',
+        'sol_type_inve',
         'document_link'
 
     ];
