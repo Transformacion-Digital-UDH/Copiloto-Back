@@ -42,29 +42,42 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
 //RUTAS PARA SOLICITUDES
 Route::middleware(['auth:sanctum'])->group(function () {
-    // Ruta para crear una nueva solicitud
+    // Ruta para crear una nueva solicitud ---> ESTUDIANTE
     Route::post('/solicitudes-store', [SolicitudeController::class, 'store']);
-    // Actualizar título de tesis y asesor
+    // Actualizar título de tesis y asesor ---> ESTUDIANTE
     Route::put('/solicitudes/{id}', [SolicitudeController::class, 'updateSolicitude'])->middleware('permission:update-solicitude');
-
-    // Ruta para ver solicitudes aceptadas para -> PAISI
+    // Ruta para actualizar el estado de una solicitud ---> ESTUDIANTE, ASESOR
+    Route::patch('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
+    // Ruta para ver solicitudes aceptadas para ---> PAISI
     Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
 });
-    //Ruta para actualizar el estado de la solicitud de PAISI
-    Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']);
 
-    // Ruta para actualizar el estado de una solicitud
-    Route::patch('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
+//RUTAS PARA OFFICIOS
+Route::middleware(['auth:sanctum'])->group(function () {
+    //Ruta para actualizar el estado de la solicitud ---> PAISI
+    Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']);
+});
     
+//RUTAS PARA RESOLUCIONES
+Route::middleware(['auth:sanctum'])->group(function () {   
+    // Actualizar estado para Resolucion ---> FACULTAD
+    Route::put('/resolution/{id}/status', [DocResolutionController::class, 'updateStatus']);
+});
+
 // RUTAS PARA ESTUDIANTES
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
     Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
-    // Ruta para que el estudiante solicite la primera revision a su asesor
+});
+
+// RUTAS PARA REVISIONES
+Route::middleware(['auth:sanctum'])->group(function () {  
+    // Ruta para que el estudiante solicite la primera revision ---> ESTUDIANTE
+    Route::post('/student/first-review/{student_id}', [ReviewController::class, 'createReview']);
+    // Ruta para el actualizar estado de la revision ---> ESTUDIANTE, ASESOR
+    Route::put('/student/review/{student_id}/status', [ReviewController::class, 'updateStatusReview']);
 
 });
-Route::post('/student/first-review/{student_id}', [ReviewController::class, 'createReview']);
-
 
 
 // RUTAS PARA ASESORES
@@ -81,14 +94,13 @@ Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'ge
 
 
 
-//Ruta para ver y generar PDF de carta de aceptacion -----> Asesor
+//Ruta para ver y generar PDF de carta de aceptacion [DA]-----> Asesor
 Route::get('/view-letter/{id}', [SolicitudeController::class, 'viewPDF']);
 Route::get('/download-letter/{id}', [SolicitudeController::class, 'downloadLetter']);
-//Ruta para ver y generar PDF de oficio -----> PAISI
+//Ruta para ver y generar PDF de oficio [DA]-----> PAISI
 Route::get('/view-office/{id}', [DocOfController::class, 'offPDF']); 
 Route::get('/download-office/{id}', [DocOfController::class, 'downloadOffice']);
-
-//Ruta para ver y generar PDF de Resolucion -------> FACULTAD  
+//Ruta para ver y generar PDF de Resolucion [DA]-------> FACULTAD  
 Route::get('/view-resolution/{id}', [DocResolutionController::class, 'resPDF']);
 Route::get('/download-resolution/{id}', [DocResolutionController::class, 'downloadResolution']);
 
@@ -96,9 +108,4 @@ Route::get('/download-resolution/{id}', [DocResolutionController::class, 'downlo
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
 
 
-//RUTAS PARA FACULTAD
-Route::middleware(['auth:sanctum'])->group(function () {   
-    // Actualizar estado para Resolucion ----> FACULTAD
-    Route::put('/resolution/{id}/status', [DocResolutionController::class, 'updateStatus']);
-});
 
