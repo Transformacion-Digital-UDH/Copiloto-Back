@@ -15,9 +15,11 @@ class Solicitude extends Model
         'sol_title_inve',   // Campo para almacenar el título de la tesis
         'adviser_id',
         'student_id', // ID del estudiante que hace la solicitud
+        'paisi_id',
         'sol_status',
         'sol_num',
         'sol_observation',
+        'sol_type_inve',
         'document_link'
 
     ];
@@ -31,6 +33,11 @@ class Solicitude extends Model
     public function adviser()
     {
         return $this->belongsTo(Adviser::class, 'adviser_id');
+    }
+
+    public function paisi()
+    {
+        return $this->belongsTo(Paisi::class, 'paisi_id');
     }
 
     public function docof(): HasOne

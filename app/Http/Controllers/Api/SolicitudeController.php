@@ -40,6 +40,7 @@ class SolicitudeController extends Controller
         // Crear la solicitud si no existe una en estado pendiente
         $solicitude = Solicitude::create([
             'sol_title_inve' => null, // Inicialmente vacío
+            'sol_type_inve' => null, // Inicialmente vacío
             'adviser_id' => null, // Inicialmente vacío
             'student_id' => $validatedData['student_id'], // ID del estudiante
             'sol_status' => 'en progreso' // Estado inicial pendiente
@@ -57,6 +58,7 @@ class SolicitudeController extends Controller
         // Validar la solicitud
         $validator = Validator::make($request->all(), [
             'sol_title_inve' => 'required|string|max:255',
+            'sol_type_inve' => 'required|string|in:cientifica, tecnologica',
             'adviser_id' => 'required|exists:advisers,_id', // Asumiendo que hay una colección 'advisers'
             'sol_status' => 'required', 
         ]);
@@ -76,6 +78,7 @@ class SolicitudeController extends Controller
             // Actualizar los campos
             $solicitude->update([
                 'sol_title_inve' => $request->input('sol_title_inve'),
+                'sol_type_inve' => $request->input('sol_type_inve'),
                 'adviser_id' => $request->input('adviser_id'),
                 'sol_status' => $request->input('sol_status'),
             ]);
