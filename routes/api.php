@@ -84,7 +84,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 });
 
-Route::get('/student/get-review/{student_id}', [HistoryReviewController::class, 'viewRevisionByStudent']);   
 
 
 // RUTAS PARA ASESORES

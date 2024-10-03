@@ -38,10 +38,6 @@ class HistoryReviewController extends Controller
             ]);
         }
 
-        $student = Student::where('_id', $student_id)->first();
-
-        $student_name = $student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name;
-
         $solicitude = Solicitude::where('student_id', $student_id)->first();
 
         $adviser = Adviser::where('_id', $solicitude->adviser_id)->first(); 
@@ -52,9 +48,9 @@ class HistoryReviewController extends Controller
         return response()->json([
             'status' => true,
             'data' => [
-                'estudiante' => $student_name,
                 'asesor' => $adviser_name,
                 'título' => $solicitude->sol_title_inve,
+                'link-tesis' => $solicitude->document_link,
             ],
             'revision' => [
                 'revision_id' => $review->_id,
