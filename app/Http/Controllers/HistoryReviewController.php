@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Adviser;
 use App\Models\HistoryReview;
+use App\Models\Review;
 use App\Models\Solicitude;
 use App\Models\Student;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -17,9 +18,9 @@ class HistoryReviewController extends Controller
                                  ->orderBy('rev_count', 'desc')
                                  ->select('rev_file', 'rev_count', 'updated_at', 'rev_status') // Selecciona los campos necesarios
                                  ->get();
-    
+        
         // Transformamos los datos
-        $data = $reviews->map(function ($review) {
+        $history = $reviews->map(function ($review) {
             return [
                 'rev_file' => $review->rev_file,
                 'rev_count' => $review->rev_count,
@@ -27,10 +28,28 @@ class HistoryReviewController extends Controller
                 'rev_status' => $review->rev_status,
             ];
         });
-    
+          
+        $review = Review::where('student_id', $student_id)->first();
+        
+        if (!$review) {
+            return response()->json([
+                'status' => false,
+                'message' => 'No tiene ninguna solicitud de revisión'
+            ]);
+        }
+
         return response()->json([
-            'data' => $data,
-        ], 200);
+            'status' => true,
+            'revision' => [
+                'revision_id' => $review->_id,
+                'estudiante_id' => $review->student_id,
+                'estado' => $review->rev_status,
+                'cantidad' => $review->rev_count,
+                'archivos' => $review->rev_file,
+                'fecha' => Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s'), // Formato personalizado
+            ],
+            'historial' => $history
+        ]);
     }
     public function viewConfAdviser($id) {
 
