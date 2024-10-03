@@ -64,7 +64,9 @@ class ReviewController extends Controller
             'rev_count' => 1, // Incrementa el contador de revisiones
             'rev_file' => null,
             'rev_status' => 'pendiente',
-            'rev_type' => 'tesis'
+            'rev_type' => 'tesis',
+            'rev_adviser_rol' => 'asesor', // asesor, presidente, secretario, vocal
+
         ]);
 
         return response()->json([
@@ -114,7 +116,8 @@ class ReviewController extends Controller
                         'rev_num_of' => $request->input('rev_num_of'), // Cambia aquí
                         'rev_count' => $count + 1,
                         'rev_status' => 'aprobado', // Estado
-                        'rev_type' => 'tesis',
+                        'rev_type' => $review->rev_type,
+                        'rev_adviser_rol' => $review->rev_adviser_rol, // asesor, presidente, secretario, vocal
                     ]);
     
                     $review->update([
@@ -135,7 +138,8 @@ class ReviewController extends Controller
                         'rev_count' => $count + 1,
                         'rev_file' => $request->input('rev_file'), // Cambia aquí
                         'rev_status' => 'observado', // Estado
-                        'rev_type' => 'tesis',
+                        'rev_type' => $review->rev_type,
+                        'rev_adviser_rol' => $review->rev_adviser_rol, // asesor, presidente, secretario, vocal
                     ]);
     
                     // Actualiza la revisión
