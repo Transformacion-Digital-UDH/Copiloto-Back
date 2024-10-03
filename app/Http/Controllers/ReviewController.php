@@ -41,13 +41,22 @@ class ReviewController extends Controller
     $docresolution = DocResolution::where('docof_id', $docof->id)->first();
 
         // Verificar que la resolución exista y esté en estado 'tramitado'
-        if ($docresolution->docres_status =! 'tramitado') {
-            return response()->json([
-                'status' => false,
-                'message' => 'No cuenta con resolución de designación de asesor.'
-            ], 400);
-        }
+    if ($docresolution->docres_status =! 'tramitado') {
+        return response()->json([
+            'status' => false,
+            'message' => 'No uenta con resolución de designación de asesor.'
+        ], 400);
+    }
+    
+    $review_student = Review::where('student_id', $solicitude->student_id)->first();
+    $review_adviser = Review::where('student_id', $solicitude->student_id)->first();
 
+    if ($review_student and $review_adviser){
+        return response()->json([
+            'status' => false,
+            'message' => 'Ya tiene una revision pendiente.'
+        ], 400);
+    }
         // Crear la revisión
         Review::create([
             'student_id' => $student_id,
@@ -186,6 +195,7 @@ class ReviewController extends Controller
 
         // Agregar los datos de la revisión al array resultante
         $result[] = [
+            'stu_id' => $student->_id,
             'stu_name' => $studentName,
             'sol_title_inve' => $solicitude ? $solicitude->sol_title_inve : 'No title', // Maneja si no hay solicitud
             'rev_count' => $review->rev_count,

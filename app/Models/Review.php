@@ -20,6 +20,7 @@ class Review extends Model
         "rev_file", //excel que sube asesor
         "rev_status", // pendiente || aprobado || observado
         "rev_type", //tesis || informe
+        "rev_adviser_rol", // asesor, presidente, secretario, vocal
     ];
 
 }

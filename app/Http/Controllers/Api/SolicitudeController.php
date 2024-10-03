@@ -71,7 +71,7 @@ class SolicitudeController extends Controller
         // Validar la solicitud
         $validator = Validator::make($request->all(), [
             'sol_title_inve' => 'required|string|max:255',
-            'sol_type_inve' => 'required|string|in:cientifica, tecnologica',
+            'sol_type_inve' => 'required|string|in:cientifica,tecnologica',
             'adviser_id' => 'required|exists:advisers,_id', // Asumiendo que hay una colección 'advisers'
             'sol_status' => 'required', 
         ]);
