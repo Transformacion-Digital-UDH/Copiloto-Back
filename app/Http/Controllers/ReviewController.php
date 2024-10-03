@@ -186,6 +186,7 @@ class ReviewController extends Controller
 
         // Agregar los datos de la revisión al array resultante
         $result[] = [
+            'stu_id' => $student->_id,
             'stu_name' => $studentName,
             'sol_title_inve' => $solicitude ? $solicitude->sol_title_inve : 'No title', // Maneja si no hay solicitud
             'rev_count' => $review->rev_count,
