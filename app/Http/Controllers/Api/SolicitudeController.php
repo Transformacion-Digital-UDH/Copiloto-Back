@@ -6,6 +6,8 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SolicitudeResource;
 use App\Models\Adviser;
+use App\Models\User;
+use App\Models\Role;
 use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\History;
@@ -38,8 +40,19 @@ class SolicitudeController extends Controller
             ], 409); // Código 409: Conflict
         }
 
-        // Buscar un paisi que tenga el programa 'ingeniería de sistemas e informática'
-        $paisi = User::where('us_program', 'ingeniería de sistemas e informática')->first();
+        // Buscar el role_id correspondiente al rol 'paisi' en la colección de roles
+        $paisiRole = Role::where('name', 'paisi')->first();
+        // Buscar un usuario que tenga el role_id del rol 'paisi' y el programa 'ingeniería de sistemas e informática'
+        $paisi = User::where('role_id', $paisiRole->_id)
+                    ->where('us_program', 'ingeniería de sistemas e informática')
+                    ->first();
+
+        if (!$paisi) {
+            return response()->json([
+                'message' => 'No se encontró un PAISI con el programa Ingeniería de Sistemas e Informática.'
+            ], 404); // Código 404: Not Found
+        }
+
 
         if (!$paisi) {
             return response()->json([
