@@ -20,6 +20,7 @@ class HistoryReview extends Model
         "rev_file", //excel que sube asesor
         "rev_status", // Pendiente || Aprobado || Observado
         "rev_type", //tesis || informe
+        "rev_adviser_rol", // asesor, presidente, secretario, vocal
     ];
 
 }
