@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\SolicitudeResource;
 use App\Models\Adviser;
 use App\Models\User;
+use App\Models\Paisi;
 use App\Models\Role;
 use App\Models\Solicitude;
 use App\Models\Student;
@@ -43,22 +44,18 @@ class SolicitudeController extends Controller
         // Buscar el role_id correspondiente al rol 'paisi' en la colección de roles
         $paisiRole = Role::where('name', 'paisi')->first();
         // Buscar un usuario que tenga el role_id del rol 'paisi' y el programa 'ingeniería de sistemas e informática'
-        $paisi = User::where('role_id', $paisiRole->_id)
+        $paisiUser = User::where('role_id', $paisiRole->_id)
                     ->where('us_program', 'ingeniería de sistemas e informática')
                     ->first();
 
-        if (!$paisi) {
+        if (!$paisiUser) {
             return response()->json([
                 'message' => 'No se encontró un PAISI con el programa Ingeniería de Sistemas e Informática.'
             ], 404); // Código 404: Not Found
         }
 
-
-        if (!$paisi) {
-            return response()->json([
-                'message' => 'No se encontró un PAISI con el programa Ingeniería de Sistemas e Informática.'
-            ], 404); // Código 404: Not Found
-        }
+        // Ahora buscar el documento del paisi en la colección 'paisi' que tiene el user_id de ese usuario
+        $paisi = Paisi::where('user_id', $paisiUser->_id)->first();
 
         // Crear la solicitud si no existe una en estado pendiente o en progreso
         $solicitude = Solicitude::create([
