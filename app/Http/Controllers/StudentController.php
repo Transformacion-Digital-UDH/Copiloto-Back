@@ -65,6 +65,7 @@ class StudentController extends Controller
                 "estado" => $solicitude->sol_status,
                 "observacion" => $solicitude->sol_observation,
                 "link" => $solicitude->document_link,
+                "tipo_investigacion" => $solicitude->sol_type_inve,
             ],
             'historial' => HistoryResource::collection($solicitude->history),
             'oficio' => $office,
