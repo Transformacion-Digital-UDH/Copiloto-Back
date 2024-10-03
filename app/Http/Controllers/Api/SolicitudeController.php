@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SolicitudeController extends Controller
 {   
+
     //Crear solicitude después del registro del estudiante
     public function store(Request $request)
     {
@@ -27,7 +28,7 @@ class SolicitudeController extends Controller
 
         // Verificar si ya existe una solicitud en estado 'pending' o 'in-progress' para este estudiante
         $existingSolicitude = Solicitude::where('student_id', $validatedData['student_id'])
-                                        ->whereIn('sol_status', ['pendiente', 'en progreso']) // Estados que deseas evitar duplicar
+                                        ->whereIn('sol_status', ['pendiente', 'en progreso'])
                                         ->first();
 
         if ($existingSolicitude) {
@@ -37,20 +38,32 @@ class SolicitudeController extends Controller
             ], 409); // Código 409: Conflict
         }
 
-        // Crear la solicitud si no existe una en estado pendiente
+        // Buscar un paisi que tenga el programa 'ingeniería de sistemas e informática'
+        $paisi = User::where('us_program', 'ingeniería de sistemas e informática')->first();
+
+        if (!$paisi) {
+            return response()->json([
+                'message' => 'No se encontró un PAISI con el programa Ingeniería de Sistemas e Informática.'
+            ], 404); // Código 404: Not Found
+        }
+
+        // Crear la solicitud si no existe una en estado pendiente o en progreso
         $solicitude = Solicitude::create([
             'sol_title_inve' => null, // Inicialmente vacío
             'sol_type_inve' => null, // Inicialmente vacío
             'adviser_id' => null, // Inicialmente vacío
             'student_id' => $validatedData['student_id'], // ID del estudiante
-            'sol_status' => 'en progreso' // Estado inicial pendiente
+            'paisi_id' => $paisi->_id, // Asignar el paisi_id
+            'sol_status' => 'en progreso' // Estado inicial en progreso
         ]);
 
         return response()->json([
             'status' => true, 
             'message' => 'Se inició tu trámite satisfactoriamente', 
-            'data' => $solicitude], 201);
+            'data' => $solicitude
+        ], 201);
     }
+
 
     // Actualizar título de tesis y asesor
     public function updateSolicitude(Request $request, $id)
