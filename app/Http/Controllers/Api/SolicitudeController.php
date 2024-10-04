@@ -6,6 +6,9 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SolicitudeResource;
 use App\Models\Adviser;
+use App\Models\User;
+use App\Models\Paisi;
+use App\Models\Role;
 use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\History;
@@ -17,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 
 class SolicitudeController extends Controller
 {   
+
     //Crear solicitude después del registro del estudiante
     public function store(Request $request)
     {
@@ -27,7 +31,7 @@ class SolicitudeController extends Controller
 
         // Verificar si ya existe una solicitud en estado 'pending' o 'in-progress' para este estudiante
         $existingSolicitude = Solicitude::where('student_id', $validatedData['student_id'])
-                                        ->whereIn('sol_status', ['pendiente', 'en progreso']) // Estados que deseas evitar duplicar
+                                        ->whereIn('sol_status', ['pendiente', 'en progreso'])
                                         ->first();
 
         if ($existingSolicitude) {
@@ -37,19 +41,39 @@ class SolicitudeController extends Controller
             ], 409); // Código 409: Conflict
         }
 
-        // Crear la solicitud si no existe una en estado pendiente
+        // Buscar el role_id correspondiente al rol 'paisi' en la colección de roles
+        $paisiRole = Role::where('name', 'paisi')->first();
+        // Buscar un usuario que tenga el role_id del rol 'paisi' y el programa 'ingeniería de sistemas e informática'
+        $paisiUser = User::where('role_id', $paisiRole->_id)
+                    ->where('us_program', 'ingeniería de sistemas e informática')
+                    ->first();
+
+        if (!$paisiUser) {
+            return response()->json([
+                'message' => 'No se encontró un PAISI con el programa Ingeniería de Sistemas e Informática.'
+            ], 404); // Código 404: Not Found
+        }
+
+        // Ahora buscar el documento del paisi en la colección 'paisi' que tiene el user_id de ese usuario
+        $paisi = Paisi::where('user_id', $paisiUser->_id)->first();
+
+        // Crear la solicitud si no existe una en estado pendiente o en progreso
         $solicitude = Solicitude::create([
             'sol_title_inve' => null, // Inicialmente vacío
+            'sol_type_inve' => null, // Inicialmente vacío
             'adviser_id' => null, // Inicialmente vacío
             'student_id' => $validatedData['student_id'], // ID del estudiante
-            'sol_status' => 'en progreso' // Estado inicial pendiente
+            'paisi_id' => $paisi->_id, // Asignar el paisi_id
+            'sol_status' => 'en progreso' // Estado inicial en progreso
         ]);
 
         return response()->json([
             'status' => true, 
             'message' => 'Se inició tu trámite satisfactoriamente', 
-            'data' => $solicitude], 201);
+            'data' => $solicitude
+        ], 201);
     }
+
 
     // Actualizar título de tesis y asesor
     public function updateSolicitude(Request $request, $id)
@@ -57,6 +81,7 @@ class SolicitudeController extends Controller
         // Validar la solicitud
         $validator = Validator::make($request->all(), [
             'sol_title_inve' => 'required|string|max:255',
+            'sol_type_inve' => 'required|string|in:cientifica,tecnologica',
             'adviser_id' => 'required|exists:advisers,_id', // Asumiendo que hay una colección 'advisers'
             'sol_status' => 'required', 
         ]);
@@ -76,6 +101,7 @@ class SolicitudeController extends Controller
             // Actualizar los campos
             $solicitude->update([
                 'sol_title_inve' => $request->input('sol_title_inve'),
+                'sol_type_inve' => $request->input('sol_type_inve'),
                 'adviser_id' => $request->input('adviser_id'),
                 'sol_status' => $request->input('sol_status'),
             ]);

@@ -41,13 +41,22 @@ class ReviewController extends Controller
     $docresolution = DocResolution::where('docof_id', $docof->id)->first();
 
         // Verificar que la resolución exista y esté en estado 'tramitado'
-        if ($docresolution->docres_status =! 'tramitado') {
-            return response()->json([
-                'status' => false,
-                'message' => 'No cuenta con resolución de designación de asesor.'
-            ], 400);
-        }
+    if ($docresolution->docres_status =! 'tramitado') {
+        return response()->json([
+            'status' => false,
+            'message' => 'No uenta con resolución de designación de asesor.'
+        ], 400);
+    }
+    
+    $review_student = Review::where('student_id', $solicitude->student_id)->first();
+    $review_adviser = Review::where('student_id', $solicitude->student_id)->first();
 
+    if ($review_student and $review_adviser){
+        return response()->json([
+            'status' => false,
+            'message' => 'Ya tiene una revision pendiente.'
+        ], 400);
+    }
         // Crear la revisión
         Review::create([
             'student_id' => $student_id,
@@ -55,7 +64,9 @@ class ReviewController extends Controller
             'rev_count' => 1, // Incrementa el contador de revisiones
             'rev_file' => null,
             'rev_status' => 'pendiente',
-            'rev_type' => 'tesis'
+            'rev_type' => 'tesis',
+            'rev_adviser_rol' => 'asesor', // asesor, presidente, secretario, vocal
+
         ]);
 
         return response()->json([
@@ -105,7 +116,8 @@ class ReviewController extends Controller
                         'rev_num_of' => $request->input('rev_num_of'), // Cambia aquí
                         'rev_count' => $count + 1,
                         'rev_status' => 'aprobado', // Estado
-                        'rev_type' => 'tesis',
+                        'rev_type' => $review->rev_type,
+                        'rev_adviser_rol' => $review->rev_adviser_rol, // asesor, presidente, secretario, vocal
                     ]);
     
                     $review->update([
@@ -126,7 +138,8 @@ class ReviewController extends Controller
                         'rev_count' => $count + 1,
                         'rev_file' => $request->input('rev_file'), // Cambia aquí
                         'rev_status' => 'observado', // Estado
-                        'rev_type' => 'tesis',
+                        'rev_type' => $review->rev_type,
+                        'rev_adviser_rol' => $review->rev_adviser_rol, // asesor, presidente, secretario, vocal
                     ]);
     
                     // Actualiza la revisión
@@ -152,7 +165,10 @@ class ReviewController extends Controller
 
     public function viewRevisionByAdviser($adviser_id) {
     // Obtiene las revisiones del asesor
-    $reviews = Review::where('adviser_id', $adviser_id)->get();
+    $reviews = Review::where('adviser_id', $adviser_id)
+                        ->where('rev_adviser_rol', 'asesor')
+                        ->get();
+
 
     // Mapear los resultados asignando prioridad al estado usando sortBy
     $sortedReviews = $reviews->sortBy(function ($review) {
@@ -186,11 +202,14 @@ class ReviewController extends Controller
 
         // Agregar los datos de la revisión al array resultante
         $result[] = [
+            'stu_id' => $student->_id,
             'stu_name' => $studentName,
             'sol_title_inve' => $solicitude ? $solicitude->sol_title_inve : 'No title', // Maneja si no hay solicitud
             'rev_count' => $review->rev_count,
             'rev_status' => $review->rev_status,
+            'link-tesis' => $solicitude->document_link,
             'updated_at' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
+            'rol_revisor' => $review->rev_adviser_rol,
         ];
     }
 
