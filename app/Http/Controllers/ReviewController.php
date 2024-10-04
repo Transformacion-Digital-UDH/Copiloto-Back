@@ -165,7 +165,10 @@ class ReviewController extends Controller
 
     public function viewRevisionByAdviser($adviser_id) {
     // Obtiene las revisiones del asesor
-    $reviews = Review::where('adviser_id', $adviser_id)->get();
+    $reviews = Review::where('adviser_id', $adviser_id)
+                        ->where('rev_adviser_rol', 'asesor')
+                        ->get();
+
 
     // Mapear los resultados asignando prioridad al estado usando sortBy
     $sortedReviews = $reviews->sortBy(function ($review) {
@@ -204,7 +207,9 @@ class ReviewController extends Controller
             'sol_title_inve' => $solicitude ? $solicitude->sol_title_inve : 'No title', // Maneja si no hay solicitud
             'rev_count' => $review->rev_count,
             'rev_status' => $review->rev_status,
+            'link-tesis' => $solicitude->document_link,
             'updated_at' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
+            'rol_revisor' => $review->rev_adviser_rol,
         ];
     }
 
