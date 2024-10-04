@@ -78,10 +78,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para el actualizar estado de la revision ---> ESTUDIANTE, ASESOR
     Route::put('/student/review/{student_id}/status', [ReviewController::class, 'updateStatusReview']);
     // Ruta para ver las correcciones observadas y aprobada en orden ---> ESTUDIANTE
-    Route::get('/student/get-review/{student_id}', [HistoryReviewController::class, 'viewRevisionByStudent']);   
     // Ruta para ver las correcciones pendientes ---> ASESOR
 
 });
+Route::get('/student/get-review/{student_id}', [HistoryReviewController::class, 'viewRevisionByStudent']);   
 
 Route::get('/adviser/get-review/{adviser_id}', [ReviewController::class, 'viewRevisionByAdviser']); 
 
