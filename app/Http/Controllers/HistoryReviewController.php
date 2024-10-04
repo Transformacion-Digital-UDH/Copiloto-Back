@@ -49,7 +49,7 @@ class HistoryReviewController extends Controller
             'status' => true,
             'data' => [
                 'asesor' => $adviser_name,
-                'título' => $solicitude->sol_title_inve,
+                'titulo' => $solicitude->sol_title_inve,
                 'link-tesis' => $solicitude->document_link,
             ],
             'revision' => [
