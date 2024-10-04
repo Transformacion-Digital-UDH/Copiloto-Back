@@ -223,4 +223,8 @@ class DocOfController extends Controller
             'docOf' => $docOf
         ], 200);
     }
+
+    public function soliciteJuriesForTesis($id_student){
+
+    }
 }
