@@ -57,7 +57,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para actualizar el estado de la solicitud ---> PAISI
     Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']);
+    Route::get('/office/solicitude-juries/{student_id}', [DocOfController::class, 'soliciteJuriesForTesis']);
 });
+
+    Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
+
     
 //RUTAS PARA RESOLUCIONES
 Route::middleware(['auth:sanctum'])->group(function () {   
@@ -66,7 +70,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 
-Route::get('/office/solicitude-juries/{student_id}', [DocOfController::class, 'soliciteJuriesForTesis']);
 
 // RUTAS PARA ESTUDIANTES
 Route::middleware(['auth:sanctum'])->group(function () {   
@@ -86,6 +89,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/adviser/get-review/{adviser_id}', [ReviewController::class, 'viewRevisionByAdviser']); 
 
 });
+
+Route::put('/student/review/{student_id}/status', [ReviewController::class, 'updateStatusReview']);
 
 
 

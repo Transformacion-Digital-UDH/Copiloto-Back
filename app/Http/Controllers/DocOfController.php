@@ -272,4 +272,21 @@ class DocOfController extends Controller
         ], 200);
     }
 
+    public function viewSolicitudeOfJuries()
+    {
+        // Obtener todas las solicitudes con el nombre 'Solicitud de jurados para revision de tesis'
+        $solicitude_docof = DocOf::where('of_name', 'Solicitud de jurados para revision de tesis')->get();
+
+        // Definir el orden deseado
+        $order = ['pendiente', 'observado', 'tramitado'];
+
+        // Ordenar manualmente las solicitudes por 'of_status' usando PHP
+        $sortedSolicitudes = $solicitude_docof->sort(function($a, $b) use ($order) {
+            return array_search($a->of_status, $order) <=> array_search($b->of_status, $order);
+        });
+
+        return response()->json($sortedSolicitudes->values());
+    }
+
+
 }

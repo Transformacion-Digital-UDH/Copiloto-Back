@@ -120,6 +120,7 @@ class ReviewController extends Controller
                     ]);
     
                     $review->update([
+                        'rev_num_of' => $request->input('rev_num_of'), // Cambia aquí
                         'rev_status' => 'aprobado',
                     ]);
 
