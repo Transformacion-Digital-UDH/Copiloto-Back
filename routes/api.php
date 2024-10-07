@@ -118,8 +118,8 @@ Route::get('/download-office/{id}', [DocOfController::class, 'downloadOffice']);
 Route::get('/view-resolution/{id}', [DocResolutionController::class, 'resPDF']);
 Route::get('/download-resolution/{id}', [DocResolutionController::class, 'downloadResolution']);
 // Ruta para ver conformidad del proyecto de tesis por el asesor ---> ESTUDIANTE, ASESOR 
-Route::get('/view-cpa/{id}', [HistoryReviewController::class, 'viewConfAdviser']);
-Route::get('/download-cpa/{id}', [HistoryReviewController::class, 'downloadConfAdviser']);
+Route::get('/view-cpa/{review_id}', [HistoryReviewController::class, 'viewConfAdviser']);
+Route::get('/download-cpa/{review_id}', [HistoryReviewController::class, 'downloadConfAdviser']);
 
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
