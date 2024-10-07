@@ -85,7 +85,6 @@ class ReviewController extends Controller
             $rules = [
                 'rev_status' => 'required|string|in:pendiente,aprobado,observado',
                 'rev_num_of' => 'nullable|string',
-                'rev_file' => 'nullable|string'
             ];
     
             // Contar cuántas revisiones tiene el estudiante
@@ -129,14 +128,11 @@ class ReviewController extends Controller
                     break;
     
                 case 'observado':
-                    $rules['rev_file'] = 'required|string'; // Agrega la regla para rev_file
-                    $this->validate($request, ['rev_file' => $rules['rev_file']]);
     
                     HistoryReview::create([
                         'adviser_id' => $review->adviser_id,
                         'student_id' => $review->student_id,
                         'rev_count' => $count + 1,
-                        'rev_file' => $request->input('rev_file'), // Cambia aquí
                         'rev_status' => 'observado', // Estado
                         'rev_type' => $review->rev_type,
                         'rev_adviser_rol' => $review->rev_adviser_rol, // asesor, presidente, secretario, vocal
