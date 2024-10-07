@@ -7,6 +7,7 @@ use App\Models\Adviser;
 use App\Models\DocOf;
 use App\Models\DocResolution;
 use App\Models\History;
+use App\Models\Review;
 use App\Models\Solicitude;
 use App\Models\Student;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -224,7 +225,51 @@ class DocOfController extends Controller
         ], 200);
     }
 
-    public function soliciteJuriesForTesis($id_student){
+    public function soliciteJuriesForTesis($student_id)
+    {
+        $conf_adviser = Review::where('student_id', $student_id)
+                        ->where('rev_adviser_rol', 'asesor')
+                        ->first();
 
+        $search_docOf = DocOf::where('student_id', $student_id)
+                        ->where('of_name', 'Solicitud de jurados para revision de tesis')
+                        ->first();
+
+        // Verificar si existe el asesor y si su estado es aprobado
+        if ($conf_adviser == null || $conf_adviser->rev_status != 'aprobado') {
+            return response()->json([
+                'estado' => '',
+                'message' => 'Este estudiante aun no tiene su conformidad por el asesor.'
+            ], 404);
+        }
+
+        // Verificar si ya existe una solicitud de jurados
+        if ($search_docOf != null && $search_docOf->of_name == 'Solicitud de jurados para revision de tesis') {
+            return response()->json([
+                'estado' => 'pendiente',
+                'message' => 'Este estudiante ya tiene una solicitud en proceso.'
+            ], 404);
+        }
+
+        // Crear una nueva solicitud
+        $docOf = new DocOf([
+            'student_id' => $student_id,
+            'of_name' => 'Solicitud de jurados para revision de tesis',  
+            'of_num_of' => null,  
+            'of_num_exp' => null,  
+            'of_status' => 'pendiente',  
+            'of_observation' => null,  
+        ]);
+
+        // Guardar el nuevo documento en la base de datos
+        $docOf->save();
+
+        return response()->json([
+            'estado' => $docOf->of_status,
+            'status' => true,
+            'message' => 'Solicitud enviada correctamente',
+            'docOf' => $docOf
+        ], 200);
     }
+
 }

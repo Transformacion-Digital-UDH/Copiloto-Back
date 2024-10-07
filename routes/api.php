@@ -65,6 +65,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/resolution/{id}/status', [DocResolutionController::class, 'updateStatus']);
 });
 
+
+Route::get('/office/solicitude-juries/{student_id}', [DocOfController::class, 'soliciteJuriesForTesis']);
+
 // RUTAS PARA ESTUDIANTES
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
