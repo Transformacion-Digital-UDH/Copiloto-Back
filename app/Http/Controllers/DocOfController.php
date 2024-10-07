@@ -288,5 +288,12 @@ class DocOfController extends Controller
         return response()->json($sortedSolicitudes->values());
     }
 
+    public function updateSoliciteJuriesForTesis(Request $request, $docof_id){
 
+        $docof = DocOf::where('_id', $docof_id)->first();
+
+       
+
+    }
 }
+

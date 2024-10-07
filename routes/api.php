@@ -57,10 +57,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para actualizar el estado de la solicitud ---> PAISI
     Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']);
+    //Ruta para crear la solicitud de oficio multiple, para jurados de tesis ---> ESTUDIANTE
     Route::get('/office/solicitude-juries/{student_id}', [DocOfController::class, 'soliciteJuriesForTesis']);
-});
-
+    //Ruta para ver las solicitudes de designacion de jurados para la tesis ---> PAISI
     Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
+
+});
+Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
 
     
 //RUTAS PARA RESOLUCIONES
@@ -87,10 +90,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/student/get-review/{student_id}', [HistoryReviewController::class, 'viewRevisionByStudent']);   
     // Ruta para ver las correcciones pendientes ---> ASESOR
     Route::get('/adviser/get-review/{adviser_id}', [ReviewController::class, 'viewRevisionByAdviser']); 
-
 });
 
-Route::put('/student/review/{student_id}/status', [ReviewController::class, 'updateStatusReview']);
 
 
 
