@@ -57,10 +57,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para actualizar el estado de la solicitud ---> PAISI
     Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']);
+    //Ruta para crear la solicitud de officio de designacion de jurados ---> ESTUDIANTE
     Route::get('/office/solicitude-juries/{student_id}', [DocOfController::class, 'soliciteJuriesForTesis']);
+    //Ruta para ver todos los oficios prendientes de designacion de jurados ---> PAISI
+    Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
+
 });
 
-    Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
 
     
 //RUTAS PARA RESOLUCIONES
