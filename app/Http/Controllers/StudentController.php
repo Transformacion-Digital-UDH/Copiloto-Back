@@ -10,6 +10,7 @@ use App\Models\DocResolution;
 use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\Adviser;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use MongoDB\Laravel\Eloquent\Casts\ObjectId;
 
@@ -83,4 +84,52 @@ class StudentController extends Controller
             'resolucion' => $resolution
         ], 200);
     }
+
+    public function viewJuriesForTesisByStudent($student_id) {
+        // Obtener todas las revisiones relacionadas con el estudiante especificado
+        $reviews = Review::where('student_id', $student_id)
+            ->where('rev_adviser_rol', '!=', 'asesor')
+            ->get();  
+        
+        // Crear un array para almacenar asesores y roles
+        $jurados = $reviews->map(function($review) {
+            // Obtener el asesor correspondiente a la revisión
+            $adviser = Adviser::where('_id', $review->adviser_id)->first(); // Obtener el asesor
+            
+            // Verificar si el asesor existe
+            $adviser_name = $adviser ? strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name) : 'No disponible';
+    
+            return [
+                'asesor' => $adviser_name, // Convertir a mayúsculas
+                'rol' => $review->rev_adviser_rol
+            ];
+        });
+    
+        // Obtener el documento de oficio
+        $docof = DocOf::where('student_id', $student_id)
+            ->where('of_name', 'Solicitud de jurados para revision de tesis')
+            ->first();
+    
+        // Verificar si el documento existe antes de acceder a sus propiedades
+        if (!$docof) {
+            return response()->json([
+                'estudiante_id' => $student_id,
+                'mensaje' => 'No ha iniciado el trámite, complete el pre-requisito.',
+                'estado' => 'No iniciado',
+                'jurados' => $jurados,
+            ], 404); // O cualquier otro código de estado que consideres apropiado
+        }
+    
+        // Retornar los roles y IDs en formato JSON
+        return response()->json([
+            'estudiante_id' => $student_id,
+            'tramite' => $docof->of_name,
+            'estado' => $docof->of_status,
+            'jurados' => $jurados,
+        ], 200);
+    }
+    
+    
+    
+    
 }

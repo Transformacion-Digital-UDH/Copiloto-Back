@@ -80,7 +80,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
     Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
+    // Ruta para ver los jurados asignados por id de estudiante
 });
+
+Route::get('/student/get-juries/{student_id}', [StudentController::class, 'viewJuriesForTesisByStudent']); 
+
 
 // RUTAS PARA REVISIONES
 Route::middleware(['auth:sanctum'])->group(function () {  
