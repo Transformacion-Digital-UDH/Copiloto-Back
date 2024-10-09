@@ -288,12 +288,122 @@ class DocOfController extends Controller
         return response()->json($sortedSolicitudes->values());
     }
 
-    public function updateSoliciteJuriesForTesis(Request $request, $docof_id){
-
+    public function updateSoliciteJuriesForTesis(Request $request, $docof_id)
+    {
+        // Obtener el registro correspondiente en la base de datos
         $docof = DocOf::where('_id', $docof_id)->first();
 
-       
+        if (!$docof) {
+            return response()->json(['error' => 'Oficio no encontrado'], 404);
+        }
+        
+        if ($docof->of_name != 'Solicitud de jurados para revision de tesis') {
+            return response()->json(['error' => 'Oficio no válido'], 400);
+        }
 
+        $state = $request->input('estado');
+
+        $rules = [
+            'estado' => 'required|string|in:observado,tramitado',
+        ];
+        // Manejo de diferentes estados usando un switch
+        switch ($state) {
+            case 'observado':
+                $rules['observacion'] = 'required|string'; // Agrega la regla para rev_num_of
+                $this->validate($request, ['observacion' => $rules['observacion']]);
+                
+                $docof->update([
+                    'of_status' => $request->input('estado'),
+                    'of_observation' => $request->input('observacion')
+                ]);
+                return response()->json([
+                    'message' => 'Observacion enviada y actualizada',
+                    'estado' => $docof->of_status,
+                ], 200);
+
+                break;
+
+            case 'tramitado':
+
+                $rules = [
+                    'numero_oficio' => 'required|string',
+                    'expediente' => 'required|string',
+                    'presidente' => 'required|string',
+                    'secretario' => 'required|string',
+                    'vocal' => 'required|string',
+                ];
+
+                $validator = Validator::make($request->all(), $rules);
+
+                if ($validator->fails()) {
+                    return response()->json([
+                        'status' => false,
+                        'errors' => $validator->errors()
+                    ], 400);
+                }
+                
+                $this->validate($request, $rules);
+
+                $presidente =  Review::create([
+                    'adviser_id' => $request->input('presidente'),
+                    'student_id' => $docof->student_id,
+                    'rev_num_of' => null,
+                    'rev_count' => 0,
+                    'rev_status' => 'pendiente', // Estado
+                    'rev_type' => 'tesis',
+                    'rev_adviser_rol' => 'presidente', // asesor, presidente, secretario, vocal
+                ]);
+
+                $secretario =  Review::create([
+                    'adviser_id' => $request->input('secretario'),
+                    'student_id' => $docof->student_id,
+                    'rev_num_of' => null, 
+                    'rev_count' => 0,
+                    'rev_status' => 'pendiente', // Estado
+                    'rev_type' => 'tesis',
+                    'rev_adviser_rol' => 'secretario', // asesor, presidente, secretario, vocal
+                ]);
+
+                $vocal =  Review::create([
+                    'adviser_id' => $request->input('vocal'),
+                    'student_id' => $docof->student_id,
+                    'rev_num_of' => null, 
+                    'rev_count' => 0,
+                    'rev_status' => 'pendiente', // Estado
+                    'rev_type' => 'tesis',
+                    'rev_adviser_rol' => 'vocal', // asesor, presidente, secretario, vocal
+                ]);
+
+                $presidente->save();
+                $secretario->save();
+                $vocal->save();
+
+                
+                $docof->update([
+                    'of_status' => $request->input('estado'),
+                    'of_num_of' => $request->input('numero_oficio'),
+                    'of_num_exp' => $request->input('expediente'),
+                    'of_observation' => null,
+                ]);
+
+                
+
+                return response()->json([
+                    'message' => 'Observacion enviada y actualizada',
+                    'estado' => $docof->of_status,
+                ], 200);
+               
+                break;
+
+            default:
+                // Manejo de estado no reconocido
+                return response()->json(['error' => 'Estado no válido'], 400);
+    }
+
+    $docof->save();
+    return response()->json([
+        'message' => 'Estado actualizado correctamente',
+        'oficio_datos' => $docof,
+    ], 200);
     }
 }
-
