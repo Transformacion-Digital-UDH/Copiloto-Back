@@ -103,7 +103,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/adviser/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
     // Ruta para listar solicitudes ordenando por estado (PENDIENTE, ACEPTADO, RECHAZADO) por id de asesor    
     Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
+    // Ruta para listar jurados y sus revisiones, con rol, estudiante, tiempo transcurrido en dias ---> PAISI
+    Route::get('/juries/get-select', [AdviserController::class, 'getSelectJuriesTesis']); 
+
 });
+
+
 
 //RUTA PARA DOCUMENTO GOOGLE
 Route::post('/create-document', [GoogleDocumentController::class, 'createDocument']); //Crear gocumento de google docs (Tesis)
