@@ -9,11 +9,14 @@ use Illuminate\Http\Request;
 use App\Models\Solicitude;
 use App\Models\Comment;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 class CommentControllerDocs extends Controller
 {
     protected $client;
     protected $driveService;
+    protected const COMMENTS_PER_PAGE = 100;
 
     public function __construct()
     {
@@ -22,144 +25,227 @@ class CommentControllerDocs extends Controller
 
     protected function initializeGoogleClient()
     {
-        // Cargar las credenciales de la cuenta de servicio
-        putenv('GOOGLE_APPLICATION_CREDENTIALS=' . storage_path('app/google/proyectotitulacionudh-72441794cf5a.json'));
+        try {
+            $credentialsPath = storage_path('app/google/proyectotitulacionudh-72441794cf5a.json');
+            
+            if (!file_exists($credentialsPath)) {
+                throw new \Exception('Google credentials file not found');
+            }
 
-        $this->client = new Google_Client();
-        $this->client->useApplicationDefaultCredentials();
-        // Cambiamos la constante no definida por permisos válidos
-        $this->client->addScope(Google_Service_Drive::DRIVE_METADATA_READONLY);
-        $this->client->addScope(Google_Service_Docs::DOCUMENTS_READONLY);
-        // Se eliminó la constante DRIVE_COMMENTS_READONLY
-        // Se puede utilizar el alcance DRIVE en su lugar si se desea acceso general a archivos
-        $this->client->addScope(Google_Service_Drive::DRIVE); // Comentado: descomentar si es necesario
+            putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $credentialsPath);
 
-        // Inicializar el servicio de Drive
-        $this->driveService = new Google_Service_Drive($this->client);
+            $this->client = new Google_Client();
+            $this->client->useApplicationDefaultCredentials();
+            $this->client->addScope([
+                Google_Service_Drive::DRIVE_METADATA_READONLY,
+                Google_Service_Docs::DOCUMENTS_READONLY,
+                Google_Service_Drive::DRIVE
+            ]);
+
+            $this->driveService = new Google_Service_Drive($this->client);
+        } catch (\Exception $e) {
+            Log::error('Failed to initialize Google client: ' . $e->getMessage());
+            throw $e;
+        }
     }
 
     public function extractAndSaveComments($solicitudeId)
     {
-        // Encuentra la solicitud
-        $solicitude = Solicitude::find($solicitudeId);
-        if (!$solicitude) {
-            return response()->json(['success' => false, 'message' => 'Solicitud no encontrada'], 404);
-        }
-    
-        // Obtener el ID del documento a partir del enlace almacenado
-        $documentId = $this->getDocumentIdFromLink($solicitude->document_link);
-    
+        Log::info("Starting comment extraction for solicitude ID: {$solicitudeId}");
+
         try {
-            // Obtener los comentarios del documento, especificando los campos requeridos
-            $optParams = [
-                'fields' => 'comments(author(displayName), content, createdTime, id, replies(id, author(displayName), content, createdTime))'
-            ];
-            $comments = $this->driveService->comments->listComments($documentId, $optParams);
+            // Validación de entrada
+            $validator = Validator::make(['solicitude_id' => $solicitudeId], [
+                'solicitude_id' => 'required|string|exists:solicitudes,_id'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['success' => false, 'message' => $validator->errors()], 400);
+            }
+
+            $solicitude = Solicitude::findOrFail($solicitudeId);
+            $documentId = $this->getDocumentIdFromLink($solicitude->document_link);
+
+            if (!$documentId) {
+                Log::error("Invalid document link for solicitude ID: {$solicitudeId}");
+                return response()->json(['success' => false, 'message' => 'Invalid document link'], 400);
+            }
+
+            $allComments = $this->fetchAllComments($documentId);
+
+            $existingComments = Comment::where('solicitude_id', $solicitudeId)->first();
+            $newCommentsArray = $this->processComments($allComments, $existingComments);
+
+            if ($existingComments) {
+                Log::info("Updating existing comments for solicitude ID: {$solicitudeId}");
+                $this->updateExistingComments($existingComments, $newCommentsArray);
+                $message = 'Comentarios y respuestas actualizados exitosamente';
+            } else {
+                Log::info("Creating new comments for solicitude ID: {$solicitudeId}");
+                $this->createNewComments($solicitudeId, $documentId, $newCommentsArray);
+                $message = 'Comentarios extraídos y guardados exitosamente';
+            }
+
+            Log::info("Comment extraction completed for solicitude ID: {$solicitudeId}");
+            return response()->json([
+                'success' => true,
+                'message' => $message,
+                'comments' => $newCommentsArray
+            ]);
+
+        } catch (\Google_Service_Exception $e) {
+            Log::error("Google API error: " . $e->getMessage());
+            return response()->json([
+                'success' => false, 
+                'message' => 'Error al acceder a la API de Google: ' . $e->getMessage()
+            ], 500);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Error al obtener los comentarios: ' . $e->getMessage()], 500);
+            Log::error("Error in comment extraction: " . $e->getMessage());
+            Log::error("Stack trace: " . $e->getTraceAsString());
+            return response()->json([
+                'success' => false, 
+                'message' => 'Error al procesar los comentarios: ' . $e->getMessage()
+            ], 500);
         }
-    
-        // Buscar si ya existe un registro de comentarios para la solicitud
-        $existingComments = Comment::where('solicitude_id', $solicitudeId)->first();
-    
-        // Obtener los IDs de los comentarios ya guardados
-        $existingCommentIds = [];
-        $existingReplyIds = []; // Almacenaremos también los IDs de las respuestas existentes
-        if ($existingComments) {
-            $existingCommentsArray = $existingComments->comments; // Convertir a array modificable
-            foreach ($existingCommentsArray as $existingComment) {
-                $existingCommentIds[] = $existingComment['id'];
-    
-                // Obtener los IDs de las respuestas ya guardadas
-                if (isset($existingComment['replies'])) {
-                    foreach ($existingComment['replies'] as $existingReply) {
-                        $existingReplyIds[] = $existingReply['id'];
-                    }
-                }
-            }
-        }
-    
-        // Preparar los nuevos comentarios y respuestas (que no estén ya en la base de datos)
-        $newCommentsArray = [];
-        foreach ($comments->getComments() as $comment) {
-            $commentData = [
-                'id' => $comment->getId(),
-                'author' => $comment->getAuthor()->getDisplayName(),
-                'content' => $comment->getContent(),
-                'created_time' => $comment->getCreatedTime(),
-                'replies' => []
+    }
+
+    protected function fetchAllComments($documentId)
+    {
+        $allComments = [];
+        $pageToken = null;
+
+        do {
+            $optParams = [
+                'fields' => 'comments(author(displayName),content,createdTime,id,resolved,replies(id,author(displayName),content,createdTime)),nextPageToken',
+                'pageSize' => self::COMMENTS_PER_PAGE,
+                'pageToken' => $pageToken
             ];
+
+            $response = $this->driveService->comments->listComments($documentId, $optParams);
+            $allComments = array_merge($allComments, $response->getComments());
+            $pageToken = $response->getNextPageToken();
+        } while ($pageToken != null);
+
+        return $allComments;
+    }
+
+    private function processComments($comments, $existingComments)
+    {
+        $newCommentsArray = [];
     
-            // Añadir respuestas nuevas a los comentarios
-            if ($comment->getReplies()) {
-                foreach ($comment->getReplies() as $reply) {
-                    // Solo añadir la respuesta si no está ya guardada
-                    if (!in_array($reply->getId(), $existingReplyIds)) {
-                        $commentData['replies'][] = [
-                            'id' => $reply->getId(),
-                            'author' => $reply->getAuthor()->getDisplayName(),
-                            'content' => $reply->getContent(),
-                            'created_time' => $reply->getCreatedTime()
-                        ];
-                    }
-                }
-            }
+        foreach ($comments as $comment) {
+            $commentData = $this->formatCommentData($comment);
     
-            // Añadir solo los nuevos comentarios
-            if (!in_array($comment->getId(), $existingCommentIds)) {
+            if (!$existingComments || !$this->commentExists($existingComments, $comment->getId())) {
                 $newCommentsArray[] = $commentData;
             } else {
-                // Si el comentario ya existe, solo agregar las nuevas respuestas
-                foreach ($existingCommentsArray as &$existingComment) {
-                    if ($existingComment['id'] == $comment->getId()) {
-                        // Agregar solo las respuestas nuevas
-                        if (!empty($commentData['replies'])) {
-                            $existingComment['replies'] = array_merge($existingComment['replies'], $commentData['replies']);
-                        }
-                    }
+                $updatedComment = $this->updateExistingComment($existingComments, $commentData);
+                if (!empty($updatedComment)) {
+                    $newCommentsArray[] = $updatedComment;
                 }
             }
         }
     
-        // Actualizar si ya existen comentarios
-        if ($existingComments) {
-            // Verificar si hay nuevos comentarios o respuestas para añadir
-            if (!empty($newCommentsArray)) {
-                // Añadir los nuevos comentarios al array de comentarios existentes
-                $existingCommentsArray = array_merge($existingCommentsArray, $newCommentsArray);
-            }
-    
-            // Asignar el array actualizado al modelo antes de guardarlo
-            $existingComments->comments = $existingCommentsArray;
-            $existingComments->save();
-    
-            return response()->json([
-                'success' => true,
-                'message' => 'Comentarios y respuestas actualizados exitosamente',
-                'comments' => $existingComments->comments
-            ]);
-        } else {
-            // Si no existe, crear un nuevo registro
-            $commentRecord = new Comment([
-                'solicitude_id' => $solicitudeId,
-                'document_id' => $documentId,
-                'comments' => $newCommentsArray
-            ]);
-    
-            $commentRecord->save();
-    
-            return response()->json([
-                'success' => true,
-                'message' => 'Comentarios extraídos y guardados exitosamente',
-                'comments' => $newCommentsArray
-            ]);
-        }
-    }    
+        return $newCommentsArray;
+    }
 
-    // Extrae el ID del documento de Google Docs a partir del enlace
+    private function commentExists($existingComments, $commentId)
+    {
+        foreach ($existingComments->getComments() as $comment) {
+            if ($comment['id'] === $commentId) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private function formatCommentData($comment)
+    {
+        $commentData = [
+            'id' => $comment->getId(),
+            'author' => $comment->getAuthor()->getDisplayName(),
+            'content' => $comment->getContent(),
+            'created_time' => Carbon::parse($comment->getCreatedTime())->toIso8601String(),
+            'resolved' => $comment->getResolved() ?? false,
+            'replies' => []
+        ];
+    
+        if ($comment->getReplies()) {
+            foreach ($comment->getReplies() as $reply) {
+                $commentData['replies'][] = [
+                    'id' => $reply->getId(),
+                    'author' => $reply->getAuthor()->getDisplayName(),
+                    'content' => $reply->getContent(),
+                    'created_time' => Carbon::parse($reply->getCreatedTime())->toIso8601String(),
+                ];
+            }
+        }
+    
+        return $commentData;
+    }   
+    
+    private function updateExistingComment($existingComments, $newCommentData)
+    {
+        $existingComment = collect($existingComments->getComments())->first(function ($comment) use ($newCommentData) {
+            return $comment['id'] === $newCommentData['id'];
+        });
+
+        if ($existingComment) {
+            // Actualizar el contenido principal del comentario si ha cambiado
+            $updated = false;
+            if ($existingComment['content'] !== $newCommentData['content']) {
+                $existingComment['content'] = $newCommentData['content'];
+                $updated = true;
+            }
+
+            // Procesar las respuestas
+            foreach ($newCommentData['replies'] as $newReply) {
+                $existingReply = collect($existingComment['replies'])->first(function ($reply) use ($newReply) {
+                    return $reply['id'] === $newReply['id'];
+                });
+
+                if (!$existingReply) {
+                    $existingComment['replies'][] = $newReply;
+                    $updated = true;
+                } elseif ($existingReply['content'] !== $newReply['content']) {
+                    $existingReplyIndex = array_search($existingReply, $existingComment['replies']);
+                    $existingComment['replies'][$existingReplyIndex] = $newReply;
+                    $updated = true;
+                }
+            }
+
+            if ($updated) {
+                $existingComments->updateComment($newCommentData['id'], $existingComment);
+                return $existingComment;
+            }
+        }
+
+        return null;
+    }
+
+    private function updateExistingComments($existingComments, $newCommentsArray)
+    {
+        foreach ($newCommentsArray as $newComment) {
+            $existingComments->addComment($newComment);
+        }
+        $existingComments->save();
+    }
+
+    private function createNewComments($solicitudeId, $documentId, $newCommentsArray)
+    {
+        $comment = new Comment([
+            'solicitude_id' => $solicitudeId,
+            'document_id' => $documentId,
+        ]);
+        $comment->setComments($newCommentsArray);
+        $comment->save();
+    }
+
     private function getDocumentIdFromLink($documentLink)
     {
-        preg_match('/\/d\/(.+)\//', $documentLink, $matches);
-        return $matches[1] ?? null;
+        if (preg_match('/\/d\/([a-zA-Z0-9-_]+)/', $documentLink, $matches)) {
+            return $matches[1];
+        }
+        return null;
     }
 }
