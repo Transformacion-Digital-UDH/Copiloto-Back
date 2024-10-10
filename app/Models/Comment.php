@@ -14,6 +14,6 @@ class Comment extends Model
     protected $fillable = [
         'solicitude_id', 
         'document_id', 
-        'comments'
+        'comments',
     ];
 }
