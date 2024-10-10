@@ -432,6 +432,7 @@ class DocOfController extends Controller
     }
 
     public function viewOfficeJuriesForTesis($docof_id){
+        
         $office = DocOf::where('_id', $docof_id)->first();
     
         // Verifica si el registro no se encuentra
@@ -445,7 +446,7 @@ class DocOfController extends Controller
 
 
 
-        $solicitude = Solicitude::where('_id', $office->solicitude_id)->first();
+        $solicitude = Solicitude::where('student_id', $office->student_id)->first();
     
         // Recibe el id del Asesor
         $adviser = Adviser::where('_id', $solicitude->adviser_id)->first();
@@ -487,7 +488,7 @@ class DocOfController extends Controller
         }
     
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('office_adviser', compact('siglas', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
+        $pdf = Pdf::loadView('of_dj_pt', compact('siglas', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
     
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
     }
