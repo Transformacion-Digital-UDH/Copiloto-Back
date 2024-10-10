@@ -4,14 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oficio N° {{$review->rev_num_of}}-ARC-PAISI-FI-UDH</title>
+    <title>Oficio Múltiple N° 019-2024-CA-PAISI-FI-UDH</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Old+Uyghur&display=swap" rel="stylesheet">
     <style>
         @page {
-            size: A4;
+            size: 215.9mm 355.6mm;
             margin: 2mm;
         }
 

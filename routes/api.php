@@ -134,8 +134,8 @@ Route::get('/download-resolution/{id}', [DocResolutionController::class, 'downlo
 Route::get('/view-cpa/{review_id}', [HistoryReviewController::class, 'viewConfAdviser']);
 Route::get('/download-cpa/{review_id}', [HistoryReviewController::class, 'downloadConfAdviser']);
 //Ruta para ver oficio de designacion de jurados para la revision de tesis ---> ESTUDIANTE, JURADOS
-Route::get('/view-odj-pt/{docof_id}', [HistoryReviewController::class, 'viewOfficeJuriesForTesis']);
-Route::get('/download-odj-pt/{docof_id}', [HistoryReviewController::class, 'downloadOfficeJuriesForTesis']);
+Route::get('/view-odj-pt/{docof_id}', [DocOfController::class, 'viewOfficeJuriesForTesis']);
+Route::get('/download-odj-pt/{docof_id}', [DocOfController::class, 'downloadOfficeJuriesForTesis']);
 
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);

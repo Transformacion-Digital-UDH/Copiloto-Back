@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Old+Uyghur&display=swap" rel="stylesheet">
     <style>
         @page {
-            size: A4;
+            size: 215.9mm 355.6mm;
             margin: 2mm;
         }
 
