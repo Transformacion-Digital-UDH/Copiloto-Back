@@ -65,7 +65,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/office/djt/{docof_id}/status', [DocOfController::class, 'updateSoliciteJuriesForTesis']);
 
 });
-Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
 
 
     
@@ -82,9 +81,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
     Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
     // Ruta para ver los jurados asignados por id de estudiante
+    Route::get('/student/get-juries/{student_id}', [StudentController::class, 'viewJuriesForTesisByStudent']); 
 });
 
-Route::get('/student/get-juries/{student_id}', [StudentController::class, 'viewJuriesForTesisByStudent']); 
 
 
 // RUTAS PARA REVISIONES
