@@ -19,14 +19,6 @@ class Comment extends Model
         'comments',
     ];
 
-    // Eliminamos el cast de 'comments'
-    protected $casts = [];
-
-    public function solicitude(): BelongsTo
-    {
-        return $this->belongsTo(Solicitude::class);
-    }
-
     public function setComments(array $comments)
     {
         $this->attributes['comments'] = $comments;
@@ -47,11 +39,32 @@ class Comment extends Model
     public function updateComment($commentId, $newData)
     {
         $comments = $this->getComments();
+        $updated = false;
         foreach ($comments as $key => $comment) {
             if ($comment['id'] === $commentId) {
+                // Asegurarse de que status_history existe
+                if (!isset($comments[$key]['status_history'])) {
+                    $comments[$key]['status_history'] = [];
+                }
+                
+                // Si el estado de resolución ha cambiado
+                if (isset($newData['resolved']) && $comment['resolved'] !== $newData['resolved']) {
+                    $comments[$key]['status_history'][] = [
+                        'action' => $newData['resolved'] ? 'resolved' : 'reopened',
+                        'timestamp' => now()->toIso8601String(),
+                        'by' => $newData['author'] ?? 'Unknown'
+                    ];
+                    $comments[$key]['resolved'] = $newData['resolved'];
+                }
+                
+                // Actualizar otros campos
                 $comments[$key] = array_merge($comment, $newData);
+                $updated = true;
                 break;
             }
+        }
+        if (!$updated) {
+            $comments[] = $newData;
         }
         $this->setComments($comments);
     }

@@ -132,15 +132,25 @@ class CommentControllerDocs extends Controller
     private function processComments($comments, $existingComments)
     {
         $newCommentsArray = [];
+        $processedIds = [];
     
         foreach ($comments as $comment) {
+            $commentId = $comment->getId();
+            
+            if (in_array($commentId, $processedIds)) {
+                continue;
+            }
+            
+            $processedIds[] = $commentId;
+            
             $commentData = $this->formatCommentData($comment);
-    
-            if (!$existingComments || !$this->commentExists($existingComments, $comment->getId())) {
+            
+            if (!$existingComments || !$this->commentExists($existingComments, $commentId)) {
                 $newCommentsArray[] = $commentData;
             } else {
                 $updatedComment = $this->updateExistingComment($existingComments, $commentData);
-                if (!empty($updatedComment)) {
+                // Solo añadir el comentario actualizado si hubo cambios
+                if (!empty($updatedComment) && $updatedComment !== true) {
                     $newCommentsArray[] = $updatedComment;
                 }
             }
@@ -167,6 +177,7 @@ class CommentControllerDocs extends Controller
             'content' => $comment->getContent(),
             'created_time' => Carbon::parse($comment->getCreatedTime())->toIso8601String(),
             'resolved' => $comment->getResolved() ?? false,
+            'status_history' => [],
             'replies' => []
         ];
     
@@ -191,26 +202,50 @@ class CommentControllerDocs extends Controller
         });
 
         if ($existingComment) {
-            // Actualizar el contenido principal del comentario si ha cambiado
             $updated = false;
-            if ($existingComment['content'] !== $newCommentData['content']) {
+            
+            // Verificar si el estado de resolución ha cambiado
+            if ($existingComment['resolved'] !== $newCommentData['resolved']) {
+                $updated = true;
+                $action = $newCommentData['resolved'] ? 'resolved' : 'reopened';
+                
+                // Inicializar status_history si no existe
+                if (!isset($existingComment['status_history'])) {
+                    $existingComment['status_history'] = [];
+                }
+                
+                // Añadir nueva entrada al historial
+                $existingComment['status_history'][] = [
+                    'action' => $action,
+                    'timestamp' => now()->toIso8601String(),
+                    'by' => $newCommentData['author'] // Opcional: registrar quién realizó la acción
+                ];
+                
+                // Actualizar el estado resolved
+                $existingComment['resolved'] = $newCommentData['resolved'];
+            }
+
+            // Actualizar contenido si ha cambiado y no está vacío
+            if (!empty($newCommentData['content']) && $existingComment['content'] !== $newCommentData['content']) {
                 $existingComment['content'] = $newCommentData['content'];
                 $updated = true;
             }
 
             // Procesar las respuestas
-            foreach ($newCommentData['replies'] as $newReply) {
-                $existingReply = collect($existingComment['replies'])->first(function ($reply) use ($newReply) {
-                    return $reply['id'] === $newReply['id'];
-                });
+            if (!empty($newCommentData['replies'])) {
+                foreach ($newCommentData['replies'] as $newReply) {
+                    $existingReply = collect($existingComment['replies'])->first(function ($reply) use ($newReply) {
+                        return $reply['id'] === $newReply['id'];
+                    });
 
-                if (!$existingReply) {
-                    $existingComment['replies'][] = $newReply;
-                    $updated = true;
-                } elseif ($existingReply['content'] !== $newReply['content']) {
-                    $existingReplyIndex = array_search($existingReply, $existingComment['replies']);
-                    $existingComment['replies'][$existingReplyIndex] = $newReply;
-                    $updated = true;
+                    if (!$existingReply) {
+                        $existingComment['replies'][] = $newReply;
+                        $updated = true;
+                    } elseif ($existingReply['content'] !== $newReply['content']) {
+                        $existingReplyIndex = array_search($existingReply, $existingComment['replies']);
+                        $existingComment['replies'][$existingReplyIndex] = $newReply;
+                        $updated = true;
+                    }
                 }
             }
 
@@ -220,13 +255,15 @@ class CommentControllerDocs extends Controller
             }
         }
 
-        return null;
+        return $updated ? true : null;
     }
 
     private function updateExistingComments($existingComments, $newCommentsArray)
     {
         foreach ($newCommentsArray as $newComment) {
-            $existingComments->addComment($newComment);
+            if (!$this->commentExists($existingComments, $newComment['id'])) {
+                $existingComments->addComment($newComment);
+            }
         }
         $existingComments->save();
     }
