@@ -65,6 +65,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/office/djt/{docof_id}/status', [DocOfController::class, 'updateSoliciteJuriesForTesis']);
 
 });
+Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
 
 
     
@@ -132,6 +133,9 @@ Route::get('/download-resolution/{id}', [DocResolutionController::class, 'downlo
 // Ruta para ver conformidad del proyecto de tesis por el asesor ---> ESTUDIANTE, ASESOR 
 Route::get('/view-cpa/{review_id}', [HistoryReviewController::class, 'viewConfAdviser']);
 Route::get('/download-cpa/{review_id}', [HistoryReviewController::class, 'downloadConfAdviser']);
+//Ruta para ver oficio de designacion de jurados para la revision de tesis ---> ESTUDIANTE, JURADOS
+Route::get('/view-odj-pt/{docof_id}', [HistoryReviewController::class, 'viewOfficeJuriesForTesis']);
+Route::get('/download-odj-pt/{docof_id}', [HistoryReviewController::class, 'downloadOfficeJuriesForTesis']);
 
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);

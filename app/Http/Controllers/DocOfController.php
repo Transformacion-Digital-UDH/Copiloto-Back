@@ -274,19 +274,43 @@ class DocOfController extends Controller
 
     public function viewSolicitudeOfJuries()
     {
-        // Obtener todas las solicitudes con el nombre 'Solicitud de jurados para revision de tesis'
+        // Obtener todas las solicitudes con el nombre 'Solicitud de jurados para revisión de tesis'
         $solicitude_docof = DocOf::where('of_name', 'Solicitud de jurados para revision de tesis')->get();
 
         // Definir el orden deseado
         $order = ['pendiente', 'observado', 'tramitado'];
 
-        // Ordenar manualmente las solicitudes por 'of_status' usando PHP
-        $sortedSolicitudes = $solicitude_docof->sort(function($a, $b) use ($order) {
+        // Ordenar manualmente las solicitudes por 'of_status'
+        $sortedSolicitudes = $solicitude_docof->sort(function ($a, $b) use ($order) {
             return array_search($a->of_status, $order) <=> array_search($b->of_status, $order);
-        });
+        })->values(); // Para asegurar que se mantenga como una colección indexada.
 
-        return response()->json($sortedSolicitudes->values());
+        // Crear un array para almacenar los resultados finales
+        $result = [];
+
+        // Recorrer cada solicitud ordenada y obtener los datos del estudiante y de la solicitud
+        foreach ($sortedSolicitudes as $solicitude) {
+            // Obtener el estudiante relacionado
+            $student = Student::find($solicitude->student_id);
+            
+            // Obtener la solicitud relacionada
+            $tittle = Solicitude::where('student_id', $solicitude->student_id)->first();
+            
+            // Si los datos existen, agregar al resultado
+            if ($student && $tittle) {
+                $result[] = [
+                    'oficio_id' => $solicitude->_id,
+                    'estado' => $solicitude->of_status,
+                    'nombre' => $student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name,
+                    'titulo' => $tittle->sol_title_inve
+                ];
+            }
+        }
+
+        // Devolver los resultados en formato JSON
+        return response()->json($result);
     }
+
 
     public function updateSoliciteJuriesForTesis(Request $request, $docof_id)
     {
@@ -405,5 +429,66 @@ class DocOfController extends Controller
         'message' => 'Estado actualizado correctamente',
         'oficio_datos' => $docof,
     ], 200);
+    }
+
+    public function viewOfficeJuriesForTesis($docof_id){
+        $office = DocOf::where('_id', $docof_id)->first();
+    
+        // Verifica si el registro no se encuentra
+        if (!$office) {
+            return redirect()->back()->with('error', 'Solicitud no encontrada');
+        }
+        
+        // Formatear la fecha updated_at como "11 de julio de 2024"
+        $formattedDate = Carbon::parse($office->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+        $year = Carbon::parse($office->updated_at)->locale('es')->isoFormat('YYYY');
+
+
+
+        $solicitude = Solicitude::where('_id', $office->solicitude_id)->first();
+    
+        // Recibe el id del Asesor
+        $adviser = Adviser::where('_id', $solicitude->adviser_id)->first();
+    
+        // Verifica si el asesor existe
+        if ($adviser) {
+            // Formatear los nombres del asesor
+            $adviserFormatted = [
+                'adv_name' => ucwords(strtolower($adviser->adv_name)),
+                'adv_lastname_m' => ucwords(strtolower($adviser->adv_lastname_m)),
+                'adv_lastname_f' => ucwords(strtolower($adviser->adv_lastname_f)),
+            ];
+        } else {
+            $adviserFormatted = null;
+        }
+        if ($adviser) {
+            // Concatenar las primeras letras de los nombres y apellidos
+            $siglas = strtoupper(
+                mb_substr($adviser->adv_name, 0, 1) .
+                mb_substr($adviser->adv_lastname_m, 0, 1) .
+                mb_substr($adviser->adv_lastname_f, 0, 1)
+            );
+        } else {
+            $siglas = null;
+        }
+
+        $student = Student::where('_id', $solicitude->student_id)->first();
+    
+        // Verifica si el estudiante existe
+        if ($student) {
+            // Formatear los nombres del estudiante
+            $studentFormatted = [
+                'stu_name' => ucwords(strtolower($student->stu_name)),
+                'stu_lastname_m' => strtoupper($student->stu_lastname_m),
+                'stu_lastname_f' => strtoupper($student->stu_lastname_f),
+            ];
+        } else {
+            $studentFormatted = null; 
+        }
+    
+        // Pasar los datos a la vista
+        $pdf = Pdf::loadView('office_adviser', compact('siglas', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
+    
+        return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
     }
 }
