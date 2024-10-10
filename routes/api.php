@@ -12,6 +12,7 @@ use App\Http\Controllers\GoogleDocumentController;
 use App\Http\Controllers\HistoryReviewController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\CommentControllerDocs;
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
@@ -141,4 +142,5 @@ Route::get('/download-odj-pt/{docof_id}', [DocOfController::class, 'downloadOffi
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
 
 
-
+//Ruta para extraer y guardar los comentarios
+Route::post('/solicitudes/{solicitudeId}/comments/extract', [CommentControllerDocs::class, 'extractAndSaveComments']);

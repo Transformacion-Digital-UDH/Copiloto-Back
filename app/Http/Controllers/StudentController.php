@@ -23,7 +23,7 @@ class StudentController extends Controller
     }
 
 
-    public function getInfoStudentById($student_id)
+        public function getInfoStudentById($student_id)
     {
         // Recibe el id del estudiante y busca
         $student = Student::where('_id', $student_id)->first();
@@ -85,6 +85,7 @@ class StudentController extends Controller
         ], 200);
     }
 
+<<<<<<< HEAD
     public function viewJuriesForTesisByStudent($student_id) {
         // Obtener todas las revisiones relacionadas con el estudiante especificado
         $reviews = Review::where('student_id', $student_id)
@@ -132,4 +133,6 @@ class StudentController extends Controller
     
     
     
+=======
+>>>>>>> Jordan
 }
