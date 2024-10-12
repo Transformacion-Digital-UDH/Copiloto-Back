@@ -143,8 +143,7 @@ class DocOfController extends Controller
     }
 
     public function getOffices(){
-        $docs = DocOf::where('of_status', 'tramitado')->get();
-
+        $docs = DocOf::where('of_status', 'tramitado')->where('of_name','Solicitud de resolución de designación de asesor')->get();
         return DocOfResource::collection($docs);
     }
     
