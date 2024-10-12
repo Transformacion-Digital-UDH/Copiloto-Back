@@ -97,8 +97,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/student/get-review/{student_id}', [HistoryReviewController::class, 'viewRevisionByStudent']);   
     // Ruta para ver las correcciones pendientes ---> ASESOR
     Route::get('/adviser/get-review/{adviser_id}', [ReviewController::class, 'viewRevisionByAdviser']); 
-});
+    // Ruta para que los jurados vean las reviciones con el estado de las otra revisiones pendientes
+    Route::get('/adviser/get-review-jury/{adviser_id}', [ReviewController::class, 'viewReviewAsJuryForAdviser']);
 
+});
 
 
 

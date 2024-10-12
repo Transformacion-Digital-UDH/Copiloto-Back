@@ -217,4 +217,64 @@ class ReviewController extends Controller
         'data' => array_values($result),  // Asegúrate de devolver los datos con índices reorganizados
     ], 200);
 }
+
+    public function viewReviewAsJuryForAdviser($adviser_id)
+    {
+        // Obtener todas las revisiones con adviser_id y los roles específicos
+        $reviews = Review::where('adviser_id', $adviser_id)
+                        ->where('rev_type', 'tesis')
+                        ->whereIn('rev_adviser_rol', ['presidente', 'vocal', 'secretario'])
+                        ->get();
+
+        // Si no hay revisiones, devolver un mensaje de error
+        if ($reviews->isEmpty()) {
+            return response()->json(['message' => 'No tiene revisiones pendientes'], 404);
+        }
+
+        // Definir el orden deseado para rev_status
+        $statusOrder = ['pendiente', 'observado', 'aprobado'];
+
+        // Ordenar las revisiones por rev_status según el orden personalizado
+        $sortedReviews = $reviews->sort(function ($a, $b) use ($statusOrder) {
+            $posA = array_search($a->rev_status, $statusOrder);
+            $posB = array_search($b->rev_status, $statusOrder);
+            return $posA - $posB;
+        })->values(); // Resetear las claves
+
+        // Crear una estructura para devolver los resultados con el nombre del estudiante
+        $response = [];
+
+        // Recorrer las revisiones ordenadas y buscar al estudiante
+        foreach ($sortedReviews as $review) {
+            // Buscar el estudiante por su ID
+            $student = Student::where('_id', $review->student_id)->first();
+            $solicitude = Solicitude::where('student_id', $student->_id)->first();
+            $review_presidente = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'presidente')->first();
+            $review_secretario = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'secretario')->first();
+            $review_vocal = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'vocal')->first();
+
+            // Asegurarse de que el estudiante exista
+            if ($student) {
+                $response[] = [
+                    'nombre' => strtoupper($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name), 
+                    'titulo' => $solicitude->sol_title_inve,             
+                    'link' => $solicitude->document_link,
+                    'estado' => $review->rev_status, 
+                    'revision_id' => $review->_id, 
+                    'rol' => $review->rev_adviser_rol,
+                    'presidente_estado' => $review_presidente->rev_status,
+                    'presidente_cont' => $review_presidente->rev_count,
+                    'secretario_estado' => $review_secretario->rev_status,
+                    'secretario_cont' => $review_secretario->rev_count,
+                    'vocal_estado' => $review_vocal->rev_status,
+                    'vocal_cont' => $review_vocal->rev_count,
+                ];
+            } 
+        }
+        
+        // Devolver las revisiones ordenadas con el nombre del estudiante
+        return response()->json(['data' => $response], 200);
+    }
+
+
 }
