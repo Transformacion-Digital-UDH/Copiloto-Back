@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Adviser;
 use App\Models\DocOf;
 use App\Models\DocResolution;
 use App\Models\HistoryReview;
@@ -77,7 +78,9 @@ class ReviewController extends Controller
 
     public function updateStatusReview($student_id, Request $request) {
         // Encuentra la revisión correspondiente al student_id
-        $review = Review::where('student_id', $student_id)->first();
+        $review = Review::where('student_id', $student_id)
+                        ->where('rev_adviser_rol', 'asesor')
+                        ->first();
     
         // Verifica si se encontró la revisión
         if ($review) {
@@ -276,5 +279,73 @@ class ReviewController extends Controller
         return response()->json(['data' => $response], 200);
     }
 
+    public function getInfoReviewJuriesByStudent($student_id){
+
+        // Obtener todas las revisiones con adviser_id y los roles específicos
+        $reviews = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'tesis')
+                        ->whereIn('rev_adviser_rol', ['presidente', 'vocal', 'secretario'])
+                        ->get();
+
+        if ($reviews->isEmpty()) {
+            return response()->json(['message' => 'No tiene jurados'], 404);
+        }
+
+        $response = [];
+
+        foreach ($reviews as $review) {
+                // Buscar el estudiante por su ID
+                $adviser = Adviser::where('_id', $review->adviser_id)->first();
+
+                // Asegurarse de que el estudiante exista
+                if ($adviser) {
+                    $response[] = [
+                        'revision_id' => $review->_id, 
+                        'nombre' => strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name), 
+                        'rol' => $review->rev_adviser_rol, 
+                        'numero_revision' => $review->rev_count, 
+                        'fecha' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
+                        'estado' => $review->rev_status,
+                    ];
+                } 
+            }
+
+        $solicitude = Solicitude::where('student_id', $student_id)->first();
+
+        $presidente = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'tesis')
+                        ->where('rev_adviser_rol', 'presidente')
+                        ->first();
+        $secretario = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'tesis')
+                        ->where('rev_adviser_rol', 'secretario')
+                        ->first();
+        $vocal = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'tesis')
+                        ->where('rev_adviser_rol', 'vocal')
+                        ->first();
+
+        if($presidente->rev_status==$secretario->rev_status && $secretario->rev_status==$vocal->rev_status)
+        {
+            $status = $presidente->rev_status;
+        }
+
+        else{
+
+            $status = 'observado';
+        }
+
+        return response()->json([
+            'estudiante_id' => $solicitude->student_id,
+            'titulo' => $solicitude->sol_title_inve,
+            'link' => $solicitude->document_link,
+            'estado_general' => $status,
+            'data' => $response
+        ], 200);
+    }
+
+    public function updateStatusReviewJuries($review_id){
+
+    }
 
 }
