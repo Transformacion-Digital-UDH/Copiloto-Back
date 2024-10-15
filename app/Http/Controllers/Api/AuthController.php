@@ -225,7 +225,7 @@ class AuthController extends Controller
         Student::create([
             'stu_name' => '',
             'stu_lastname_m' => '',
-            'stu_latsname_f' => '',
+            'stu_lastname_f' => '',
             'stu_dni' => '',
             'stu_code' => '',
             'user_id' => $user->_id

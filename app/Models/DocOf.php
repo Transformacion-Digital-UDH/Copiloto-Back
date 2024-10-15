@@ -21,8 +21,8 @@ class DocOf extends Model
         "student_id",
         "of_num_of",
         "of_num_exp",
-        "of_status",
-        "of_observation"
+        "of_status", //pendiente , observado, tramitado
+        "of_observation",
     ];
     
     public function solicitude(): HasOne

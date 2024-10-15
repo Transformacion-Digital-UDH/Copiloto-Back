@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oficio N° {{$review->rev_num_of}}-ARC-PAISI-FI-UDH</title>
+    <title>Oficio Múltiple N° {{$office->of_num_of}}-{{$year}}-CA-PAISI-FI-UDH</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,7 @@
         body {
             font-family: "Noto Serif Old Uyghur", serif;
             margin: 20mm;
-            
+
         }
 
         .cabecera {
@@ -30,8 +30,10 @@
         }
 
         .cabecera img {
-            max-width: 100%; /* Asegúrate de que la imagen no desborde */
-            height: auto; /* Mantiene la proporción de la imagen */
+            max-width: 100%;
+            /* Asegúrate de que la imagen no desborde */
+            height: auto;
+            /* Mantiene la proporción de la imagen */
             margin-left: -90px;
         }
 
@@ -40,12 +42,14 @@
             justify-content: center;
             align-items: center;
             width: 200px;
-            height: 200px; 
+            height: 200px;
         }
 
         .firma img {
-            max-width: 100%; /* Asegúrate de que la imagen no desborde */
-            height: auto; /* Mantiene la proporción de la imagen */
+            max-width: 100%;
+            /* Asegúrate de que la imagen no desborde */
+            height: auto;
+            /* Mantiene la proporción de la imagen */
             margin-left: 220px;
             margin-top: -10px;
         }
@@ -99,33 +103,31 @@
         <p class="fecha-hoy">
             Huánuco, {{ $formattedDate }}
         </p>
-        <p class="data-oficio"><strong> N° {{$review->rev_num_of}}-{{$siglas}}-PAISI-FI-UDH</strong></p>
+        <p class="data-oficio"><strong>Oficio Múltiple N° {{$office->of_num_of}}-{{$year}}-CA-PAISI-FI-UDH</strong></p>
     </div>
 
     <div class="content">
-        <p><strong>SEÑOR:</strong></p>
-        <p><strong>Ing. Paolo Solís Jara</strong><br>
-            Coordinador del Programa Académico de Ingeniería de Sistemas e Informática<br>
-            Facultad de Ingeniería<br>
-            Universidad de Huánuco</p>
+        <p><strong>SEÑOR (A):</strong></p>
+        {{ $presidente }}<br>
+        {{ $secretario }}<br>
+        {{ $vocal }}
+        <p><strong>DOCENTE DEL P. A. DE INGENIERIA DE SISTEMAS E INFORMÁTICA- UNIVERSIDAD DE HUÁNUCO</strong></p>
+        <p>ASUNTO:	DESIGNACIÓN DE JURADO</p>
         <p><strong>Presente.</strong></p>
-        <p>De mi consideración:</p>
-        <p style="text-indent: 30px;">Es grato dirigirme a usted para saludarlo cordialmente y hacerle de conocimiento la <strong>APROBACIÓN Y CONFORMIDAD</strong> del proyecto con; </p>
-        <strong>Titulo de tesis:</strong>
-            <div class="titulo-tesis">
-                <p>
-                    {{$solicitude->sol_title_inve}} <!-- Accede directamente al campo 'tesis' -->
-                </p>
-            </div>
-        <strong>Tesista:</strong>
-                <div class="estudiante">
-                    <p>
-                        {{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}
-                    </p>
-                </div>
-        <p style="text-indent: 30px;">Realizada la revisión del proyecto de investigación se sugiere al
-            interesado siga con el trámite que establece el Reglamento General de Grados y Títulos de
-            la Universidad, por lo que informo a usted para los fines pertinentes.</p>
+        <p style="text-indent: 30px;">De mi consideración:</p>
+        <p style="text-indent: 30px;">Por medio del presente me dirijo a usted para saludarlo cordialmente y a la vez para <strong>SOLICITAR</strong>
+             su apoyo en la revisión y aprobación del <strong>PROYECTO DE TESIS</strong> , presentado con <strong>Exp. N° {{$num_exp}}</strong>, 
+             el mismo que hago llegar adjunto al presente, el ejemplar en digital del proyecto de tesis intitulado: 
+             <strong>"{{ $tittle }}"</strong>
+             Presentado por el egresado. <strong> {{ $student }} </strong>. El tiempo que dispone es de 07 días hábiles como plazo máximo, 
+             de acuerdo al Reglamento General de Grados y Títulos (Art. 24), para emitir a través de un informe sus observaciones y/o 
+             conformidad para su aprobación y ejecución. En caso de no poder cumplir con el encargo sírvase devolver el proyecto al menor 
+             tiempo posible con la finalidad de asignar a otro revisor. </p>
+        <p style="text-indent: 30px;">
+            <strong>Adjunto: </strong>
+            <span style="display: block; padding-left: 10px;">- Proyecto de Investigación digitalizado en formato Word.</span>
+            <span style="display: block; padding-left: 10px;">- Copia Resolución Nº {{$num_res}}-{{$res_year}}-D-FI-UDH ({{$res_date}})</span>
+        </p>       
         <p style="text-indent: 30px;">Sin otro particular, me despido recordándole las muestras de mi especial consideración y estima personal.</p>
         <p style="text-align: center;">Atentamente,</p>
     </div>
@@ -136,8 +138,8 @@
     <div class="signature">
 
         <p><strong>
-            Ing. {{ $adviserFormatted['adv_name'] }} {{ $adviserFormatted['adv_lastname_m'] }} {{ $adviserFormatted['adv_lastname_f'] }}
-        </strong></p>
+                Ing. Paolo E. Solís Jara <br>
+            </strong>Coordinador Académico</p>
     </div>
 </body>
 </html>

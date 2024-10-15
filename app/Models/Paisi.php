@@ -15,7 +15,7 @@ class Paisi extends Model
     protected $fillable = [
         'pai_name',
         'pai_lastname_m',
-        'pai_latsname_f',
+        'pai_lastname_f',
         'user_id',
     ];
 
@@ -33,6 +33,6 @@ class Paisi extends Model
 
     // Función para obtener el nombre completo
     public function getFullName(){
-        return $this->pai_name . ' ' . $this->pai_lastname_m . ' ' . $this->pai_latsname_f;
+        return $this->pai_name . ' ' . $this->pai_lastname_m . ' ' . $this->pai_lastname_f;
     }
 }

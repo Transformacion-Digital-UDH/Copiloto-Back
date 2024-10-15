@@ -12,6 +12,7 @@ use App\Http\Controllers\GoogleDocumentController;
 use App\Http\Controllers\HistoryReviewController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StudentController;
+use App\Http\Controllers\CommentControllerDocs;
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
@@ -55,9 +56,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 //RUTAS PARA OFFICIOS
 Route::middleware(['auth:sanctum'])->group(function () {
-    //Ruta para actualizar el estado de la solicitud ---> PAISI
+    //Ruta para actualizar el estado de la solicitud de designacion de asesor ---> PAISI
     Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']);
+    //Ruta para crear la solicitud de oficio multiple, para jurados de tesis ---> ESTUDIANTE
+    Route::get('/office/solicitude-juries/{student_id}', [DocOfController::class, 'soliciteJuriesForTesis']);
+    //Ruta para ver las solicitudes de designacion de jurados para la tesis ---> PAISI
+    Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
+    //Ruta para actualizar el estado del oficio de designacion de jurados --->PAISI
+    Route::put('/office/djt/{docof_id}/status', [DocOfController::class, 'updateSoliciteJuriesForTesis']);
+
 });
+
+
     
 //RUTAS PARA RESOLUCIONES
 Route::middleware(['auth:sanctum'])->group(function () {   
@@ -65,11 +75,17 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::put('/resolution/{id}/status', [DocResolutionController::class, 'updateStatus']);
 });
 
+
+
 // RUTAS PARA ESTUDIANTES
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
     Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
+    // Ruta para ver los jurados asignados por id de estudiante
+    Route::get('/student/get-juries/{student_id}', [StudentController::class, 'viewJuriesForTesisByStudent']); 
 });
+
+
 
 // RUTAS PARA REVISIONES
 Route::middleware(['auth:sanctum'])->group(function () {  
@@ -78,12 +94,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para el actualizar estado de la revision ---> ESTUDIANTE, ASESOR
     Route::put('/student/review/{student_id}/status', [ReviewController::class, 'updateStatusReview']);
     // Ruta para ver las correcciones observadas y aprobada en orden ---> ESTUDIANTE
+    Route::get('/student/get-review/{student_id}', [HistoryReviewController::class, 'viewRevisionByStudent']);   
     // Ruta para ver las correcciones pendientes ---> ASESOR
-
+    Route::get('/adviser/get-review/{adviser_id}', [ReviewController::class, 'viewRevisionByAdviser']); 
+    // Ruta para que los jurados vean las reviciones con el estado de las otra revisiones pendientes ---> ASESORES(JURADOS)
+    Route::get('/adviser/get-review-jury/{adviser_id}', [ReviewController::class, 'viewReviewAsJuryForAdviser']);
 });
-Route::get('/student/get-review/{student_id}', [HistoryReviewController::class, 'viewRevisionByStudent']);   
 
-Route::get('/adviser/get-review/{adviser_id}', [ReviewController::class, 'viewRevisionByAdviser']); 
+// Ruta para ver las reviciones pendientes de los jurados con informacion del estudiante ---> ESTUDIANTE
+Route::get('/review/get-review-jury/{student_id}', [ReviewController::class, 'getInfoReviewJuriesByStudent']);
+// Ruta para actualizar los estados por id de revicion ---> ESTUDIANTE - ASESOR
+Route::put('/review/{review_id}/status', [ReviewController::class, 'updateStatusReviewJuries']);
+
+
 
 
 // RUTAS PARA ASESORES
@@ -92,7 +115,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/adviser/get-select', [AdviserController::class, 'getToSelect']); // Obtener todos los asesores para seleccionar
     // Ruta para listar solicitudes ordenando por estado (PENDIENTE, ACEPTADO, RECHAZADO) por id de asesor    
     Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
+    // Ruta para listar jurados y sus revisiones, con rol, estudiante, tiempo transcurrido en dias ---> PAISI
+    Route::get('/juries/get-select', [AdviserController::class, 'getSelectJuriesTesis']); 
+
 });
+
+
 
 //RUTA PARA DOCUMENTO GOOGLE
 Route::post('/create-document', [GoogleDocumentController::class, 'createDocument']); //Crear gocumento de google docs (Tesis)
@@ -110,11 +138,15 @@ Route::get('/download-office/{id}', [DocOfController::class, 'downloadOffice']);
 Route::get('/view-resolution/{id}', [DocResolutionController::class, 'resPDF']);
 Route::get('/download-resolution/{id}', [DocResolutionController::class, 'downloadResolution']);
 // Ruta para ver conformidad del proyecto de tesis por el asesor ---> ESTUDIANTE, ASESOR 
-Route::get('/view-cpa/{id}', [HistoryReviewController::class, 'viewConfAdviser']);
-Route::get('/download-cpa/{id}', [HistoryReviewController::class, 'downloadConfAdviser']);
+Route::get('/view-cpa/{review_id}', [HistoryReviewController::class, 'viewConfAdviser']);
+Route::get('/download-cpa/{review_id}', [HistoryReviewController::class, 'downloadConfAdviser']);
+//Ruta para ver oficio de designacion de jurados para la revision de tesis ---> ESTUDIANTE, JURADOS
+Route::get('/view-odj-pt/{docof_id}', [DocOfController::class, 'viewOfficeJuriesForTesis']);
+Route::get('/download-odj-pt/{docof_id}', [DocOfController::class, 'downloadOfficeJuriesForTesis']);
 
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
 
 
-
+//Ruta para extraer y guardar los comentarios
+Route::post('/solicitudes/{solicitudeId}/comments/extract', [CommentControllerDocs::class, 'extractAndSaveComments']);

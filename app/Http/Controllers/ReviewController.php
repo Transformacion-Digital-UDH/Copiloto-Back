@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Adviser;
 use App\Models\DocOf;
 use App\Models\DocResolution;
 use App\Models\HistoryReview;
@@ -77,7 +78,10 @@ class ReviewController extends Controller
 
     public function updateStatusReview($student_id, Request $request) {
         // Encuentra la revisión correspondiente al student_id
-        $review = Review::where('student_id', $student_id)->first();
+        $review = Review::where('student_id', $student_id)
+                        ->where('rev_adviser_rol', 'asesor')
+                        ->where('rev_type', 'tesis')
+                        ->first();
     
         // Verifica si se encontró la revisión
         if ($review) {
@@ -85,11 +89,13 @@ class ReviewController extends Controller
             $rules = [
                 'rev_status' => 'required|string|in:pendiente,aprobado,observado',
                 'rev_num_of' => 'nullable|string',
-                'rev_file' => 'nullable|string'
             ];
     
             // Contar cuántas revisiones tiene el estudiante
-            $count = HistoryReview::where('student_id', $student_id)->count();
+            $count = HistoryReview::where('student_id', $student_id)
+                                ->where('adviser_id', $review->adviser_id)    
+                                ->where('rev_type', $review->rev_type)    
+                                ->count();
     
             // Valida los datos de entrada
             $this->validate($request, $rules);
@@ -108,6 +114,7 @@ class ReviewController extends Controller
     
                 case 'aprobado':
                     $rules['rev_num_of'] = 'required|string'; // Agrega la regla para rev_num_of
+                    
                     $this->validate($request, ['rev_num_of' => $rules['rev_num_of']]);
     
                     HistoryReview::create([
@@ -121,6 +128,8 @@ class ReviewController extends Controller
                     ]);
     
                     $review->update([
+                        'rev_count' => $count + 1,
+                        'rev_num_of' => $request->input('rev_num_of'), // Cambia aquí
                         'rev_status' => 'aprobado',
                     ]);
 
@@ -129,14 +138,11 @@ class ReviewController extends Controller
                     break;
     
                 case 'observado':
-                    $rules['rev_file'] = 'required|string'; // Agrega la regla para rev_file
-                    $this->validate($request, ['rev_file' => $rules['rev_file']]);
     
                     HistoryReview::create([
                         'adviser_id' => $review->adviser_id,
                         'student_id' => $review->student_id,
                         'rev_count' => $count + 1,
-                        'rev_file' => $request->input('rev_file'), // Cambia aquí
                         'rev_status' => 'observado', // Estado
                         'rev_type' => $review->rev_type,
                         'rev_adviser_rol' => $review->rev_adviser_rol, // asesor, presidente, secretario, vocal
@@ -202,6 +208,7 @@ class ReviewController extends Controller
 
         // Agregar los datos de la revisión al array resultante
         $result[] = [
+            'review_id' => $review->_id,
             'stu_id' => $student->_id,
             'stu_name' => $studentName,
             'sol_title_inve' => $solicitude ? $solicitude->sol_title_inve : 'No title', // Maneja si no hay solicitud
@@ -218,4 +225,226 @@ class ReviewController extends Controller
         'data' => array_values($result),  // Asegúrate de devolver los datos con índices reorganizados
     ], 200);
 }
+
+    public function viewReviewAsJuryForAdviser($adviser_id)
+    {
+        // Obtener todas las revisiones con adviser_id y los roles específicos
+        $reviews = Review::where('adviser_id', $adviser_id)
+                        ->where('rev_type', 'tesis')
+                        ->whereIn('rev_adviser_rol', ['presidente', 'vocal', 'secretario'])
+                        ->get();
+
+        // Si no hay revisiones, devolver un mensaje de error
+        if ($reviews->isEmpty()) {
+            return response()->json(['message' => 'No tiene revisiones pendientes'], 404);
+        }
+
+        // Definir el orden deseado para rev_status
+        $statusOrder = ['pendiente', 'observado', 'aprobado'];
+
+        // Ordenar las revisiones por rev_status según el orden personalizado
+        $sortedReviews = $reviews->sort(function ($a, $b) use ($statusOrder) {
+            $posA = array_search($a->rev_status, $statusOrder);
+            $posB = array_search($b->rev_status, $statusOrder);
+            return $posA - $posB;
+        })->values(); // Resetear las claves
+
+        // Crear una estructura para devolver los resultados con el nombre del estudiante
+        $response = [];
+
+        // Recorrer las revisiones ordenadas y buscar al estudiante
+        foreach ($sortedReviews as $review) {
+            // Buscar el estudiante por su ID
+            $student = Student::where('_id', $review->student_id)->first();
+            $solicitude = Solicitude::where('student_id', $student->_id)->first();
+            $review_presidente = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'presidente')->first();
+            $review_secretario = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'secretario')->first();
+            $review_vocal = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'vocal')->first();
+
+            // Asegurarse de que el estudiante exista
+            if ($student) {
+                $response[] = [
+                    'nombre' => strtoupper($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name), 
+                    'titulo' => $solicitude->sol_title_inve,             
+                    'link' => $solicitude->document_link,
+                    'estado' => $review->rev_status, 
+                    'revision_id' => $review->_id, 
+                    'rol' => $review->rev_adviser_rol,
+                    'presidente_estado' => $review_presidente->rev_status,
+                    'presidente_cont' => $review_presidente->rev_count,
+                    'secretario_estado' => $review_secretario->rev_status,
+                    'secretario_cont' => $review_secretario->rev_count,
+                    'vocal_estado' => $review_vocal->rev_status,
+                    'vocal_cont' => $review_vocal->rev_count,
+                ];
+            } 
+        }
+        
+        // Devolver las revisiones ordenadas con el nombre del estudiante
+        return response()->json(['data' => $response], 200);
+    }
+
+    public function getInfoReviewJuriesByStudent($student_id){
+
+        // Obtener todas las revisiones con adviser_id y los roles específicos
+        $reviews = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'tesis')
+                        ->whereIn('rev_adviser_rol', ['presidente', 'vocal', 'secretario'])
+                        ->get();
+
+        if ($reviews->isEmpty()) {
+            return response()->json(['message' => 'No tiene jurados'], 404);
+        }
+
+        $response = [];
+
+        foreach ($reviews as $review) {
+                // Buscar el estudiante por su ID
+                $adviser = Adviser::where('_id', $review->adviser_id)->first();
+
+                // Asegurarse de que el estudiante exista
+                if ($adviser) {
+                    $response[] = [
+                        'revision_id' => $review->_id, 
+                        'nombre' => strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name), 
+                        'rol' => $review->rev_adviser_rol, 
+                        'numero_revision' => $review->rev_count, 
+                        'fecha' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
+                        'estado' => $review->rev_status,
+                    ];
+                } 
+            }
+
+        $solicitude = Solicitude::where('student_id', $student_id)->first();
+
+        $presidente = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'tesis')
+                        ->where('rev_adviser_rol', 'presidente')
+                        ->first();
+        $secretario = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'tesis')
+                        ->where('rev_adviser_rol', 'secretario')
+                        ->first();
+        $vocal = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'tesis')
+                        ->where('rev_adviser_rol', 'vocal')
+                        ->first();
+
+        if($presidente->rev_status==$secretario->rev_status && $secretario->rev_status==$vocal->rev_status)
+        {
+            $status = $presidente->rev_status;
+        }
+
+        else{
+
+            $status = 'observado';
+        }
+
+        return response()->json([
+            'estudiante_id' => $solicitude->student_id,
+            'titulo' => $solicitude->sol_title_inve,
+            'link' => $solicitude->document_link,
+            'estado_general' => $status,
+            'data' => $response
+        ], 200);
+    }
+
+    public function updateStatusReviewJuries($review_id, Request $request){
+        // Encuentra la revisión correspondiente al student_id
+        $review = Review::where('_id', $review_id)
+                        ->first();
+    
+        // Verifica si se encontró la revisión
+        if ($review) {
+            // Define las reglas de validación
+            $rules = [
+                'rev_status' => 'required|string|in:pendiente,aprobado,observado',
+                'rev_num_of' => 'nullable|string',
+            ];
+    
+            // Contar cuántas revisiones tiene el estudiante
+            $count = HistoryReview::where('student_id', $review->student_id)
+                                ->where('adviser_id', $review->adviser_id)    
+                                ->where('rev_type', $review->rev_type)   
+                                ->count();
+    
+            // Valida los datos de entrada
+            $this->validate($request, $rules);
+    
+            $status = $request->input('rev_status'); // Cambia aquí
+    
+            // Determina el nuevo estado basado en el valor de $status
+            switch ($status) {
+                case 'pendiente':
+                    $review->update([
+                        'rev_status' => 'pendiente',
+                    ]);
+                    return response()->json([
+                        'estado' => $review->rev_status,
+                        'message' => 'Solicitud de revision enviada'
+                    ], 200);
+
+                    break;
+    
+                case 'aprobado':
+                    $rules['rev_num_of'] = 'required|string'; // Agrega la regla para rev_num_of
+                    
+                    $this->validate($request, ['rev_num_of' => $rules['rev_num_of']]);
+    
+                    HistoryReview::create([
+                        'adviser_id' => $review->adviser_id,
+                        'student_id' => $review->student_id,
+                        'rev_num_of' => $request->input('rev_num_of'), // Cambia aquí
+                        'rev_count' => $count + 1,
+                        'rev_status' => 'aprobado', // Estado
+                        'rev_type' => $review->rev_type,
+                        'rev_adviser_rol' => $review->rev_adviser_rol, // asesor, presidente, secretario, vocal
+                    ]);
+    
+                    $review->update([
+                        'rev_count' => $count + 1,
+                        'rev_num_of' => $request->input('rev_num_of'), // Cambia aquí
+                        'rev_status' => 'aprobado',
+                    ]);
+
+                    return response()->json([
+                        'estado' => $review->rev_status,
+                        'message' => 'Su confomidad fué enviada'
+                    ], 200);
+
+                    break;
+    
+                case 'observado':
+    
+                    HistoryReview::create([
+                        'adviser_id' => $review->adviser_id,
+                        'student_id' => $review->student_id,
+                        'rev_count' => $count + 1,
+                        'rev_status' => 'observado', // Estado
+                        'rev_type' => $review->rev_type,
+                        'rev_adviser_rol' => $review->rev_adviser_rol, // asesor, presidente, secretario, vocal
+                    ]);
+    
+                    // Actualiza la revisión
+                    $review->update([
+                        'rev_count' => $count + 1,
+                        'rev_status' => 'observado',
+                    ]);
+                    
+                    return response()->json([
+                        'estado' => $review->rev_status,
+                        'message' => 'Observacion enviada'
+                    ], 200);
+                    
+                    break;
+    
+                default:
+                    return response()->json(['message' => 'Estado no válido.'], 400);
+            }
+    
+            return response()->json(['message' => 'Estado de la revisión actualizado correctamente.'], 200);
+        } else {
+            return response()->json(['message' => 'Revisión no encontrada.'], 404);
+        }
+    }
 }

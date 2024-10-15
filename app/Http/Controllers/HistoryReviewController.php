@@ -63,9 +63,9 @@ class HistoryReviewController extends Controller
             'historial' => $history
         ]);
     }
-    public function viewConfAdviser($id) {
+    public function viewConfAdviser($review_id) {
 
-        $review = HistoryReview::where('_id', $id)->first();
+        $review = Review::where('_id', $review_id)->first();
     
         // Verifica si el registro no se encuentra
         if (!$review || $review->rev_status != 'aprobado') {
@@ -122,9 +122,9 @@ class HistoryReviewController extends Controller
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
     }
     
-    public function downloadConfAdviser($id) {
+    public function downloadConfAdviser($review_id) {
 
-        $review = HistoryReview::where('_id', $id)->first();
+        $review = Review::where('_id', $review_id)->first();
     
         // Verifica si el registro no se encuentra
         if (!$review || $review->rev_status != 'aprobado') {

@@ -9,6 +9,8 @@ use App\Models\DocOf;
 use App\Models\DocResolution;
 use App\Models\Solicitude;
 use App\Models\Student;
+use App\Models\Adviser;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use MongoDB\Laravel\Eloquent\Casts\ObjectId;
 
@@ -21,7 +23,7 @@ class StudentController extends Controller
     }
 
 
-    public function getInfoStudentById($student_id)
+        public function getInfoStudentById($student_id)
     {
         // Recibe el id del estudiante y busca
         $student = Student::where('_id', $student_id)->first();
@@ -31,8 +33,7 @@ class StudentController extends Controller
         }
 
         // Obtener la ultima solicitud creada por el estudiante
-        $solicitude = Solicitude::where('student_id', $student->_id)
-            ->first();
+        $solicitude = Solicitude::where('student_id', $student->_id)->first();
 
         if (!$solicitude) {
             return response()->json([
@@ -44,15 +45,21 @@ class StudentController extends Controller
         $docof = DocOf::where('solicitude_id', $solicitude->_id)->first();
         $resolution = [];
 
-        if(!$docof){
+        if (!$docof) {
             $office = [];
-        }else{
+        } else {
             $office = new DocOfResource($solicitude->docof);
             $resdoc = DocResolution::where('docof_id', $docof->_id)->first();
-           
-            if($resdoc){
-                $resolution = new DocResolutionResource(DocResolution::where('docof_id', $docof->_id)->first());
+            
+            if ($resdoc) {
+                $resolution = new DocResolutionResource($resdoc);
             }
+        }
+
+        // Obtener información del asesor
+        $adviser = null;
+        if ($solicitude->adviser_id) {
+            $adviser = Adviser::find($solicitude->adviser_id); // Asegúrate de que Adviser sea el modelo correcto
         }
 
         // Devolver los datos del estudiante junto con sus solicitudes
@@ -66,10 +73,63 @@ class StudentController extends Controller
                 "observacion" => $solicitude->sol_observation,
                 "link" => $solicitude->document_link,
                 "tipo_investigacion" => $solicitude->sol_type_inve,
+                "asesor" => $adviser ? [
+                    "nombre" => $adviser->adv_name,
+                    "apellido_paterno" => $adviser->adv_lastname_f,
+                    "apellido_materno" => $adviser->adv_lastname_m,
+                ] : null, // Si el asesor no se encuentra, retorna null
             ],
             'historial' => HistoryResource::collection($solicitude->history),
             'oficio' => $office,
             'resolucion' => $resolution
         ], 200);
     }
+
+    public function viewJuriesForTesisByStudent($student_id) {
+        // Obtener todas las revisiones relacionadas con el estudiante especificado
+        $reviews = Review::where('student_id', $student_id)
+            ->where('rev_adviser_rol', '!=', 'asesor')
+            ->get();  
+        
+        // Crear un array para almacenar asesores y roles
+        $jurados = $reviews->map(function($review) {
+            // Obtener el asesor correspondiente a la revisión
+            $adviser = Adviser::where('_id', $review->adviser_id)->first(); // Obtener el asesor
+            
+            // Verificar si el asesor existe
+            $adviser_name = $adviser ? strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name) : 'No disponible';
+    
+            return [
+                'asesor' => $adviser_name, // Convertir a mayúsculas
+                'rol' => $review->rev_adviser_rol
+            ];
+        });
+    
+        // Obtener el documento de oficio
+        $docof = DocOf::where('student_id', $student_id)
+            ->where('of_name', 'Solicitud de jurados para revision de tesis')
+            ->first();
+    
+        // Verificar si el documento existe antes de acceder a sus propiedades
+        if (!$docof) {
+            return response()->json([
+                'estudiante_id' => $student_id,
+                'mensaje' => 'No ha iniciado el trámite, complete el pre-requisito.',
+                'estado' => 'No iniciado',
+                'jurados' => $jurados,
+            ], 404); // O cualquier otro código de estado que consideres apropiado
+        }
+    
+        // Retornar los roles y IDs en formato JSON
+        return response()->json([
+            'estudiante_id' => $student_id,
+            'tramite' => $docof->of_name,
+            'estado' => $docof->of_status,
+            'jurados' => $jurados,
+        ], 200);
+    }
+    
+    
+    
+    
 }

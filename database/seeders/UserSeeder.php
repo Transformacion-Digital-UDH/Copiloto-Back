@@ -284,7 +284,7 @@ class UserSeeder extends Seeder
                 'role_data' => [
                     'pai_name' => 'Lorena',
                     'pai_lastname_m' => 'Ramirez',
-                    'pai_latsname_f' => 'Flores',
+                    'pai_lastname_f' => 'Flores',
                 ]
             ],
             // con rol facultad
@@ -339,7 +339,7 @@ class UserSeeder extends Seeder
                         'user_id' => $createdUser->_id,
                         'pai_name' => $user['role_data']['pai_name'],
                         'pai_lastname_m' => $user['role_data']['pai_lastname_m'],
-                        'pai_latsname_f' => $user['role_data']['pai_latsname_f'],
+                        'pai_lastname_f' => $user['role_data']['pai_lastname_f'],
                         // Otros campos específicos de la tabla `paisis`
                     ]);
                     break;
