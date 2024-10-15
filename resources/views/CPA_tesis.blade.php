@@ -110,7 +110,7 @@
             Universidad de Huánuco</p>
         <p><strong>Presente.</strong></p>
         <p>De mi consideración:</p>
-        <p>Es grato dirigirme a usted para saludarlo cordialmente y hacerle de conocimiento la revisión y conformidad del proyecto</p>
+        <p style="text-indent: 30px;">Es grato dirigirme a usted para saludarlo cordialmente y hacerle de conocimiento la <strong>APROBACIÓN Y CONFORMIDAD</strong> del proyecto con; </p>
         <strong>Titulo de tesis:</strong>
             <div class="titulo-tesis">
                 <p>
@@ -123,11 +123,11 @@
                         {{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}
                     </p>
                 </div>
-        <p>Realizada la revisión del proyecto de investigación se sugiere al
+        <p style="text-indent: 30px;">Realizada la revisión del proyecto de investigación se sugiere al
             interesado siga con el trámite que establece el Reglamento General de Grados y Títulos de
             la Universidad, por lo que informo a usted para los fines pertinentes.</p>
-        <p>Sin otro particular, me despido recordándole las muestras de mi especial consideración y estima personal.</p>
-        <p>Atentamente,</p>
+        <p style="text-indent: 30px;">Sin otro particular, me despido recordándole las muestras de mi especial consideración y estima personal.</p>
+        <p style="text-align: center;">Atentamente,</p>
     </div>
 
     <div class="firma">
