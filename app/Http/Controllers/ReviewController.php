@@ -292,6 +292,10 @@ class ReviewController extends Controller
                         ->whereIn('rev_adviser_rol', ['presidente', 'vocal', 'secretario'])
                         ->get();
 
+        $docof = DocOf::where('student_id', $student_id)
+                    ->where('of_name', 'Solicitud de jurados para revision de tesis')    
+                    ->first();
+
         if ($reviews->isEmpty()) {
             return response()->json(['message' => 'No tiene jurados'], 404);
         }
@@ -344,6 +348,8 @@ class ReviewController extends Controller
             'estudiante_id' => $solicitude->student_id,
             'titulo' => $solicitude->sol_title_inve,
             'link' => $solicitude->document_link,
+            'oficio_id' => $docof->_id,
+            'oficio_estado' => $docof->of_status,
             'estado_general' => $status,
             'data' => $response
         ], 200);
