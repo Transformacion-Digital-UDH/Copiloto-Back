@@ -640,7 +640,7 @@ class DocOfController extends Controller
             if ($student && $tittle) {
                 $result[] = [
                     'oficio_id' => $solicitude->_id,
-                    'nombre' => ucwords($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name),
+                    'nombre' => ucwords(strtolower($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name)),
                     'titulo' => $tittle->sol_title_inve,
                     'revision_presidente_id' => $presidente->_id,
                     'revision_secretario_id' => $secretario->_id,
@@ -653,5 +653,87 @@ class DocOfController extends Controller
         // Devolver los resultados en formato JSON
         return response()->json($result);
 
+        }
+        public function updateStatusOfficeApproveThesis(Request $request, $docof_id)
+        {
+            // Obtener el registro correspondiente en la base de datos
+            $docof = DocOf::where('_id', $docof_id)->first();
+
+            if (!$docof) {
+                return response()->json(['error' => 'Oficio no encontrado'], 404);
+            }
+            
+            $state = $request->input('estado');
+
+            $rules = [
+                'estado' => 'required|string|in:observado,tramitado',
+            ];
+            // Manejo de diferentes estados usando un switch
+            switch ($state) {
+                case 'observado':
+                    $rules['observacion'] = 'required|string'; // Agrega la regla para rev_num_of
+                    $this->validate($request, ['observacion' => $rules['observacion']]);
+                    
+                    $docof->update([
+                        'of_status' => $request->input('estado'),
+                        'of_observation' => $request->input('observacion')
+                    ]);
+                    return response()->json([
+                        'message' => 'Observacion enviada y actualizada',
+                        'observacion' => $docof->of_observation,
+                        'estado' => $docof->of_status,
+                    ], 200);
+
+                    break;
+
+                case 'tramitado':
+
+                    $rules = [
+                        'numero_oficio' => 'required|string',
+                        'expediente' => 'required|string',
+                    ];
+
+                    $validator = Validator::make($request->all(), $rules);
+
+                    if ($validator->fails()) {
+                        return response()->json([
+                            'status' => false,
+                            'errors' => $validator->errors()
+                        ], 400);
+                    }
+                    
+                    $this->validate($request, $rules);
+
+                    $docres =  DocResolution::create([
+                        'docof_id' => $docof_id,
+                        'docres_name' => $docof->of_name,
+                        'docres_num_res' => null,
+                        'docres_status' => 'pendiente',
+                    ]);
+                    
+                    $docof->update([
+                        'of_status' => $request->input('estado'),
+                        'of_num_of' => $request->input('numero_oficio'),
+                        'of_num_exp' => $request->input('expediente'),
+                        'of_observation' => null,
+                    ]);
+
+                    return response()->json([
+                        'message' => 'Oficio trámitado',
+                        'estado' => $docof->of_status,
+                    ], 200);
+                
+                    break;
+
+                default:
+                    // Manejo de estado no reconocido
+                    return response()->json(['error' => 'Estado no válido'], 400);
+        }
+
+        $docof->save();
+        return response()->json([
+            'message' => 'Estado actualizado correctamente',
+            'oficio_datos' => $docof,
+        ], 200);
         }
 }

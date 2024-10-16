@@ -70,7 +70,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 //Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI
 Route::get('/oficio/get-aprobar-tesis', [DocOfController::class, 'getOfficeApproveThesis']);
-
+//Ruta para para actualizar oficios --->PAISI
+Route::put('/oficio/aprobacion-tesis/{office_id}/status', [DocOfController::class, 'updateStatusOfficeApproveThesis']);
 
 //RUTAS PARA RESOLUCIONES
 Route::middleware(['auth:sanctum'])->group(function () {   
