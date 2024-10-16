@@ -255,6 +255,7 @@ class ReviewController extends Controller
         // Recorrer las revisiones ordenadas y buscar al estudiante
         foreach ($sortedReviews as $review) {
             // Buscar el estudiante por su ID
+            $my_role = Review::where('adviser_id', $review->adviser_id)->first();
             $student = Student::where('_id', $review->student_id)->first();
             $solicitude = Solicitude::where('student_id', $student->_id)->first();
             $review_presidente = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'presidente')->first();
@@ -266,6 +267,7 @@ class ReviewController extends Controller
                 $response[] = [
                     'nombre' => strtoupper($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name), 
                     'titulo' => $solicitude->sol_title_inve,             
+                    'mi_rol' => $my_role->rev_adviser_rol,             
                     'link' => $solicitude->document_link,
                     'estado' => $review->rev_status, 
                     'revision_id' => $review->_id, 
