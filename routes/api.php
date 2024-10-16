@@ -64,11 +64,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
     //Ruta para actualizar el estado del oficio de designacion de jurados --->PAISI
     Route::put('/office/djt/{docof_id}/status', [DocOfController::class, 'updateSoliciteJuriesForTesis']);
-
+    //Ruta para crear oficio de solicitud de aprobacion de tesis por la facultad--->PAISI
+    Route::post('/oficio/solicitud-aprobar-tesis/{student_id}', [DocOfController::class, 'soliciteOfficeApproveThesis']);
 });
 
-//Ruta para crear oficio de solicitud de aprobacion de tesis por la facultad--->PAISI
-Route::post('/oficio/solicitud-aprobar-tesis/{student_id}', [DocOfController::class, 'soliciteOfficeApproveThesis']);
+//Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI
+Route::get('/oficio/get-aprobar-tesis', [DocOfController::class, 'getOfficeApproveThesis']);
 
     
 //RUTAS PARA RESOLUCIONES

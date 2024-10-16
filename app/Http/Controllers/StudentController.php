@@ -129,8 +129,4 @@ class StudentController extends Controller
             'jurados' => $jurados,
         ], 200);
     }
-    
-    
-    
-    
 }
