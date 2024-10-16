@@ -76,10 +76,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Actualizar estado para Resolucion ---> FACULTAD
     Route::put('/resolution/{id}/status', [DocResolutionController::class, 'updateStatus']);
+    //Ruta para ver las resoluciones de aprobacion de tesis ---> FACULTAD
+    Route::get('/resolucion/get-aprobar-tesis', [DocResolutionController::class, 'getReslutionApproveThesis']);
+    //Ruta para ver actualizar las resoluciones ---> FACULTAD
+    Route::put('/resolucion/aprobacion-tesis/{docres_id}/status', [DocResolutionController::class, 'updateStatusResolutionApproveThesis']);
 });
 
-//Ruta para ver las resoluciones de aprobacion de tesis ---> FACULTAD
-Route::get('/resolucion/get-aprobar-tesis', [DocResolutionController::class, 'getReslutionApproveThesis']);
+
+
 
 // RUTAS PARA ESTUDIANTES
 Route::middleware(['auth:sanctum'])->group(function () {   

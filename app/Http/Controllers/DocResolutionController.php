@@ -226,5 +226,75 @@ class DocResolutionController extends Controller
             return response()->json($result);
         }
 
+        public function updateStatusResolutionApproveThesis(Request $request, $docres_id)
+        {
+            // Obtener el registro correspondiente en la base de datos
+            $docres = DocResolution::where('_id', $docres_id)->first();
+
+            if (!$docres) {
+                return response()->json(['error' => 'Resolucion no encontrada'], 404);
+            }
+            
+            $state = $request->input('estado');
+
+            $rules = [
+                'estado' => 'required|string|in:observado,tramitado',
+            ];
+            // Manejo de diferentes estados usando un switch
+            switch ($state) {
+                case 'observado':
+                    $rules['observacion'] = 'required|string'; // Agrega la regla para rev_num_of
+                    $this->validate($request, ['observacion' => $rules['observacion']]);
+                    
+                    $docres->update([
+                        'docres_status' => $request->input('estado'),
+                        'docres_observation' => $request->input('observacion')
+                    ]);
+                    return response()->json([
+                        'message' => 'Observacion enviada y actualizada',
+                        'observacion' => $docres->docres_observation,
+                        'estado' => $docres->docres_status,
+                    ], 200);
+
+                    break;
+
+                case 'tramitado':
+
+                    $rules = [
+                        'numero_resolucion' => 'required|string',
+                    ];
+
+                    $validator = Validator::make($request->all(), $rules);
+
+                    if ($validator->fails()) {
+                        return response()->json([
+                            'status' => false,
+                            'errors' => $validator->errors()
+                        ], 400);
+                    }
+                    
+                    $this->validate($request, $rules);
+                    
+                    $docres->update([
+                        'docres_status' => $request->input('estado'),
+                        'docres_num_res' => $request->input('numero_resolucion'),
+                        'docres_observation' => null,
+                    ]);
+
+                    return response()->json([
+                        'message' => 'Resolución trámitada',
+                        'estado' => $docres->docres_status,
+                    ], 200);
+                
+                    break;
+
+                default:
+                    // Manejo de estado no reconocido
+                    return response()->json(['error' => 'Estado no válido'], 400);
+        }
+
+        $docres->save();
+
+        }
 
 }
