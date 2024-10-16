@@ -71,7 +71,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 //Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI
 Route::get('/oficio/get-aprobar-tesis', [DocOfController::class, 'getOfficeApproveThesis']);
 
-    
+
 //RUTAS PARA RESOLUCIONES
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Actualizar estado para Resolucion ---> FACULTAD
@@ -88,6 +88,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/student/get-juries/{student_id}', [StudentController::class, 'viewJuriesForTesisByStudent']); 
 });
 
+//Ruta para para vista de APROBACION DE TESIS ---> ESTUDIANTE
+Route::get('/estudiante/get-info-aprobar-tesis/{student_id}', [StudentController::class, 'getInfoApproveThesis']);
 
 
 // RUTAS PARA REVISIONES
