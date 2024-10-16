@@ -125,6 +125,7 @@ class StudentController extends Controller
             'estudiante_id' => $student_id,
             'tramite' => $docof->of_name,
             'estado' => $docof->of_status,
+            'docof_id' => $docof->_id,
             'jurados' => $jurados,
         ], 200);
     }

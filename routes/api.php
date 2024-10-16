@@ -67,6 +67,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 });
 
+//Ruta para crear oficio de solicitud de aprobacion de tesis por la facultad--->PAISI
+Route::post('/oficio/solicitud-aprobar-tesis/{student_id}', [DocOfController::class, 'soliciteOfficeApproveThesis']);
 
     
 //RUTAS PARA RESOLUCIONES
@@ -99,12 +101,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/adviser/get-review/{adviser_id}', [ReviewController::class, 'viewRevisionByAdviser']); 
     // Ruta para que los jurados vean las reviciones con el estado de las otra revisiones pendientes ---> ASESORES(JURADOS)
     Route::get('/adviser/get-review-jury/{adviser_id}', [ReviewController::class, 'viewReviewAsJuryForAdviser']);
+    // Ruta para ver las reviciones pendientes de los jurados con informacion del estudiante ---> ESTUDIANTE
+    Route::get('/review/get-review-jury/{student_id}', [ReviewController::class, 'getInfoReviewJuriesByStudent']);
+    // Ruta para actualizar los estados por id de revicion ---> ESTUDIANTE - ASESOR
+    Route::put('/review/{review_id}/status', [ReviewController::class, 'updateStatusReviewJuries']);
 });
 
-// Ruta para ver las reviciones pendientes de los jurados con informacion del estudiante ---> ESTUDIANTE
-Route::get('/review/get-review-jury/{student_id}', [ReviewController::class, 'getInfoReviewJuriesByStudent']);
-// Ruta para actualizar los estados por id de revicion ---> ESTUDIANTE - ASESOR
-Route::put('/review/{review_id}/status', [ReviewController::class, 'updateStatusReviewJuries']);
+
 
 
 
@@ -137,7 +140,7 @@ Route::get('/download-office/{id}', [DocOfController::class, 'downloadOffice']);
 // Ruta para ver y generar PDF de Resolucion [DA]-------> FACULTAD  
 Route::get('/view-resolution/{id}', [DocResolutionController::class, 'resPDF']);
 Route::get('/download-resolution/{id}', [DocResolutionController::class, 'downloadResolution']);
-// Ruta para ver conformidad del proyecto de tesis por el asesor ---> ESTUDIANTE, ASESOR 
+// Ruta para ver conformidad del proyecto de tesis ---> ESTUDIANTE, ASESOR, JURADOS  
 Route::get('/view-cpa/{review_id}', [HistoryReviewController::class, 'viewConfAdviser']);
 Route::get('/download-cpa/{review_id}', [HistoryReviewController::class, 'downloadConfAdviser']);
 //Ruta para ver oficio de designacion de jurados para la revision de tesis ---> ESTUDIANTE, JURADOS

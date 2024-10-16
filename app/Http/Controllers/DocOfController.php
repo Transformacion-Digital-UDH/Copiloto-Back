@@ -542,4 +542,63 @@ class DocOfController extends Controller
         $pdf = Pdf::loadView('of_dj_pt', compact('office', 'tittle', 'formattedDate', 'presidente', 'secretario', 'vocal', 'student', 'year', 'num_exp', 'num_res', 'res_date', 'res_year'));
         return $pdf->download('OFF-DJ-' . $student . '.pdf'); // Puedes especificar un nombre para el archivo PDF
     }
+
+    public function soliciteOfficeApproveThesis($student_id)
+    {
+        // Verificar si el estudiante existe
+        $student = Student::where('_id', $student_id)->first();
+        if (!$student) {
+            return response()->json([
+                'mensaje' => 'El estudiante no existe',
+            ], 400);
+        }
+
+        // Verificar si el estudiante tiene todos los jurados aprobados
+        $presidente = Review::where('student_id', $student_id)
+            ->where('rev_adviser_rol', 'presidente')
+            ->where('rev_status', 'aprobado')
+            ->first();
+        $secretario = Review::where('student_id', $student_id)
+            ->where('rev_adviser_rol', 'secretario')
+            ->where('rev_status', 'aprobado')
+            ->first();
+        $vocal = Review::where('student_id', $student_id)
+            ->where('rev_adviser_rol', 'vocal')
+            ->where('rev_status', 'aprobado')
+            ->first();
+
+        if (!$presidente || !$secretario || !$vocal) {
+            return response()->json([
+                'mensaje' => 'El estudiante aún no tiene la conformidad de sus jurados',
+            ], 400);
+        }
+
+        // Verificar si ya existe una solicitud de "Aprobación de tesis" pendiente
+        $existingOffice = DocOf::where('student_id', $student_id)
+            ->where('of_name', 'Aprobación de tesis')
+            ->where('of_status', 'pendiente') // Añadimos condición de estado "pendiente"
+            ->first();
+
+        if ($existingOffice) {
+            return response()->json([
+                'mensaje' => 'El estudiante ya tiene una solicitud de aprobación de tesis pendiente',
+            ], 400);
+        }
+
+        // Crear nueva solicitud de aprobación de tesis
+        $office = DocOf::create([
+            'student_id' => $student_id,
+            'of_name' => 'Aprobación de tesis',
+            'of_num_of' => null,
+            'of_num_exp' => null,
+            'of_status' => 'pendiente',
+            'of_observation' => null,
+        ]);
+
+        return response()->json([
+            'mensaje' => 'Aprobación de tesis creada correctamente',
+            'estado' => $office->of_status,
+        ], 200);
+    }
+
 }
