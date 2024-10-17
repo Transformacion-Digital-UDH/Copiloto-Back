@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Adviser;
 use App\Models\DocOf;
 use App\Models\DocResolution;
+use App\Models\Review;
 use App\Models\Solicitude;
 use App\Models\Student;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -297,4 +298,22 @@ class DocResolutionController extends Controller
 
         }
 
+        public function viewResApproveThesis($docres_id) {
+            $resolution = DocResolution::where('_id', $docres_id)->first();
+            // Verifica si el registro no se encuentra
+            if (!$resolution) {
+                return redirect()->back()->with('error', 'Resolucion no encontrada');
+            }
+
+            // Formatear la fecha updated_at como "11 de julio de 2024"
+            $formattedDate = Carbon::parse($resolution->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+            $year_res = Carbon::parse($resolution->updated_at)->locale('es')->isoFormat('YYYY');
+
+            $docresnum = $resolution->docres_num_res;
+    
+            
+            // Pasar los datos a la vista
+            $pdf = Pdf::loadView('res_apt', compact('resolution', 'formattedDate', 'year_res'));
+            return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
+        }
 }

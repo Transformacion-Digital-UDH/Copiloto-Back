@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RESOLUCIÓN Nº {{$docresnum}}-{{$year_res}}-D-FI-UDH</title>
+    <title>RESOLUCIÓN Nº {{$resolution->docres_num_res}}-{{$year_res}}-D-FI-UDH</title>
     <!-- Fuente Noto Sans Arabic de Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -42,7 +42,7 @@
         }
 
         .container div {
-            margin-bottom: 5px; /* Espaciado entre los elementos */
+            margin-bottom: 5px;
         }
     
         .res-date {
@@ -67,11 +67,11 @@
         }
 
         .firma {
-        display: flex;
-        justify-content: center; /* Centra horizontalmente */
-        width: 600px;
-        height: 250px; 
-        gap: 10px; /* Espacio entre las imágenes (opcional) */
+            display: flex;
+            justify-content: center; /* Centra horizontalmente */
+            width: 600px;
+            height: 250px; 
+            gap: 10px; /* Espacio entre las imágenes (opcional) */
         }
 
         .firma img {
@@ -91,28 +91,42 @@
         <div class="container-facultad">Facultad de Ingeniería</div>
     </div>
     <div class="res-date">
-        <p class="num-res">RESOLUCIÓN Nº {{$docresnum}}-{{$year_res}}-D-FI-UDH</p>
+        <p class="num-res">RESOLUCIÓN Nº {{$resolution->docres_num_res}}-{{$year_res}}-D-FI-UDH</p>
         <p class="fecha">Huánuco, {{$formattedDate}}</p>
         <div class="parrafo">
             <p>
-                Visto, el Oficio N° {{$office->of_num_of}}-{{$year_res}}-CA-PAISI-FI-UDH presentado por el Coordinador
-                del Programa Académico de Ingeniería de Sistemas e Informática y el Expediente N°
-                {{$office->of_num_exp}}, del Bach. <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>, quién solicita Asesor de
-                Tesis, para desarrollar el trabajo de investigación (Tesis).
+                Visto, el Oficio N° 181-2024-CA-PAISI-FI-UDH, mediante el cual el Coordinador
+                Académico de Ingeniería de Sistemas e Informática, remite el dictamen de los jurados revisores, del
+                Trabajo de Investigación (Tesis) intitulado: “MEJORA DEL SERVICIO DE TRANSPORTE DE LA
+                UNIVERSIDAD DE HUÁNUCO, MEDIANTE EL DESARROLLO DE UNA APLICACIÓN MÓVIL PARA
+                EL SEGUIMIENTO DE LOS BUSES”, presentado por el (la) Bach. Jose Alvaro JAPA SALAZAR.
             </p>
             <p><strong>CONSIDERANDO:</strong></p>
-            <p>Que, de acuerdo a la Nueva Ley Universitaria 30220, Capítulo V, Art 45º inc.45.2, es procedente su atención, y;</p>
-            <p>
-                Que, según el Expediente N° {{$office->of_num_exp}}, presentado por el (la) 
-                Bach. <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>, 
-                quien solicita Asesor de Tesis, para desarrollar su trabajo de investigación, el mismo que propone al Ing. {{ $adviserFormatted['adv_name'] }} {{ $adviserFormatted['adv_lastname_m'] }} {{ $adviserFormatted['adv_lastname_f'] }}, como Asesor de Tesis, y;
-            </p>
-            <p>Que, según lo dispuesto en el Capítulo II, Art. 27 y 28 del Reglamento General de Grados y Títulos de la Universidad de Huánuco vigente, es procedente atender lo solicitado, y;</p>
-            <p>Estando a Las atribuciones conferidas al Decano de la Facultad de Ingeniería y con cargo a dar cuenta en el próximo Consejo de Facultad.</p>
+            <p>Que, según mediante Resolución N° 006-2001-R-AU-UDH, de fecha 24 de julio de 2001, se crea la Facultad de Ingeniería, y;</p>
+            
+            <p>Que, mediante Resolución de Consejo Directivo N° 076-2019-SUNEDU/CD, de fecha
+                05 de junio de 2019, otorga la Licencia a la Universidad de Huánuco para ofrecer el servicio
+                educativo superior universitario, y;</p>
+            <p>Que, mediante Resolución N° 1244-2023-D-FI-UDH, de fecha 02 de junio de 2023,
+                perteneciente al Bach. Jose Alvaro JAPA SALAZAR se le designó como ASESOR(A) de Tesis al Mg.
+                Fabio Rodríguez Meléndez, docente adscrito al Programa Académico de Ingeniería de Sistemas e
+                Informática de la Facultad de Ingeniería, y;</p>
+            <p>Que, según Oficio N° 181-2024-CA-PAISI-FI-UDH, del Coordinador Académico quien
+                informa que los JURADOS REVISORES del Trabajo de Investigación (Tesis) intitulado: “MEJORA
+                DEL SERVICIO DE TRANSPORTE DE LA UNIVERSIDAD DE HUÁNUCO, MEDIANTE EL
+                DESARROLLO DE UNA APLICACIÓN MÓVIL PARA EL SEGUIMIENTO DE LOS BUSES”, presentado
+                por el (la) Bach. Jose Alvaro JAPA SALAZAR, integrado por los siguientes docentes: Mg. Omar Ivan
+                Sulca Correa (Presidente), Mg. Jose Guillermo Beraun Barrantes (Secretario) e Ing. Paolo Edver Solis
+                Jara (Vocal), quienes declaran APTO para ser ejecutado el proyecto de Tesis, y;</p>
+                <p>
+            <p>Estando a las atribuciones conferidas al Decano de la Facultad de Ingeniería y con cargo a dar cuenta en el próximo Consejo de Facultad.</p>
             <p><strong>SE RESUELVE:</strong></p>
-            <p><strong style="text-decoration: underline;">Artículo Primero</strong><strong>.-. DESIGNAR,</strong> como Asesor de Tesis del 
-            Bach. <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>,
-            al Ing. {{ $adviserFormatted['adv_name'] }} {{ $adviserFormatted['adv_lastname_m'] }} {{ $adviserFormatted['adv_lastname_f'] }}, Docente del Programa Académico de Ingeniería de Sistemas de Informática, Facultad de Ingeniería.</p>
+            <p><strong style="text-decoration: underline;">Artículo Primero</strong><strong>.-. APROBAR,,</strong> el Trabajo de Investigación (Tesis) y su ejecución
+                intitulado: “MEJORA DEL SERVICIO DE TRANSPORTE DE LA UNIVERSIDAD DE HUÁNUCO,
+                MEDIANTE EL DESARROLLO DE UNA APLICACIÓN MÓVIL PARA EL SEGUIMIENTO DE LOS
+                BUSES”, presentado por el (la) Bach. Jose Alvaro JAPA SALAZAR para optar el Título Profesional
+                de Ingeniero(a) de Sistemas e Informática, del Programa Académico de Ingeniería de Sistemas e
+                Informática de la Universidad de Huánuco.</p>
             <p><strong style="text-decoration: underline;">Artículo Segundo</strong>. - El interesado tendrá un plazo máximo de 6 meses para solicitar revisión del Trabajo de Investigación (Tesis). En todo caso deberá de solicitar nuevamente el trámite con el costo económico vigente.</p>
             <p style="text-align: center"><br><strong>REGÍSTRESE, COMUNÍQUESE Y ARCHÍVESE</strong></p>
             <br>
