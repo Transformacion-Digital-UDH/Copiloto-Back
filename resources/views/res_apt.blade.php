@@ -95,11 +95,9 @@
         <p class="fecha">Huánuco, {{$formattedDate}}</p>
         <div class="parrafo">
             <p>
-                Visto, el Oficio N° 181-2024-CA-PAISI-FI-UDH, mediante el cual el Coordinador
+                Visto, el Oficio N° {{$num_of}}-{{$year_of}}-CA-PAISI-FI-UDH, mediante el cual el Coordinador
                 Académico de Ingeniería de Sistemas e Informática, remite el dictamen de los jurados revisores, del
-                Trabajo de Investigación (Tesis) intitulado: “MEJORA DEL SERVICIO DE TRANSPORTE DE LA
-                UNIVERSIDAD DE HUÁNUCO, MEDIANTE EL DESARROLLO DE UNA APLICACIÓN MÓVIL PARA
-                EL SEGUIMIENTO DE LOS BUSES”, presentado por el (la) Bach. Jose Alvaro JAPA SALAZAR.
+                Trabajo de Investigación (Tesis) intitulado: <strong>“{{$tittle}}”</strong>, presentado por el (la) Bach. <strong>{{$name_student}}</strong>.
             </p>
             <p><strong>CONSIDERANDO:</strong></p>
             <p>Que, según mediante Resolución N° 006-2001-R-AU-UDH, de fecha 24 de julio de 2001, se crea la Facultad de Ingeniería, y;</p>
@@ -108,23 +106,18 @@
                 05 de junio de 2019, otorga la Licencia a la Universidad de Huánuco para ofrecer el servicio
                 educativo superior universitario, y;</p>
             <p>Que, mediante Resolución N° 1244-2023-D-FI-UDH, de fecha 02 de junio de 2023,
-                perteneciente al Bach. Jose Alvaro JAPA SALAZAR se le designó como ASESOR(A) de Tesis al Mg.
-                Fabio Rodríguez Meléndez, docente adscrito al Programa Académico de Ingeniería de Sistemas e
+                perteneciente al Bach. <strong>{{$name_student}}</strong> se le designó como ASESOR(A) de Tesis al Mg.
+                {{$name_adviser}}, docente adscrito al Programa Académico de Ingeniería de Sistemas e
                 Informática de la Facultad de Ingeniería, y;</p>
             <p>Que, según Oficio N° 181-2024-CA-PAISI-FI-UDH, del Coordinador Académico quien
-                informa que los JURADOS REVISORES del Trabajo de Investigación (Tesis) intitulado: “MEJORA
-                DEL SERVICIO DE TRANSPORTE DE LA UNIVERSIDAD DE HUÁNUCO, MEDIANTE EL
-                DESARROLLO DE UNA APLICACIÓN MÓVIL PARA EL SEGUIMIENTO DE LOS BUSES”, presentado
-                por el (la) Bach. Jose Alvaro JAPA SALAZAR, integrado por los siguientes docentes: Mg. Omar Ivan
-                Sulca Correa (Presidente), Mg. Jose Guillermo Beraun Barrantes (Secretario) e Ing. Paolo Edver Solis
-                Jara (Vocal), quienes declaran APTO para ser ejecutado el proyecto de Tesis, y;</p>
+                informa que los JURADOS REVISORES del Trabajo de Investigación (Tesis) intitulado: <strong>“{{$tittle}}”</strong>, presentado
+                por el (la) Bach. <strong>{{$name_student}}</strong>, integrado por los siguientes docentes: Mg. {{$name_presidente}} (Presidente), Mg. {{$name_secretario}} (Secretario) e 
+                Ing. {{$name_vocal}} (Vocal), quienes declaran APTO para ser ejecutado el proyecto de Tesis, y;</p>
                 <p>
             <p>Estando a las atribuciones conferidas al Decano de la Facultad de Ingeniería y con cargo a dar cuenta en el próximo Consejo de Facultad.</p>
             <p><strong>SE RESUELVE:</strong></p>
             <p><strong style="text-decoration: underline;">Artículo Primero</strong><strong>.-. APROBAR,,</strong> el Trabajo de Investigación (Tesis) y su ejecución
-                intitulado: “MEJORA DEL SERVICIO DE TRANSPORTE DE LA UNIVERSIDAD DE HUÁNUCO,
-                MEDIANTE EL DESARROLLO DE UNA APLICACIÓN MÓVIL PARA EL SEGUIMIENTO DE LOS
-                BUSES”, presentado por el (la) Bach. Jose Alvaro JAPA SALAZAR para optar el Título Profesional
+                intitulado: <strong>“{{$tittle}}”</strong>, presentado por el (la) Bach. <strong>{{$name_student}}</strong> para optar el Título Profesional
                 de Ingeniero(a) de Sistemas e Informática, del Programa Académico de Ingeniería de Sistemas e
                 Informática de la Universidad de Huánuco.</p>
             <p><strong style="text-decoration: underline;">Artículo Segundo</strong>. - El interesado tendrá un plazo máximo de 6 meses para solicitar revisión del Trabajo de Investigación (Tesis). En todo caso deberá de solicitar nuevamente el trámite con el costo económico vigente.</p>
@@ -139,8 +132,8 @@
         <div class="pie">
             <p style="text-decoration: underline;">Distribución:</p>
             <p>
-                Fac. de Ingeniería – PAISI – Asesor – Mat. y Reg.Acad. – Interesado – Archivo.<br>
-                <strong>BLCR/EJML/nto.</strong>
+            Fac. de Ingeniería – PAISI – Exp. Graduando – Interesado - Archivo.<br>
+                BCR/EJML/nto.
             </p>
 
 
