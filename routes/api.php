@@ -157,8 +157,8 @@ Route::get('/download-odj-pt/{docof_id}', [DocOfController::class, 'downloadOffi
 Route::get('/oficio/ver-aprobacion-tesis/{office_id}', [DocOfController::class, 'viewOfficeApproveThesis']);
 Route::get('/oficio/descargar-aprobacion-tesis/{office_id}', [DocOfController::class, 'downloadOfficeApproveThesis']);
 //Ruta para ver resolucion de aprobacion de proyecto de tesis (APT) ---> ESTUDIANTE, PAISI, FACULTAD
-Route::get('/resolucion/ver-aprobacion-tesis/{resolution_id}', [DocOfController::class, 'viewResApproveThesis']);
-Route::get('/resolucion/download-aprobacion-tesis/{resolution_id}', [DocOfController::class, 'downloadResApproveThesis']);
+Route::get('/resolucion/ver-aprobacion-tesis/{resolution_id}', [DocResolutionController::class, 'viewResApproveThesis']);
+Route::get('/resolucion/descargar-aprobacion-tesis/{resolution_id}', [DocResolutionController::class, 'downloadResApproveThesis']);
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
 

@@ -23,6 +23,7 @@ class UserResource extends JsonResource
 
         if($role == 'asesor'){
             $id = $this->adviser->_id;
+            $jurado = $this->adviser->adv_is_jury;
         }
 
         return [
@@ -32,6 +33,7 @@ class UserResource extends JsonResource
             'rol' => $this->role->name,
             'facultad' => $this->us_faculty,
             'programa' => $this->us_program,
+            'es_jurado' => $jurado ?? '',
         ];
     }
 }
