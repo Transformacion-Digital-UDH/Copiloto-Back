@@ -91,6 +91,10 @@
             margin-top: auto;
             text-align: right;
         }
+        .pie{
+            text-align: left;
+            font-size: 11px;
+        }
     </style>
 </head>
 
@@ -103,31 +107,36 @@
         <p class="fecha-hoy">
             Huánuco, {{ $formattedDate }}
         </p>
-        <p class="data-oficio"><strong>Oficio Múltiple N° {{$office->of_num_of}}-{{$year}}-CA-PAISI-FI-UDH</strong></p>
+        <p class="data-oficio"><strong>OFICIO N° {{$office->of_num_of}}-{{$year}}-CA-PAISI-FI-UDH</strong></p>
     </div>
 
     <div class="content">
-        <p><strong>SEÑOR (A):</strong></p>
-        {{ $presidente }}<br>
-        {{ $secretario }}<br>
-        {{ $vocal }}
-        <p><strong>DOCENTE DEL P. A. DE INGENIERIA DE SISTEMAS E INFORMÁTICA- UNIVERSIDAD DE HUÁNUCO</strong></p>
-        <p>ASUNTO:	DESIGNACIÓN DE JURADO</p>
+        <p><strong>SEÑOR (A): <br>
+            MG. BERTHA LUCILA CAMPOS RIOS <br>
+            DECANA (E) DE LA FACULTAD DE INGENIERÍA <br>
+            UNIVERSIDAD DE HUÁNUCO</strong></p>
+            
+
         <p><strong>Presente.</strong></p>
         <p style="text-indent: 30px;">De mi consideración:</p>
-        <p style="text-indent: 30px;">Por medio del presente me dirijo a usted para saludarlo cordialmente y a la vez para <strong>SOLICITAR</strong>
-             su apoyo en la revisión y aprobación del <strong>PROYECTO DE TESIS</strong> , presentado con <strong>Exp. N° {{$num_exp}}</strong>, 
-             el mismo que hago llegar adjunto al presente, el ejemplar en digital del proyecto de tesis intitulado: 
-             <strong>"{{ $tittle }}"</strong>
-             Presentado por el egresado. <strong> {{ $student }} </strong>. El tiempo que dispone es de 07 días hábiles como plazo máximo, 
-             de acuerdo al Reglamento General de Grados y Títulos (Art. 24), para emitir a través de un informe sus observaciones y/o 
-             conformidad para su aprobación y ejecución. En caso de no poder cumplir con el encargo sírvase devolver el proyecto al menor 
-             tiempo posible con la finalidad de asignar a otro revisor. </p>
+        <p style="text-indent: 30px;">Por medio del presente me dirijo a Usted, para saludarla cordialmente y a la vez remitirle el Expediente
+             <strong>N° {{$num_exp}}</strong> del Bachiller: <strong>{{$student}}</strong>, quien solicita Aprobación del Trabajo de Investigación Tesis. </p>
+        
+        <p style="text-indent: 30px;">Se pone en conocimiento que, mediante <strong> RESOLUCIÓN N° {{$num_res}}-{{$res_year}}-D-FI-UDH</strong> de fecha {{$res_date}}, perteneciente 
+            a la Bachiller: <strong>{{$student}}</strong> se le designo como asesor de Tesis al <strong>{{$asesor}}</strong>, y a su vez informar que, 
+            el Jurado Revisor del Trabajo de Investigación Tesis titulado: “<strong>{{$tittle}}</strong>” 
+            del P.A. de Ingeniería de sistemas <strong>– Sede – La esperanza – Huánuco</strong>, integrado por los siguientes docentes Revisores del Trabajo de Investigación de Tesis:</p>
+        <p style="text-indent: 30px;">
+            <span style="display: block; padding-left: 10px;">- {{$presidente}}</span>
+            <span style="display: block; padding-left: 10px;">- {{$secretario}}</span>
+            <span style="display: block; padding-left: 10px;">- {{$vocal}}</span>
+        </p>       
+        <p style="text-indent: 30px;">Quienes declaran <strong>APTO</strong> para ser ejecutado el Trabajo de Investigación Tesis. </p>
         <p style="text-indent: 30px;">
             <strong>Adjunto: </strong>
-            <span style="display: block; padding-left: 10px;">- Proyecto de Investigación digitalizado en formato Word.</span>
-            <span style="display: block; padding-left: 10px;">- Copia Resolución Nº {{$num_res}}-{{$res_year}}-D-FI-UDH ({{$res_date}})</span>
-        </p>       
+            <span style="display: block; padding-left: 10px;">- Informe de Conformidad de los Jurados Revisores del Trabajo de Investigación de Tesis.</span>
+            <span style="display: block; padding-left: 10px;">- Trabajo de Investigación Tesis en PDF.</span>
+
         <p style="text-indent: 30px;">Sin otro particular, me despido recordándole las muestras de mi especial consideración y estima personal.</p>
         <p style="text-align: center;">Atentamente,</p>
     </div>
@@ -141,5 +150,13 @@
                 Ing. Paolo E. Solís Jara <br>
             </strong>Coordinador Académico</p>
     </div>
+    
+    <div class="pie">
+            <p>
+                c.c. <br>
+                Archivo <br>
+                PESJ/dnmr <br>
+            </p>
+        </div>
 </body>
 </html>
