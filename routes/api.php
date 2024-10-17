@@ -153,7 +153,12 @@ Route::get('/download-cpa/{review_id}', [HistoryReviewController::class, 'downlo
 //Ruta para ver oficio de designacion de jurados para la revision de tesis ---> ESTUDIANTE, JURADOS
 Route::get('/view-odj-pt/{docof_id}', [DocOfController::class, 'viewOfficeJuriesForTesis']);
 Route::get('/download-odj-pt/{docof_id}', [DocOfController::class, 'downloadOfficeJuriesForTesis']);
-
+//Ruta para ver oficio de aprobacion de proyecto de tesis (APT) ---> ESTUDIANTE, PAISI, FACULTAD
+Route::get('/oficio/ver-aprobacion-tesis/{office_id}', [DocOfController::class, 'viewOfficeApproveThesis']);
+Route::get('/oficio/descargar-aprobacion-tesis/{office_id}', [DocOfController::class, 'downloadOfficeApproveThesis']);
+//Ruta para ver resolucion de aprobacion de proyecto de tesis (APT) ---> ESTUDIANTE, PAISI, FACULTAD
+Route::get('/resolucion/ver-aprobacion-tesis/{resolution_id}', [DocOfController::class, 'viewResApproveThesis']);
+Route::get('/resolucion/download-aprobacion-tesis/{resolution_id}', [DocOfController::class, 'downloadResApproveThesis']);
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
 
