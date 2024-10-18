@@ -272,6 +272,7 @@ class ReviewController extends Controller
                     'estado' => $review->rev_status, 
                     'revision_id' => $review->_id, 
                     'rol' => $review->rev_adviser_rol,
+                    'rol' => $review->rev_count,
                     'presidente_estado' => $review_presidente->rev_status,
                     'presidente_cont' => $review_presidente->rev_count,
                     'secretario_estado' => $review_secretario->rev_status,
@@ -283,7 +284,9 @@ class ReviewController extends Controller
         }
         
         // Devolver las revisiones ordenadas con el nombre del estudiante
-        return response()->json(['data' => $response], 200);
+        return response()->json([
+            'data' => $response
+        ], 200);
     }
 
     public function getInfoReviewJuriesByStudent($student_id){
