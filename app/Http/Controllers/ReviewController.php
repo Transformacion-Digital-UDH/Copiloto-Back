@@ -272,7 +272,7 @@ class ReviewController extends Controller
                     'estado' => $review->rev_status, 
                     'revision_id' => $review->_id, 
                     'rol' => $review->rev_adviser_rol,
-                    'rol' => $review->rev_count,
+                    'count' => $review->rev_count,
                     'presidente_estado' => $review_presidente->rev_status,
                     'presidente_cont' => $review_presidente->rev_count,
                     'secretario_estado' => $review_secretario->rev_status,
