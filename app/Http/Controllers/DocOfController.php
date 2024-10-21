@@ -624,6 +624,10 @@ class DocOfController extends Controller
             // Obtener la solicitud relacionada
             $tittle = Solicitude::where('student_id', $solicitude->student_id)->first();
             
+            $asesor = Review::where('student_id', $student->_id)
+                                ->where('rev_type', 'tesis')
+                                ->where('rev_adviser_rol', 'asesor')
+                                ->first();
             $presidente = Review::where('student_id', $student->_id)
                                 ->where('rev_type', 'tesis')
                                 ->where('rev_adviser_rol', 'presidente')
@@ -642,9 +646,10 @@ class DocOfController extends Controller
                     'oficio_id' => $solicitude->_id,
                     'nombre' => ucwords(strtolower($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name)),
                     'titulo' => $tittle->sol_title_inve,
-                    'revision_presidente_id' => $presidente->_id,
-                    'revision_secretario_id' => $secretario->_id,
-                    'revision_vocal_id' => $vocal->_id,
+                    'revision_id_asesor' => $asesor->_id,
+                    'revision_id_presidente' => $presidente->_id,
+                    'revision_id_secretario' => $secretario->_id,
+                    'revision_id_vocal' => $vocal->_id,
                     'estado' => $solicitude->of_status,
                 ];
             }
