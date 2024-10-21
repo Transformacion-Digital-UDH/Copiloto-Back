@@ -64,8 +64,10 @@ class DocResolutionController extends Controller
         } else {
             $studentFormatted = null; 
         }
+
+        $docresnum = $resolution->docres_num_res;
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('resolution_adviser', compact('siglas', 'resolution', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year_of', 'year_res'));
+        $pdf = Pdf::loadView('resolution_adviser', compact('docresnum','siglas', 'resolution', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year_of', 'year_res'));
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
 }
 
