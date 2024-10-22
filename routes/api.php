@@ -94,6 +94,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para para vista de APROBACION DE TESIS ---> ESTUDIANTE
     Route::get('/estudiante/get-info-aprobar-tesis/{student_id}', [StudentController::class, 'getInfoApproveThesis']);
 });
+    //Ruta para para vista de TESIS APROBADA MAS RESOLUCIONES ---> ESTUDIANTE
+    Route::get('/estudiante/get-info-tesis/aprobado/{student_id}', [StudentController::class, 'getInfoEjecucion']);
 
 
 // RUTAS PARA REVISIONES

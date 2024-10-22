@@ -161,4 +161,17 @@ class StudentController extends Controller
             'resolucion_estado' => $docres->docres_status,
         ], 200);
     }
+
+    public function getInfoEjecucion($student_id) {
+        $student = Student::where('_id', $student_id)->first();
+        $student_name = $student->stu_lastname_m . ' ' . $student->stu_lastname_f . ' ' . $student->stu_name;
+        $res_da = Solicitude::where('student_id', $student_id)->first();
+
+        return response()->json([
+            'nombre_estudiante' => $student_name,
+            'fecha_ini' => $date_ini,
+            'fecha_fin' => $date_end,
+        ], 200);
+
+    }
 }
