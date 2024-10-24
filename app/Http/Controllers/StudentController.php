@@ -11,6 +11,7 @@ use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\Adviser;
 use App\Models\Review;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use MongoDB\Laravel\Eloquent\Casts\ObjectId;
 
@@ -165,12 +166,93 @@ class StudentController extends Controller
     public function getInfoEjecucion($student_id) {
         $student = Student::where('_id', $student_id)->first();
         $student_name = $student->stu_lastname_m . ' ' . $student->stu_lastname_f . ' ' . $student->stu_name;
-        $res_da = Solicitude::where('student_id', $student_id)->first();
+        // Designacion de asesor
+        $sol_da = Solicitude::where('student_id', $student_id)->first();
+        $off_da = DocOf::where('solicitude_id', $sol_da->_id)->first();
+        $res_da = DocResolution::where('docof_id', $off_da->_id)->first();
+
+        $revision_presidente = Review::where('student_id', $student_id)->where('rev_adviser_rol', 'presidente')->where('rev_type', 'tesis')->first();
+        $revision_secretario = Review::where('student_id', $student_id)->where('rev_adviser_rol', 'secretario')->where('rev_type', 'tesis')->first();
+        $revision_vocal = Review::where('student_id', $student_id)->where('rev_adviser_rol', 'vocal')->where('rev_type', 'tesis')->first();
+        $revision_asesor = Review::where('student_id', $student_id)->where('rev_adviser_rol', 'asesor')->where('rev_type', 'tesis')->first();
+
+        $presidente = Adviser::where('_id', $revision_presidente->adviser_id)->first();
+        $presidente = ucwords(strtolower($presidente->adv_name . ' ' . $presidente->adv_lastname_m . ' ' . $presidente->adv_lastname_f));
+
+        $secretario = Adviser::where('_id', $revision_secretario->adviser_id)->first();
+        $secretario = ucwords(strtolower($secretario->adv_name . ' ' . $secretario->adv_lastname_m . ' ' . $secretario->adv_lastname_f));
+
+        $vocal = Adviser::where('_id', $revision_vocal->adviser_id)->first();
+        $vocal = ucwords(strtolower($vocal->adv_name . ' ' . $vocal->adv_lastname_m . ' ' . $vocal->adv_lastname_f));
+
+        $asesor = Adviser::where('_id', $revision_asesor->adviser_id)->first();
+        $asesor = ucwords(strtolower($asesor->adv_name . ' ' . $asesor->adv_lastname_m . ' ' . $asesor->adv_lastname_f));
+
+        
+        //Designacion de jurados
+        $off_dj = DocOf::where('student_id', $student_id)->where('of_name', 'Solicitud de jurados para revision de tesis')->first();
+        $off_apt = DocOf::where('student_id', $student_id)->where('of_name', 'Aprobación de tesis')->first();
+        $res_apt = DocResolution::where('docof_id', $off_apt->_id)->first();
+
+
+        //Ini - End 
+        $date_ini = Carbon::parse($res_da->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY'); 
+        $date_end = Carbon::parse($res_da->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY'); 
+
+        $res_emisor = 'Facultad de ingeniería';
+        $off_emisor = 'Escuela académica de ingeniería de sistemas e informática';
 
         return response()->json([
             'nombre_estudiante' => $student_name,
             'fecha_ini' => $date_ini,
             'fecha_fin' => $date_end,
+            'designacion_asesor' => [
+                'nombre_doc' => 'Carta de aceptación',
+                'doc_emisor' => $asesor ,
+                'doc_fecha' => Carbon::parse($sol_da->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') ,
+                'doc_id' => $sol_da->_id,
+                'nombre_res' => 'Resolución de designación de asesor',
+                'res_emisor' => $res_emisor,
+                'res_fecha' => Carbon::parse($res_da->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') ,
+                'res_id' => $res_da->_id,
+
+            ],
+            'conformidad_asesor' => [
+                'nombre_doc' => 'Oficio de conformidad - Asesor',
+                'doc_emisor' => $asesor ,
+                'doc_fecha' => Carbon::parse($revision_asesor->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') ,
+                'doc_id' => $revision_asesor->_id,
+            ],
+            'desigancion_jurados' => [
+                'nombre_doc' => 'Oficio múltiple de designación de jurados',
+                'doc_emisor' => $off_emisor,
+                'doc_fecha' => Carbon::parse($off_dj->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') ,
+                'doc_id' => $off_dj->_id,
+            ],
+            'conformidad_jurado_pres' => [
+                'nombre_doc' => 'Oficio de conformidad - Presidente',
+                'doc_emisor' => $presidente,
+                'doc_fecha' => Carbon::parse($revision_presidente->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') ,
+                'doc_id' => $revision_presidente->_id,
+            ],
+            'conformidad_jurado_secre' => [
+                'nombre_doc' => 'Oficio de conformidad - Secretario',
+                'doc_emisor' => $secretario,
+                'doc_fecha' => Carbon::parse($revision_secretario->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') ,
+                'doc_id' => $revision_secretario->_id,
+            ],
+            'conformidad_jurado_vocal' => [
+                'nombre_doc' => 'Oficio de conformidad - Vocal',
+                'doc_emisor' => $vocal,
+                'doc_fecha' => Carbon::parse($revision_vocal->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') ,
+                'doc_id' => $revision_vocal->_id,
+            ],
+            'aprobacion_tesis' => [
+                'nombre_doc' => 'Resolución de aprobación de trabajo de investigación (Tesis)',
+                'doc_emisor' => $res_emisor,
+                'doc_fecha' => Carbon::parse($res_apt->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') ,
+                'doc_id' => $res_apt->_id,
+            ]
         ], 200);
 
     }

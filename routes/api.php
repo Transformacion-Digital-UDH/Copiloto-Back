@@ -93,10 +93,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/student/get-juries/{student_id}', [StudentController::class, 'viewJuriesForTesisByStudent']); 
     //Ruta para para vista de APROBACION DE TESIS ---> ESTUDIANTE
     Route::get('/estudiante/get-info-aprobar-tesis/{student_id}', [StudentController::class, 'getInfoApproveThesis']);
-});
     //Ruta para para vista de TESIS APROBADA MAS RESOLUCIONES ---> ESTUDIANTE
-    Route::get('/estudiante/get-info-tesis/aprobado/{student_id}', [StudentController::class, 'getInfoEjecucion']);
 
+});
+Route::get('/estudiante/get-info-tesis/aprobado/{student_id}', [StudentController::class, 'getInfoEjecucion']);
 
 // RUTAS PARA REVISIONES
 Route::middleware(['auth:sanctum'])->group(function () {  
