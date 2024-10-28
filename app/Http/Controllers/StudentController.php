@@ -257,31 +257,41 @@ class StudentController extends Controller
 
     }
 
-    public function getStudentsInforme(){
-        
+    public function getStudentsInforme()
+    {
         $students = Student::all();
         $data = []; // Inicializar el array $data
-    
-        foreach($students as $student){
+
+        foreach ($students as $student) {
             
             // Obtener la primera solicitud asociada al estudiante, si existe
             $sol_da = Solicitude::where('student_id', $student->_id)->first();
-    
+
             // Establecer el estado en 'pendiente' si no hay solicitud o falta el enlace de documento
             $status = ($sol_da && $sol_da->document_link) ? 'aprobado' : 'pendiente';
-    
+
+            // Obtener la aprobación de tesis, si existe
+            $off_apt = DocOf::where('student_id', $student->_id)->where('of_name', 'Aprobación de tesis')->first();
+            $res_apt = $off_apt ? DocResolution::where('docof_id', $off_apt->_id)->first() : null;
+            
+            if($res_apt){
+            // Solo agregar al array si se encuentra una resolución o un registro válido
             $data[] = [
                 'id' => $student->_id,
-                'nombre' => $student->stu_name,
+                'nombre' => $student->stu_lastname_m . ' ' . $student->stu_lastname_f . ' ' . $student->stu_name,
                 'estado' => $status,
+                'resolucion_id' => $res_apt ? $res_apt->_id : null,
+                'resolucion_fecha' => $res_apt ? Carbon::parse($res_apt->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') : null,
                 // Agrega aquí los demás campos que desees incluir
             ];
+            }
         }
-    
+
         return response()->json([
             'students' => $data
         ]);
     }
+
     
     
     
