@@ -256,4 +256,33 @@ class StudentController extends Controller
         ], 200);
 
     }
+
+    public function getStudentsInforme(){
+        
+        $students = Student::all();
+        $data = []; // Inicializar el array $data
+    
+        foreach($students as $student){
+            
+            // Obtener la primera solicitud asociada al estudiante, si existe
+            $sol_da = Solicitude::where('student_id', $student->_id)->first();
+    
+            // Establecer el estado en 'pendiente' si no hay solicitud o falta el enlace de documento
+            $status = ($sol_da && $sol_da->document_link) ? 'aprobado' : 'pendiente';
+    
+            $data[] = [
+                'id' => $student->_id,
+                'nombre' => $student->stu_name,
+                'estado' => $status,
+                // Agrega aquí los demás campos que desees incluir
+            ];
+        }
+    
+        return response()->json([
+            'students' => $data
+        ]);
+    }
+    
+    
+    
 }
