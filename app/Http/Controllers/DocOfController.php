@@ -400,6 +400,18 @@ class DocOfController extends Controller
                     'rev_adviser_rol' => 'vocal', // asesor, presidente, secretario, vocal
                 ]);
 
+                if($tipo=='informe')
+                {
+                    $docResolution = new DocResolution([
+                        'docof_id' => $docof->_id,
+                        'docres_name' => $docof->of_name,  // Inicializado como null
+                        'docres_num_res' => null,  // Inicializado como null
+                        'docres_status' => 'pendiente',  // Estado fijo en "pendiente"
+                        'docres_observation' => null  // Inicializado como null
+                    ]);
+                    $docResolution->save();
+                }
+
                 $presidente->save();
                 $secretario->save();
                 $vocal->save();
@@ -412,6 +424,7 @@ class DocOfController extends Controller
                     'of_observation' => null,
                 ]);
 
+                
                 
 
                 return response()->json([
