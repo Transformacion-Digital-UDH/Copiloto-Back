@@ -115,9 +115,16 @@ class HistoryReviewController extends Controller
         } else {
             $studentFormatted = null; 
         }
+
+        if ($review->rev_type == 'tesis'){
+            $proyect = 'proyecto de investigación (Tesis)';
+        }
+        else {
+            $proyect = 'informe final del proyecto de investigación (Tesis)';
+        }
     
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('CPA_tesis', compact('solicitude', 'review', 'siglas', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
+        $pdf = Pdf::loadView('CPA_tesis', compact('solicitude', 'review', 'siglas', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year', 'proyect'));
     
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
     }

@@ -110,7 +110,7 @@
             Universidad de Huánuco</p>
         <p><strong>Presente.</strong></p>
         <p>De mi consideración:</p>
-        <p style="text-indent: 30px;">Es grato dirigirme a usted para saludarlo cordialmente y hacerle de conocimiento la <strong>APROBACIÓN Y CONFORMIDAD</strong> del proyecto con; </p>
+        <p style="text-indent: 30px;">Es grato dirigirme a usted para saludarlo cordialmente y hacerle de conocimiento la <strong>APROBACIÓN Y CONFORMIDAD</strong> del {{$proyect}} con; </p>
         <strong>Titulo de tesis:</strong>
             <div class="titulo-tesis">
                 <p>
