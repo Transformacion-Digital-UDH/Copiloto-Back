@@ -303,30 +303,45 @@ class StudentController extends Controller
     }
     
 
-    public function getInfoConfAdviserInforme($student_id){
-        
+    public function getInfoConfAdviserInforme($student_id) {
+        // Obtener la solicitud asociada al estudiante
         $solicitude = Solicitude::where('student_id', $student_id)->first();
+    
+        // Verificar si la solicitud existe
+        if (!$solicitude) {
+            return response()->json(['error' => 'Solicitud no encontrada'], 404);
+        }
+    
+        // Obtener el asesor
         $adviser = Adviser::where('_id', $solicitude->adviser_id)->first();
-        $adviser = ucwords(strtolower($adviser->adv_name . ' ' . $adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f));
         
+        // Verificar si el asesor existe
+        if (!$adviser) {
+            return response()->json(['error' => 'Asesor no encontrado'], 404);
+        }
+    
+        $adviser_name = ucwords(strtolower($adviser->adv_name . ' ' . $adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f));
+        
+        // Obtener la revisión
         $review = Review::where('student_id', $student_id)
                         ->where('adviser_id', $solicitude->adviser_id)    
                         ->where('rev_type', 'informe')    
                         ->first();
-
+    
+        // Construir la respuesta
         return response()->json([
-            'asesor' => $adviser,
+            'asesor' => $adviser_name,
             'titulo' => $solicitude->sol_title_inve,
             'link-informe' => $solicitude->informe_link,
-            'revision' => [
+            'revision' => $review ? [
                 'rev_id' => $review->_id,
                 'rev_contador' => $review->rev_count,
                 'rev_estado' => $review->rev_status,
-                'rev_update' => $review ? Carbon::parse($review->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') : null,
-            ]
+                'rev_update' => Carbon::parse($review->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY'),
+            ] : null,
         ]);
-
     }
+    
     
     public function infoOfficeJuriesForInforme($student_id) {
         // Obtener el oficio

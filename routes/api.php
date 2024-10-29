@@ -106,13 +106,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para ver estudiantes con tesis aprobada a espera de link para informe ---> PAISI
     Route::get('/estudiante/get-solicitud-informe', [StudentController::class, 'getStudentsInforme']);
     //Ruta para la vista del estudiante en revision de infome por el asesor --->ESTUDIANTE
-    Route::get('/estudiante/info-conf-asesor/informe/{student_id}', [StudentController::class, 'getInfoConfAdviserInforme']);
     //Ruta para la vista del estudiante en solicitud de jurados para informe final --->ESTUDIANTE
     Route::get('/estudiante/info-juries/informe/{student_id}', [StudentController::class, 'infoOfficeJuriesForInforme']);
     // Crear oficio para solicitud de jurados para informe final --->Estudiante
     Route::get('/oficio/crear-solicitud-jurados/informe/{student_id}', [DocOfController::class, 'createOfficeJuriesForInforme']);
 });
 
+Route::get('/estudiante/info-conf-asesor/informe/{student_id}', [StudentController::class, 'getInfoConfAdviserInforme']);
 
     
 
@@ -150,10 +150,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para listar solicitudes ordenando por estado (PENDIENTE, ACEPTADO, RECHAZADO) por id de asesor    
     Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
     // Ruta para listar jurados y sus revisiones, con rol, estudiante, tiempo transcurrido en dias ---> PAISI
+    Route::get('/juries/get-select', [AdviserController::class, 'getSelectJuriesTesis']); 
 
 });
 
-Route::get('/juries/get-select', [AdviserController::class, 'getSelectJuriesTesis']); 
 
 
 //RUTA PARA DOCUMENTO GOOGLE
