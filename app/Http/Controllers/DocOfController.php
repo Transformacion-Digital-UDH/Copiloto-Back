@@ -321,7 +321,10 @@ class DocOfController extends Controller
         }
         
         if ($docof->of_name != 'Solicitud de jurados para revision de tesis') {
-            return response()->json(['error' => 'Oficio no válido'], 400);
+            $tipo = 'informe';
+        }
+        else{
+            $tipo = 'tesis';
         }
 
         $state = $request->input('estado');
@@ -373,7 +376,7 @@ class DocOfController extends Controller
                     'rev_num_of' => null,
                     'rev_count' => 0,
                     'rev_status' => 'pendiente', // Estado
-                    'rev_type' => 'tesis',
+                    'rev_type' => $tipo,
                     'rev_adviser_rol' => 'presidente', // asesor, presidente, secretario, vocal
                 ]);
 
@@ -383,7 +386,7 @@ class DocOfController extends Controller
                     'rev_num_of' => null, 
                     'rev_count' => 0,
                     'rev_status' => 'pendiente', // Estado
-                    'rev_type' => 'tesis',
+                    'rev_type' => $tipo,
                     'rev_adviser_rol' => 'secretario', // asesor, presidente, secretario, vocal
                 ]);
 
@@ -392,7 +395,7 @@ class DocOfController extends Controller
                     'student_id' => $docof->student_id,
                     'rev_num_of' => null, 
                     'rev_count' => 0,
-                    'rev_status' => 'pendiente', // Estado
+                    'rev_status' => $tipo, // Estado
                     'rev_type' => 'tesis',
                     'rev_adviser_rol' => 'vocal', // asesor, presidente, secretario, vocal
                 ]);
@@ -412,7 +415,7 @@ class DocOfController extends Controller
                 
 
                 return response()->json([
-                    'message' => 'Observacion enviada y actualizada',
+                    'message' => 'Oficio tramitado',
                     'estado' => $docof->of_status,
                 ], 200);
                
@@ -861,4 +864,94 @@ class DocOfController extends Controller
             $pdf = Pdf::loadView('of_apt', compact('asesor', 'office', 'tittle', 'formattedDate', 'presidente', 'secretario', 'vocal', 'student', 'year', 'num_exp', 'num_res', 'res_date', 'res_year'));
             return $pdf->download('OFF-APT-' . $student . '.pdf'); // Puedes especificar un nombre para el archivo PDF
         }
+
+        public function createOfficeJuriesForInforme($student_id)
+        {
+            $conf_adviser = Review::where('student_id', $student_id)
+                            ->where('rev_adviser_rol', 'asesor')
+                            ->where('rev_type', 'informe')
+                            ->first();
+
+            $search_docOf = DocOf::where('student_id', $student_id)
+                            ->where('of_name', 'designacion de jurados para revision de informe final')
+                            ->first();
+
+            // Verificar si existe el asesor y si su estado es aprobado
+            if ($conf_adviser == null || $conf_adviser->rev_status != 'aprobado') {
+                return response()->json([
+                    'estado' => 'no iniciado',
+                    'message' => 'Este estudiante aun no tiene su conformidad por el asesor.'
+                ], 404);
+            }
+
+            // Verificar si ya existe una solicitud de jurados
+            if ($search_docOf != null && $search_docOf->of_name == 'designacion de jurados para revision de informe final') {
+                return response()->json([
+                    'estado' => 'pendiente',
+                    'message' => 'Este estudiante ya tiene una solicitud en proceso.'
+                ], 404);
+            }
+
+            // Crear una nueva solicitud
+            $docOf = new DocOf([
+                'student_id' => $student_id,
+                'of_name' => 'designacion de jurados para revision de informe final',  
+                'of_num_of' => null,  
+                'of_num_exp' => null,  
+                'of_status' => 'pendiente',  
+                'of_observation' => null,  
+            ]);
+
+            // Guardar el nuevo documento en la base de datos
+            $docOf->save();
+
+            return response()->json([
+                'estado' => $docOf->of_status,
+                'status' => true,
+                'message' => 'Solicitud enviada correctamente',
+            ], 200);
+        }
+
+        public function getOfficeForJuriesInforme(){
+            // Obtener todas las solicitudes con el nombre 'designacion de jurados para revision de informe final'
+            $solicitude_docof = DocOf::where('of_name', 'designacion de jurados para revision de informe final')->get();
+
+            // Definir el orden deseado
+            $order = ['pendiente', 'observado', 'tramitado'];
+
+            // Ordenar manualmente las solicitudes por 'of_status'
+            $sortedSolicitudes = $solicitude_docof->sort(function ($a, $b) use ($order) {
+                return array_search($a->of_status, $order) <=> array_search($b->of_status, $order);
+            })->values(); // Para asegurar que se mantenga como una colección indexada.
+
+            // Crear un array para almacenar los resultados finales
+            $result = [];
+
+            // Recorrer cada solicitud ordenada y obtener los datos del estudiante y de la solicitud
+            foreach ($sortedSolicitudes as $solicitude) {
+                // Obtener el estudiante relacionado
+                $student = Student::find($solicitude->student_id);
+                // Obtener la solicitud relacionada
+                $tittle = Solicitude::where('student_id', $solicitude->student_id)->first();
+                
+                $asesor = Review::where('student_id', $student->_id)
+                                    ->where('rev_type', 'informe')
+                                    ->where('rev_adviser_rol', 'asesor')
+                                    ->first();           
+                // Si los datos existen, agregar al resultado
+                if ($student && $tittle && $asesor->rev_status == 'aprobado') {
+                    $result[] = [
+                        'oficio_id' => $solicitude->_id,
+                        'nombre' => ucwords(strtolower($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name)),
+                        'titulo' => $tittle->sol_title_inve,
+                        'revision_id_asesor' => $asesor->_id,
+                        'estado' => $solicitude->of_status,
+                    ];
+                }
+            }
+            return response()->json([
+                $result,
+            ], 200);
+        }
+
 }

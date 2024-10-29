@@ -63,7 +63,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para ver las solicitudes de designacion de jurados para la tesis ---> PAISI
     Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
     //Ruta para actualizar el estado del oficio de designacion de jurados --->PAISI
-    Route::put('/office/djt/{docof_id}/status', [DocOfController::class, 'updateSoliciteJuriesForTesis']);
     //Ruta para crear oficio de solicitud de aprobacion de tesis por la facultad--->PAISI
     Route::get('/oficio/solicitud-aprobar-tesis/{student_id}', [DocOfController::class, 'soliciteOfficeApproveThesis']);
     //Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI
@@ -71,6 +70,16 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para para actualizar oficios --->PAISI
     Route::put('/oficio/aprobacion-tesis/{office_id}/status', [DocOfController::class, 'updateStatusOfficeApproveThesis']);
 });
+
+
+Route::put('/office/djt/{docof_id}/status', [DocOfController::class, 'updateSoliciteJuriesForTesis']);
+
+// Crear oficio para solicitud de jurados para informe final --->Estudiante
+Route::get('/oficio/crear-solicitud-jurados/informe/{student_id}', [DocOfController::class, 'createOfficeJuriesForInforme']);
+
+// Crear oficio para solicitud de jurados para informe final --->Estudiante
+Route::get('/oficio/solicitud-jurados/informe', [DocOfController::class, 'getOfficeForJuriesInforme']);
+
 
 //RUTAS PARA RESOLUCIONES
 Route::middleware(['auth:sanctum'])->group(function () {   
@@ -96,11 +105,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para para vista de TESIS APROBADA MAS RESOLUCIONES ---> ESTUDIANTE
     Route::get('/estudiante/get-info-tesis/aprobado/{student_id}', [StudentController::class, 'getInfoEjecucion']);
     //Ruta para ver estudiantes con tesis aprobada a espera de link para informe ---> PAISI
-    Route::get('/estudiante/get-solicitud-informe', [StudentController::class, 'getStudentsInforme']);
     //Ruta para la vista del estudiante en revision de infome por el asesor --->ESTUDIANTE
     Route::get('/estudiante/info-conf-asesor/informe/{student_id}', [StudentController::class, 'getInfoConfAdviserInforme']);
 });
+Route::get('/estudiante/get-solicitud-informe', [StudentController::class, 'getStudentsInforme']);
 
+    //Ruta para la vista del estudiante en solicitud de jurados para informe dinal --->ESTUDIANTE
+    Route::get('/estudiante/info-juries/informe/{student_id}', [StudentController::class, 'infoOfficeJuriesForInforme']);
 
 // RUTAS PARA REVISIONES
 Route::middleware(['auth:sanctum'])->group(function () {  

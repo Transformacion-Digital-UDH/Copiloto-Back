@@ -261,36 +261,47 @@ class StudentController extends Controller
     {
         $students = Student::all();
         $data = []; // Inicializar el array $data
-
+    
         foreach ($students as $student) {
             
             // Obtener la primera solicitud asociada al estudiante, si existe
             $sol_da = Solicitude::where('student_id', $student->_id)->first();
-
+    
+            // Verificar y obtener los datos del asesor si la solicitud existe
+            $asesor = '';
+            if ($sol_da && $sol_da->adviser_id) {
+                $adviser = Adviser::find($sol_da->adviser_id);
+                if ($adviser) {
+                    $asesor = strtoupper("{$adviser->adv_name} {$adviser->adv_lastname_m} {$adviser->adv_lastname_f}");
+                }
+            }
+    
             // Establecer el estado en 'pendiente' si no hay solicitud o falta el enlace de documento
             $status = ($sol_da && $sol_da->informe_link) ? 'aprobado' : 'pendiente';
-
+    
             // Obtener la aprobación de tesis, si existe
             $off_apt = DocOf::where('student_id', $student->_id)->where('of_name', 'Aprobación de tesis')->first();
             $res_apt = $off_apt ? DocResolution::where('docof_id', $off_apt->_id)->first() : null;
-            
-            if($res_apt){
+    
             // Solo agregar al array si se encuentra una resolución o un registro válido
-            $data[] = [
-                'id' => $student->_id,
-                'nombre' => $student->stu_lastname_m . ' ' . $student->stu_lastname_f . ' ' . $student->stu_name,
-                'estado' => $status,
-                'resolucion_id' => $res_apt ? $res_apt->_id : null,
-                'resolucion_fecha' => $res_apt ? Carbon::parse($res_apt->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') : null,
-                // Agrega aquí los demás campos que desees incluir
-            ];
+            if ($res_apt) {
+                $data[] = [
+                    'id' => $student->_id,
+                    'nombre' => "{$student->stu_name} {$student->stu_lastname_m} {$student->stu_lastname_f}",
+                    'asesor' => $asesor,
+                    'estado' => $status,
+                    'resolucion_id' => $res_apt->_id,
+                    'resolucion_fecha' => Carbon::parse($res_apt->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY'),
+                    // Agrega aquí los demás campos que desees incluir
+                ];
             }
         }
-
+    
         return response()->json([
             'students' => $data
         ]);
     }
+    
 
     public function getInfoConfAdviserInforme($student_id){
         
@@ -317,6 +328,70 @@ class StudentController extends Controller
 
     }
     
+    public function infoOfficeJuriesForInforme($student_id) {
+        // Obtener el oficio
+        $office = DocOf::where('student_id', $student_id)
+                       ->where('of_name', 'jurados para revision de informe')
+                       ->first();
+                       
+        // Si el oficio no se encuentra, inicializa un objeto vacío
+        $office_id = $office->_id ?? '';
+        $office_status = $office->of_status ?? '';
+    
+        // Obtener la resolución asociada al oficio
+        $resolution = DocResolution::where('docof_id', $office_id)->first();
+        $resolution_id = $resolution->_id ?? '';
+        $resolution_status = $resolution->docres_status ?? '';
+    
+        // Obtener revisiones de presidente, secretario y vocal
+        $revision_presidente = Review::where('student_id', $student_id)
+                                     ->where('rev_adviser_rol', 'presidente')
+                                     ->where('rev_type', 'informe')
+                                     ->first();
+        $revision_secretario = Review::where('student_id', $student_id)
+                                     ->where('rev_adviser_rol', 'secretario')
+                                     ->where('rev_type', 'informe')
+                                     ->first();
+        $revision_vocal = Review::where('student_id', $student_id)
+                                ->where('rev_adviser_rol', 'vocal')
+                                ->where('rev_type', 'informe')
+                                ->first();
+    
+        // Obtener nombres de los asesores o asignar vacío si no existen
+        $presidente = $revision_presidente ? Adviser::where('_id', $revision_presidente->adviser_id)->first() : null;
+        $presidente_nombre = $presidente ? ucwords(strtolower($presidente->adv_name . ' ' . $presidente->adv_lastname_m . ' ' . $presidente->adv_lastname_f)) : '';
+    
+        $secretario = $revision_secretario ? Adviser::where('_id', $revision_secretario->adviser_id)->first() : null;
+        $secretario_nombre = $secretario ? ucwords(strtolower($secretario->adv_name . ' ' . $secretario->adv_lastname_m . ' ' . $secretario->adv_lastname_f)) : '';
+    
+        $vocal = $revision_vocal ? Adviser::where('_id', $revision_vocal->adviser_id)->first() : null;
+        $vocal_nombre = $vocal ? ucwords(strtolower($vocal->adv_name . ' ' . $vocal->adv_lastname_m . ' ' . $vocal->adv_lastname_f)) : '';
+    
+        // Retornar respuesta con valores por defecto en blanco donde no se encuentren datos
+        return response()->json([
+            'estudiante_id' => $student_id,
+            'presidente' => [
+                'rol' => $revision_presidente->rev_adviser_rol ?? '',
+                'nombre' => $presidente_nombre,
+            ],
+            'secretario' => [
+                'rol' => $revision_secretario->rev_adviser_rol ?? '',
+                'nombre' => $secretario_nombre,
+            ],
+            'vocal' => [
+                'rol' => $revision_vocal->rev_adviser_rol ?? '',
+                'nombre' => $vocal_nombre,
+            ],
+            'oficio' => [
+                'of_id' => $office_id,
+                'of_estado' => $office_status,
+            ],
+            'resolucion' => [
+                'of_id' => $resolution_id,
+                'of_estado' => $resolution_status,
+            ],
+        ]);
+    }
     
     
 }
