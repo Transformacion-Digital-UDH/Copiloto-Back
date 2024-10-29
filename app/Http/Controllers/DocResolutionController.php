@@ -409,4 +409,6 @@ class DocResolutionController extends Controller
             ));
         return $pdf->download(' RES-APT-' . $name_student .'.pdf'); // Puedes especificar un nombre para el archivo PDF
         }
+
+        
 }
