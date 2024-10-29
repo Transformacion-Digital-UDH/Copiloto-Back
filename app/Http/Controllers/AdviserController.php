@@ -40,9 +40,10 @@ class AdviserController extends Controller
     
         // Crear un array para almacenar los nombres y IDs de los asesores junto con sus revisiones
         $adviser_info = $advisers->map(function($adviser) use ($reviews) {
-            // Filtrar revisiones del asesor actual
-            $adviser_reviews = $reviews->where('adviser_id', $adviser->_id);
-            
+            // Filtrar revisiones del asesor actual que no tienen 'rev_status' igual a 'aprobado'
+            $adviser_reviews = $reviews->where('adviser_id', $adviser->_id)
+                ->where('rev_status', '!=', 'aprobado');
+    
             return [
                 'asesor' => strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name),
                 'asesor_id' => $adviser->_id,
@@ -70,6 +71,7 @@ class AdviserController extends Controller
             'data' => $adviser_info
         ], 200); 
     }
+    
     
 
     
