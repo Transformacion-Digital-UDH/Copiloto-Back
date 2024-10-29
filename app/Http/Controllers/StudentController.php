@@ -277,7 +277,7 @@ class StudentController extends Controller
             }
     
             // Establecer el estado en 'pendiente' si no hay solicitud o falta el enlace de documento
-            $status = ($sol_da && $sol_da->informe_link) ? 'aprobado' : 'pendiente';
+            $status = ($sol_da && $sol_da->informe_link) ? 'generado' : 'pendiente';
     
             // Obtener la aprobación de tesis, si existe
             $off_apt = DocOf::where('student_id', $student->_id)->where('of_name', 'Aprobación de tesis')->first();
