@@ -173,6 +173,7 @@ class ReviewController extends Controller
     // Obtiene las revisiones del asesor
     $reviews = Review::where('adviser_id', $adviser_id)
                         ->where('rev_adviser_rol', 'asesor')
+                        ->where('rev_type', 'tesis')
                         ->get();
 
 
@@ -457,5 +458,105 @@ class ReviewController extends Controller
         } else {
             return response()->json(['message' => 'Revisión no encontrada.'], 404);
         }
+    }
+    public function createReviewInforme($student_id)
+    {
+    // Obtener la solicitud del estudiante
+    $sol_da = Solicitude::where('student_id', $student_id)->first();
+
+    // Verificar que la solicitud existe
+    if ($sol_da === null || $sol_da->document_link === null) {
+        return response()->json([
+            'estado' => 'no iniciado',
+            'message' => 'Espere a que su link de informe sea creado o llame a su escuela académica.'
+        ], 404);
+    }
+
+    $review = Review::where('student_id', $student_id)
+                    ->where('adviser_id', $sol_da->adviser_id)
+                    ->where('rev_type', 'informe')
+                    ->first();
+
+    if ($review){
+        return response()->json([
+            'estado' => 'pendiente',
+            'message' => 'Ya tiene una revisión pendiente de su asesor'
+        ], 404);
+    }
+    
+    // Crear la revisión
+        Review::create([
+            'student_id' => $student_id,
+            'adviser_id' => $sol_da->adviser_id, // Accediendo a adviser_id desde la relación
+            'rev_count' => 1, // Incrementa el contador de revisiones
+            'rev_status' => 'pendiente',
+            'rev_type' => 'informe',
+            'rev_adviser_rol' => 'asesor', // asesor, presidente, secretario, vocal
+
+        ]);
+
+        return response()->json([
+            'estado' => 'pendiente',
+            'message' => 'Su solicitud de revisión fue enviada a su asesor',
+        ], 201);
+    }
+
+
+    public function getInfoConfAdviserInforme($adviser_id) {
+        // Obtiene las revisiones del asesor
+        $reviews = Review::where('adviser_id', $adviser_id)
+                            ->where('rev_adviser_rol', 'asesor')
+                            ->where('rev_type', 'informe')
+                            ->get();
+    
+    
+        // Mapear los resultados asignando prioridad al estado usando sortBy
+        $sortedReviews = $reviews->sortBy(function ($review) {
+            switch ($review->rev_status) {
+                case 'pendiente':
+                    return 1;
+                case 'observado':
+                    return 2;
+                case 'aprobado':
+                    return 3;
+                default:
+                    return 4;  // Si hay un estado no esperado
+            }
+        });
+    
+        // Array donde almacenaremos los resultados formateados
+        $result = [];
+    
+        foreach ($sortedReviews as $review) {
+            // Obtener la solicitud y el estudiante relacionado a la revisión actual
+            $solicitude = Solicitude::where('student_id', $review->student_id)->first();
+            $student = Student::where('_id', $review->student_id)->first();
+    
+            // Manejar casos donde el estudiante no exista
+            if (!$student) {
+                continue;
+            }
+    
+            // Formatear el nombre del estudiante correctamente
+            $studentName = $student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name;
+    
+            // Agregar los datos de la revisión al array resultante
+            $result[] = [
+                'revision_id' => $review->_id,
+                'estudiante_id' => $student->_id,
+                'estudiante_nombre' => $studentName,
+                'titulo' => $solicitude ? $solicitude->sol_title_inve : 'No title', // Maneja si no hay solicitud
+                'contador' => $review->rev_count,
+                'revision_estado' => $review->rev_status,
+                'link-informe' => $solicitude->informe_link,
+                'actualizado' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
+                'rol' => $review->rev_adviser_rol,
+            ];
+        }
+    
+        // Retorna los datos ordenados y con los índices reorganizados
+        return response()->json([
+            'data' => array_values($result),  // Asegúrate de devolver los datos con índices reorganizados
+        ], 200);
     }
 }

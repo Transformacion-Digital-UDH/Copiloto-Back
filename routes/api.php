@@ -95,11 +95,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/estudiante/get-info-aprobar-tesis/{student_id}', [StudentController::class, 'getInfoApproveThesis']);
     //Ruta para para vista de TESIS APROBADA MAS RESOLUCIONES ---> ESTUDIANTE
     Route::get('/estudiante/get-info-tesis/aprobado/{student_id}', [StudentController::class, 'getInfoEjecucion']);
-
+    //Ruta para ver estudiantes con tesis aprobada a espera de link para informe ---> PAISI
+    Route::get('/estudiante/get-solicitud-informe', [StudentController::class, 'getStudentsInforme']);
+    //Ruta para la vista del estudiante en revision de infome por el asesor --->ESTUDIANTE
+    Route::get('/estudiante/info-conf-asesor/informe/{student_id}', [StudentController::class, 'getInfoConfAdviserInforme']);
 });
 
-//Ruta para ver estudiantes con tesis aprobada a espera de link para informe ---> PAISI
-Route::get('/estudiante/get-solicitud-informe', [StudentController::class, 'getStudentsInforme']);
 
 // RUTAS PARA REVISIONES
 Route::middleware(['auth:sanctum'])->group(function () {  
@@ -117,6 +118,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/review/get-review-jury/{student_id}', [ReviewController::class, 'getInfoReviewJuriesByStudent']);
     // Ruta para actualizar los estados por id de revicion ---> ESTUDIANTE - ASESOR
     Route::put('/review/{review_id}/status', [ReviewController::class, 'updateStatusReviewJuries']);
+    //Ruta para crear la revision para el asesor del informe final  ---> ESTUDIANTE
+    Route::get('/review/create-revision/informe/{student_id}', [ReviewController::class, 'createReviewInforme']);
+    //Ruta para ver todos los estudiantes a espera de revision de informe  ---> ASESOR
+    Route::get('/asesor/get-revisiones/informe/{adviser_id}', [ReviewController::class, 'getInfoConfAdviserInforme']);
 });
 
 

@@ -268,7 +268,7 @@ class StudentController extends Controller
             $sol_da = Solicitude::where('student_id', $student->_id)->first();
 
             // Establecer el estado en 'pendiente' si no hay solicitud o falta el enlace de documento
-            $status = ($sol_da && $sol_da->document_link) ? 'aprobado' : 'pendiente';
+            $status = ($sol_da && $sol_da->informe_link) ? 'aprobado' : 'pendiente';
 
             // Obtener la aprobación de tesis, si existe
             $off_apt = DocOf::where('student_id', $student->_id)->where('of_name', 'Aprobación de tesis')->first();
@@ -292,6 +292,30 @@ class StudentController extends Controller
         ]);
     }
 
+    public function getInfoConfAdviserInforme($student_id){
+        
+        $solicitude = Solicitude::where('student_id', $student_id)->first();
+        $adviser = Adviser::where('_id', $solicitude->adviser_id)->first();
+        $adviser = ucwords(strtolower($adviser->adv_name . ' ' . $adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f));
+        
+        $review = Review::where('student_id', $student_id)
+                        ->where('adviser_id', $solicitude->adviser_id)    
+                        ->where('rev_type', 'informe')    
+                        ->first();
+
+        return response()->json([
+            'asesor' => $adviser,
+            'titulo' => $solicitude->sol_title_inve,
+            'link-informe' => $solicitude->informe_link,
+            'revision' => [
+                'rev_id' => $review->_id,
+                'rev_contador' => $review->rev_count,
+                'rev_estado' => $review->rev_status,
+                'rev_update' => $review ? Carbon::parse($review->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') : null,
+            ]
+        ]);
+
+    }
     
     
     
