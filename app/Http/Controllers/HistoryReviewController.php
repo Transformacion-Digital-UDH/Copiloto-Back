@@ -190,7 +190,7 @@ class HistoryReviewController extends Controller
         }
     
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('CPA_tesis', 'proyect', compact('solicitude', 'review', 'siglas', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year', 'proyect'));
+        $pdf = Pdf::loadView('CPA_tesis', compact('solicitude', 'review', 'siglas', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year', 'proyect'));
     
         return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ' ' . $student->stu_name . ' CPA-TESIS.pdf'); // Puedes especificar un nombre para el archivo PDF
 
