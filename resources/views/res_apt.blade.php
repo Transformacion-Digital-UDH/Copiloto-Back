@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Old+Uyghur&display=swap" rel="stylesheet">
     <style>
         @page {
-            size: 215.9mm 355.6mm;
+            size: 215.9mm 365.6mm; /*tamaño normal size: 215.9mm 365.6mm; */ 
             margin: 2mm;
         }
 
@@ -68,10 +68,11 @@
 
         .firma {
             display: flex;
-            justify-content: center; /* Centra horizontalmente */
+            justify-content: center;
             width: 600px;
-            height: 250px; 
-            gap: 10px; /* Espacio entre las imágenes (opcional) */
+            gap: 10px;
+            margin-bottom: 0;
+            /* height: 250px; Eliminar si no es necesario */
         }
 
         .firma img {
