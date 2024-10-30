@@ -90,6 +90,7 @@ class StudentController extends Controller
         // Obtener todas las revisiones relacionadas con el estudiante especificado
         $reviews = Review::where('student_id', $student_id)
             ->where('rev_adviser_rol', '!=', 'asesor')
+            ->where('rev_type', 'tesis')
             ->get();  
         
         // Crear un array para almacenar asesores y roles
