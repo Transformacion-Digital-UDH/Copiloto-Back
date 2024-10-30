@@ -190,8 +190,8 @@ Route::get('/resolucion/descargar-aprobacion-tesis/{resolution_id}', [DocResolut
 Route::get('/office/view-oficio-jurados/informe/{docof_id}', [DocOfController::class, 'viewOfficeJuriesForInforme']);
 Route::get('/office/download-oficio-jurados/informe/{docof_id}', [DocOfController::class, 'downloadOfficeJuriesForInforme']);
 //Ruta para ver resolucion de designacion de jurados para informe final ---> ESTUDIANTE, PAISI, FACULTAD
-Route::get('/resolucion/view-resolucion-jurados/informe/{docof_id}', [DocResolutionController::class, 'viewResolutionJuriesForInforme']);
-Route::get('/resolucion/download-resolucion-jurados/informe/{docof_id}', [DocResolutionController::class, 'downloadResolutionJuriesForInforme']);
+Route::get('/resolucion/view-resolucion-jurados/informe/{res_id}', [DocResolutionController::class, 'viewResolutionJuriesForInforme']);
+Route::get('/resolucion/download-resolucion-jurados/informe/{res_id}', [DocResolutionController::class, 'downloadResolutionJuriesForInforme']);
 
 
 
