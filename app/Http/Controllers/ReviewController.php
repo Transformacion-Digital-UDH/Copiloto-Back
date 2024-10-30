@@ -465,7 +465,7 @@ class ReviewController extends Controller
     $sol_da = Solicitude::where('student_id', $student_id)->first();
 
     // Verificar que la solicitud existe
-    if ($sol_da === null || $sol_da->document_link === null) {
+    if ($sol_da === null || $sol_da->informe_link === null) {
         return response()->json([
             'estado' => 'no iniciado',
             'message' => 'Espere a que su link de informe sea creado o llame a su escuela académica.'
