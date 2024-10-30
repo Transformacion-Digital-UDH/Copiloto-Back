@@ -68,17 +68,19 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/oficio/solicitud-aprobar-tesis/{student_id}', [DocOfController::class, 'soliciteOfficeApproveThesis']);
     //Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI
     Route::get('/oficio/get-aprobar-tesis', [DocOfController::class, 'getOfficeApproveThesis']);
-    //Ruta para para actualizar oficios --->PAISI
-    Route::put('/oficio/aprobacion-tesis/{office_id}/status', [DocOfController::class, 'updateStatusOfficeApproveThesis']);
+    
     //Ruta Ver oficios para designacion de jurados para informe final --->Estudiante
     Route::get('/oficio/solicitud-jurados/informe', [DocOfController::class, 'getOfficeForJuriesInforme']);
 });
 
+//Ruta para para actualizar oficios --->PAISI
+Route::put('/oficio/aprobacion-tesis/{office_id}/status', [DocOfController::class, 'updateStatusOfficeApproveThesis']);
 
 //Ruta para crear oficio de solicitud de aprobacion de informe por la facultad--->PAISI
 Route::get('/oficio/solicitud-aprobar/informe/{student_id}', [DocOfController::class, 'soliciteOfficeApproveInforme']);
 
-
+//Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI
+Route::get('/oficio/get-aprobar/informe', [DocOfController::class, 'getOfficeApproveInforme']);
 
 
 
@@ -93,7 +95,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
 });
 
-//Ruta para las resoluciones de solicitud de juados pendientes,
+//Ruta para ver las resoluciones de aprobacion de INFORME ---> FACULTAD
+Route::get('/resolucion/get-aprobar/informe', [DocResolutionController::class, 'getReslutionApproveInforme']);
+//Ruta para las resoluciones de solicitud de juados pendientes ---> FACULTAD
 Route::get('/resolucion/solicitud-jurados/informe', [DocResolutionController::class, 'getResolutionForJuriesInforme']);
 
 
@@ -119,6 +123,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/oficio/crear-solicitud-jurados/informe/{student_id}', [DocOfController::class, 'createOfficeJuriesForInforme']);
 });
 
+//Ruta para para vista de APROBACION DE INFORME FINAL ---> ESTUDIANTE
+Route::get('/estudiante/get-info-aprobar/informe/{student_id}', [StudentController::class, 'getInfoApproveInforme']);
 
 
 

@@ -484,4 +484,36 @@ class StudentController extends Controller
             'data' => $response
         ], 200);
     }
+
+    public function getInfoApproveInforme($student_id){
+        $docof = DocOf::where('student_id', $student_id)
+            ->where('of_name', 'Aprobación de informe')
+            ->first();
+
+        if(!$docof){
+            return response()->json([
+                'mensaje' => 'Proceso no iniciado',
+            ], 400);
+        }
+
+        $docres = DocResolution::where('docof_id', $docof->_id)
+            ->first();
+
+        if(!$docres){
+            return response()->json([
+                'estudiante_id' => $student_id,
+                'oficio_id' => $docof->_id,
+                'oficio_estado' => $docof->of_status,
+                'resolucion_id' => $docres->_id ?? '',
+                'resolucion_estado' => 'no iniciado',
+            ], 200);
+        }
+        return response()->json([
+            'estudiante_id' => $student_id,
+            'oficio_id' => $docof->_id,
+            'oficio_estado' => $docof->of_status,
+            'resolucion_id' => $docres->_id,
+            'resolucion_estado' => $docres->docres_status,
+        ], 200);
+    }
 }

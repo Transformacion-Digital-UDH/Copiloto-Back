@@ -1143,4 +1143,63 @@ class DocOfController extends Controller
             'estado' => $office->of_status,
         ], 200);
     }
+
+    public function getOfficeApproveInforme() {
+
+        // Obtener todas las solicitudes con el nombre 'Aprobación de tesis'
+        $solicitude_docof = DocOf::where('of_name', 'Aprobación de informe')->get();
+
+        // Definir el orden deseado
+        $order = ['pendiente', 'observado', 'tramitado'];
+
+        // Ordenar manualmente las solicitudes por 'of_status'
+        $sortedSolicitudes = $solicitude_docof->sort(function ($a, $b) use ($order) {
+            return array_search($a->of_status, $order) <=> array_search($b->of_status, $order);
+        })->values(); // Para asegurar que se mantenga como una colección indexada.
+
+        // Crear un array para almacenar los resultados finales
+        $result = [];
+
+        // Recorrer cada solicitud ordenada y obtener los datos del estudiante y de la solicitud
+        foreach ($sortedSolicitudes as $solicitude) {
+            // Obtener el estudiante relacionado
+            $student = Student::find($solicitude->student_id);
+            // Obtener la solicitud relacionada
+            $tittle = Solicitude::where('student_id', $solicitude->student_id)->first();
+            
+            $asesor = Review::where('student_id', $student->_id)
+                                ->where('rev_type', 'informe')
+                                ->where('rev_adviser_rol', 'asesor')
+                                ->first();
+            $presidente = Review::where('student_id', $student->_id)
+                                ->where('rev_type', 'informe')
+                                ->where('rev_adviser_rol', 'presidente')
+                                ->first();
+            $secretario = Review::where('student_id', $student->_id)
+                                ->where('rev_type', 'informe')
+                                ->where('rev_adviser_rol', 'secretario')
+                                ->first();
+            $vocal = Review::where('student_id', $student->_id)
+                                ->where('rev_type', 'informe')
+                                ->where('rev_adviser_rol', 'vocal')
+                                ->first();            
+            // Si los datos existen, agregar al resultado
+            if ($student && $tittle) {
+                $result[] = [
+                    'oficio_id' => $solicitude->_id,
+                    'nombre' => ucwords(strtolower($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name)),
+                    'titulo' => $tittle->sol_title_inve,
+                    'revision_id_asesor' => $asesor->_id,
+                    'revision_id_presidente' => $presidente->_id,
+                    'revision_id_secretario' => $secretario->_id,
+                    'revision_id_vocal' => $vocal->_id,
+                    'estado' => $solicitude->of_status,
+                ];
+            }
+        }
+
+        // Devolver los resultados en formato JSON
+        return response()->json($result);
+
+        }
 }
