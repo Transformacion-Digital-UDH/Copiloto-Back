@@ -475,7 +475,7 @@ class StudentController extends Controller
         return response()->json([
             'estudiante_id' => $solicitude->student_id,
             'titulo' => $solicitude->sol_title_inve,
-            'link' => $solicitude->document_link,
+            'link' => $solicitude->informe_link,
             'oficio_id' => $docof->_id ?? '',
             'oficio_estado' => $docof->of_status ?? '',
             'resolucion_id' => $docres->_id ?? '',

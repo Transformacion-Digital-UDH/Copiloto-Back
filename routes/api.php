@@ -89,9 +89,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/resolucion/get-aprobar-tesis', [DocResolutionController::class, 'getReslutionApproveThesis']);
     //Ruta para ver actualizar las resoluciones ---> FACULTAD
     Route::put('/resolucion/aprobacion-tesis/{docres_id}/status', [DocResolutionController::class, 'updateStatusResolutionApproveThesis']);
-    //Ruta para las resoluciones de solicitud de juados pendientes,
-    Route::get('/resolucion/solicitud-jurados/informe', [DocResolutionController::class, 'getResolutionForJuriesInforme']);
+    
 });
+
+//Ruta para las resoluciones de solicitud de juados pendientes,
+Route::get('/resolucion/solicitud-jurados/informe', [DocResolutionController::class, 'getResolutionForJuriesInforme']);
 
 
 

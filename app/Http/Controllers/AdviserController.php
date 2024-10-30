@@ -114,7 +114,7 @@ class AdviserController extends Controller
                     'nombre' => strtoupper($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name), 
                     'titulo' => $solicitude->sol_title_inve,             
                     'mi_rol' => $my_role->rev_adviser_rol,             
-                    'link' => $solicitude->document_link,
+                    'link' => $solicitude->informe_link,
                     'estado' => $review->rev_status, 
                     'revision_id' => $review->_id, 
                     'rol' => $review->rev_adviser_rol,
