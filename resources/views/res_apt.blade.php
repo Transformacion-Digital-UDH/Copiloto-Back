@@ -106,7 +106,7 @@
             <p>Que, mediante Resolución de Consejo Directivo N° 076-2019-SUNEDU/CD, de fecha
                 05 de junio de 2019, otorga la Licencia a la Universidad de Huánuco para ofrecer el servicio
                 educativo superior universitario, y;</p>
-            <p>Que, mediante Resolución N° 1244-2023-D-FI-UDH, de fecha 02 de junio de 2023,
+            <p>Que, mediante Resolución N° {{$num_res_da}}-{{$year_res_da}}-D-FI-UDH, de fecha {{$date_res_da}},
                 perteneciente al Bach. <strong>{{$name_student}}</strong> se le designó como ASESOR(A) de Tesis al Mg.
                 {{$name_adviser}}, docente adscrito al Programa Académico de Ingeniería de Sistemas e
                 Informática de la Facultad de Ingeniería, y;</p>
@@ -117,7 +117,7 @@
                 <p>
             <p>Estando a las atribuciones conferidas al Decano de la Facultad de Ingeniería y con cargo a dar cuenta en el próximo Consejo de Facultad.</p>
             <p><strong>SE RESUELVE:</strong></p>
-            <p><strong style="text-decoration: underline;">Artículo Primero</strong><strong>.-. APROBAR,,</strong> el Trabajo de Investigación (Tesis) y su ejecución
+            <p><strong style="text-decoration: underline;">Artículo Primero</strong><strong>.-. APROBAR,</strong> el Trabajo de Investigación (Tesis) y su ejecución
                 intitulado: <strong>“{{$tittle}}”</strong>, presentado por el (la) Bach. <strong>{{$name_student}}</strong> para optar el Título Profesional
                 de Ingeniero(a) de Sistemas e Informática, del Programa Académico de Ingeniería de Sistemas e
                 Informática de la Universidad de Huánuco.</p>

@@ -684,6 +684,12 @@ class DocOfController extends Controller
                 return response()->json(['error' => 'Oficio no encontrado'], 404);
             }
             
+            $docres = DocResolution::where('docof_id', $docof_id)->first();
+
+            if ($docres){
+                return response()->json(['error' => 'Oficio ya aprobado'], 404);
+            }
+
             $state = $request->input('estado');
 
             $rules = [
