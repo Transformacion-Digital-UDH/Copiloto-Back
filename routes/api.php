@@ -75,7 +75,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
 
-
+//Ruta para crear oficio de solicitud de aprobacion de informe por la facultad--->PAISI
+Route::get('/oficio/solicitud-aprobar/informe/{student_id}', [DocOfController::class, 'soliciteOfficeApproveInforme']);
 
 
 
