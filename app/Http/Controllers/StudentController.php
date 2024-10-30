@@ -346,7 +346,7 @@ class StudentController extends Controller
     public function infoOfficeJuriesForInforme($student_id) {
         // Obtener el oficio
         $office = DocOf::where('student_id', $student_id)
-                       ->where('of_name', 'jurados para revision de informe')
+                       ->where('of_name', 'designacion de jurados para revision de informe final')
                        ->first();
                        
         // Si el oficio no se encuentra, inicializa un objeto vacío
@@ -408,5 +408,79 @@ class StudentController extends Controller
         ]);
     }
     
-    
+    public function getReviewJuriesInforme($student_id){
+
+        // Obtener todas las revisiones con adviser_id y los roles específicos
+        $reviews = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'informe')
+                        ->whereIn('rev_adviser_rol', ['presidente', 'vocal', 'secretario'])
+                        ->get();
+
+        $docof = DocOf::where('student_id', $student_id)
+                    ->where('of_name', 'designacion de jurados para revision de informe final')    
+                    ->first();
+
+        $docres = DocResolution::where('docof_id', $docof->_id)
+                    ->first();
+                    
+        if ($reviews->isEmpty()) {
+            return response()->json(['message' => 'No tiene jurados'], 404);
+        }
+
+        $response = [];
+
+        foreach ($reviews as $review) {
+                // Buscar el estudiante por su ID
+                $adviser = Adviser::where('_id', $review->adviser_id)->first();
+
+                // Asegurarse de que el estudiante exista
+                if ($adviser) {
+                    $response[] = [
+                        'revision_id' => $review->_id, 
+                        'nombre' => strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name), 
+                        'rol' => $review->rev_adviser_rol, 
+                        'numero_revision' => $review->rev_count, 
+                        'fecha' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
+                        'estado' => $review->rev_status,
+                    ];
+                } 
+            }
+
+        $solicitude = Solicitude::where('student_id', $student_id)->first();
+
+        $presidente = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'informe')
+                        ->where('rev_adviser_rol', 'presidente')
+                        ->first();
+        $secretario = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'informe')
+                        ->where('rev_adviser_rol', 'secretario')
+                        ->first();
+        $vocal = Review::where('student_id', $student_id)
+                        ->where('rev_type', 'informe')
+                        ->where('rev_adviser_rol', 'vocal')
+                        ->first();
+
+        if($presidente->rev_status==$secretario->rev_status && $secretario->rev_status==$vocal->rev_status)
+        {
+            $status = $presidente->rev_status;
+        }
+
+        else{
+
+            $status = 'observado';
+        }
+
+        return response()->json([
+            'estudiante_id' => $solicitude->student_id,
+            'titulo' => $solicitude->sol_title_inve,
+            'link' => $solicitude->document_link,
+            'oficio_id' => $docof->_id ?? '',
+            'oficio_estado' => $docof->of_status ?? '',
+            'resolucion_id' => $docres->_id ?? '',
+            'resolucion_estado' => $docres->docres_status ?? '',
+            'estado_general' => $status,
+            'data' => $response
+        ], 200);
+    }
 }

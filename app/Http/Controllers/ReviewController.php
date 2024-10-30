@@ -259,9 +259,9 @@ class ReviewController extends Controller
             $my_role = Review::where('adviser_id', $review->adviser_id)->first();
             $student = Student::where('_id', $review->student_id)->first();
             $solicitude = Solicitude::where('student_id', $student->_id)->first();
-            $review_presidente = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'presidente')->first();
-            $review_secretario = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'secretario')->first();
-            $review_vocal = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'vocal')->first();
+            $review_presidente = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'presidente')->where('rev_type', 'tesis')->first();
+            $review_secretario = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'secretario')->where('rev_type', 'tesis')->first();
+            $review_vocal = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'vocal')->where('rev_type', 'tesis')->first();
 
             // Asegurarse de que el estudiante exista
             if ($student) {
@@ -269,7 +269,7 @@ class ReviewController extends Controller
                     'nombre' => strtoupper($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name), 
                     'titulo' => $solicitude->sol_title_inve,             
                     'mi_rol' => $my_role->rev_adviser_rol,             
-                    'link' => $solicitude->document_link,
+                    'link' => $solicitude->informe_link,
                     'estado' => $review->rev_status, 
                     'revision_id' => $review->_id, 
                     'rol' => $review->rev_adviser_rol,

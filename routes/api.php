@@ -157,6 +157,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 });
 
+    // Ruta para listar revisiones a asesores jurados ---> ASESOR
+    Route::get('/jurado/get-revision-estudiantes/informe/{adviser_id}', [AdviserController::class, 'getReviewInforme']); 
+    // Ver revisiones de informe final --->Estudiante
+    Route::get('/estudiante/get-revision-jurados/informe/{student_id}', [StudentController::class, 'getReviewJuriesInforme']);
 
 
 //RUTA PARA DOCUMENTO GOOGLE
