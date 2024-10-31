@@ -39,7 +39,6 @@ class UserResource extends JsonResource
                 break;
 
             case 'paisi':
-                $id = $this->adviser->_id;
                 break;
         }
 
