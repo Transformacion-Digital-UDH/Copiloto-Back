@@ -14,26 +14,48 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {   
-        $role = $this->role->name;
-        $id = null;
+       $role = $this->role->name;
 
-        if($role == 'estudiante'){
-            $id = $this->student->_id;
-        }
+        // Inicializar variables solo si es necesario según el rol
+        $id = $names = $lastname_m = $lastname_f = $dni = $code = null;
+        $is_jury = false;
 
-        if($role == 'asesor'){
-            $id = $this->adviser->_id;
-            $jurado = $this->adviser->adv_is_jury;
+        switch ($role) {
+            case 'estudiante':
+                $id = $this->student->_id;
+                $names = $this->student->stu_name;
+                $lastname_m = $this->student->stu_lastname_m;
+                $lastname_f = $this->student->stu_lastname_f;
+                $dni = $this->student->stu_dni;
+                $code = $this->student->stu_code;
+                break;
+
+            case 'asesor':
+                $id = $this->adviser->_id;
+                $names = $this->adviser->adv_name;
+                $lastname_m = $this->adviser->adv_lastname_m;
+                $lastname_f = $this->adviser->adv_lastname_f;
+                $is_jury = $this->adviser->adv_is_jury;
+                break;
+
+            case 'paisi':
+                $id = $this->adviser->_id;
+                break;
         }
 
         return [
             'id' => $id,
             'nombre' => $this->name,
+            'nombres' => $names,
+            'apellido_paterno' => $lastname_m,
+            'apellido_materno' => $lastname_f,
             'correo' => $this->email,
-            'rol' => $this->role->name,
+            'dni' => $dni,
+            'codigo' => $code,
+            'rol' => $role,
             'facultad' => $this->us_faculty,
             'programa' => $this->us_program,
-            'es_jurado' => $jurado ?? '',
+            'es_jurado' => $is_jury,
         ];
     }
 }

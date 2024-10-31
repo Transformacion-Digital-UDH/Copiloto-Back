@@ -1,0 +1,55 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class GoogleDocumentEndController extends GoogleDocumentController
+{
+    public function createInforme(Request $request)
+    {
+        try {
+            $solicitudeId = $request->input('solicitude_id');
+            $data = $this->validateAndGetData($solicitudeId);
+
+            if (!$data) {
+                return response()->json(['error' => 'Datos no encontrados'], 404);
+            }
+
+            $solicitude = $data['solicitude'];
+            $student = $data['student'];
+            $adviser = $data['adviser'];
+            $paisiUser = $data['paisiUser'];
+            $studentUser = $data['studentUser'];
+            $adviserUser = $data['adviserUser'];
+
+            // Personaliza el nombre del documento y el ID de la plantilla para el informe
+            $documentName = "Informe_" . $solicitude->sol_title_inve . "_" . $student->stu_name;
+            $templateId = '1ud0cDToshwGaLxlSO6SvPF63ua0x1akKjZE9MoKvUic'; // Cambia por el ID del template para el informe
+            $folderId = '1ga2gIsAw5-Kit-oMbBuWavaXtiRunwhz'; // Cambia por el ID de la carpeta para el informe
+
+            // Crear el documento desde la plantilla específica del informe
+            $documentId = $this->createDocumentFromTemplate($templateId, $documentName);
+            if (!$documentId) {
+                return response()->json(['error' => 'No se pudo crear el documento'], 500);
+            }
+
+            // Reemplazar los marcadores de posición
+            $this->replaceDocumentPlaceholders($documentId, $solicitude, $student, $adviser);
+
+            // Asignar permisos y mover el documento a la carpeta del informe
+            $this->assignPermissions($documentId, $paisiUser, $studentUser, $adviserUser);
+            $this->moveDocumentToFolder($documentId, $folderId); // Cambiado para incluir $folderId
+
+            // Obtener el enlace del documento y actualizar usando 'informe_link'
+            $link = $this->getDocumentLink($documentId);
+            $this->updateSolicitudeWithLink($solicitude, $link, 'informe_link'); // Cambiado para manejar 'informe_link'
+
+            return response()->json(['success' => true, 'informe_link' => $link]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error creating informe: ' . $e->getMessage());
+            return response()->json(['error' => 'Error al crear el informe: ' . $e->getMessage()], 500);
+        }
+    }
+}
