@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Adviser;
 use App\Models\DocOf;
 use App\Models\DocResolution;
+use App\Models\Review;
 use App\Models\Solicitude;
 use App\Models\Student;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -187,5 +188,223 @@ class DocResolutionController extends Controller
             ], 200);
         }
 
+        public function getReslutionApproveThesis()
+        {
+            $resolutions = DocResolution::where('docres_name', 'Aprobación de tesis')->get(); // Cambié 'docof_name' a 'docres_name', asumiendo que 'docof_name' es incorrecto.
 
+            // Definir el orden deseado
+            $order = ['pendiente', 'observado', 'tramitado'];
+
+            // Ordenar manualmente las solicitudes por 'docres_status' (asumiendo que es el campo correcto)
+            $sorted_resolution = $resolutions->sort(function ($a, $b) use ($order) {
+                return array_search($a->docres_status, $order) <=> array_search($b->docres_status, $order);
+            })->values();
+
+            // Crear un array para almacenar los resultados finales
+            $result = [];
+
+            // Recorrer cada solicitud ordenada y obtener los datos del estudiante y de la solicitud
+            foreach ($sorted_resolution as $resolution) {
+                // Obtener la solicitud relacionada con DocOf
+                $office = DocOf::find($resolution->docof_id); // Cambié 'where' a 'find' para buscar por ID directamente
+
+                // Obtener el estudiante relacionado
+                $student = Student::find($office->student_id);
+
+                // Obtener la solicitud relacionada al título del estudiante
+                $tittle = Solicitude::where('student_id', $office->student_id)->first(); // Corrijo para usar 'student_id' de 'office'
+
+                // Agregar los resultados al array final
+                $result[] = [
+                    'resolucion_id' => $resolution->_id,
+                    'oficio_id' => $office->_id,
+                    'nombre' => ucwords(strtolower($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name)),
+                    'titulo' => $tittle->sol_title_inve,
+                    'estado' => $resolution->docres_status, // Cambié 'of_status' a 'docres_status', asumiendo que es el campo correcto
+                ];
+            }
+
+            return response()->json($result);
+        }
+
+        public function updateStatusResolutionApproveThesis(Request $request, $docres_id)
+        {
+            // Obtener el registro correspondiente en la base de datos
+            $docres = DocResolution::where('_id', $docres_id)->first();
+
+            if (!$docres) {
+                return response()->json(['error' => 'Resolucion no encontrada'], 404);
+            }
+            
+            $state = $request->input('estado');
+
+            $rules = [
+                'estado' => 'required|string|in:observado,tramitado',
+            ];
+            // Manejo de diferentes estados usando un switch
+            switch ($state) {
+                case 'observado':
+                    $rules['observacion'] = 'required|string'; // Agrega la regla para rev_num_of
+                    $this->validate($request, ['observacion' => $rules['observacion']]);
+                    
+                    $docres->update([
+                        'docres_status' => $request->input('estado'),
+                        'docres_observation' => $request->input('observacion')
+                    ]);
+                    return response()->json([
+                        'message' => 'Observacion enviada y actualizada',
+                        'observacion' => $docres->docres_observation,
+                        'estado' => $docres->docres_status,
+                    ], 200);
+
+                    break;
+
+                case 'tramitado':
+
+                    $rules = [
+                        'numero_resolucion' => 'required|string',
+                    ];
+
+                    $validator = Validator::make($request->all(), $rules);
+
+                    if ($validator->fails()) {
+                        return response()->json([
+                            'status' => false,
+                            'errors' => $validator->errors()
+                        ], 400);
+                    }
+                    
+                    $this->validate($request, $rules);
+                    
+                    $docres->update([
+                        'docres_status' => $request->input('estado'),
+                        'docres_num_res' => $request->input('numero_resolucion'),
+                        'docres_observation' => null,
+                    ]);
+
+                    return response()->json([
+                        'message' => 'Resolución trámitada',
+                        'estado' => $docres->docres_status,
+                    ], 200);
+                
+                    break;
+
+                default:
+                    // Manejo de estado no reconocido
+                    return response()->json(['error' => 'Estado no válido'], 400);
+        }
+
+        $docres->save();
+
+        }
+
+        public function viewResApproveThesis($docres_id) {
+            $resolution = DocResolution::where('_id', $docres_id)->first();
+            // Verifica si el registro no se encuentra
+            if (!$resolution) {
+                return redirect()->back()->with('error', 'Resolucion no encontrada');
+            }
+
+            // Formatear la fecha updated_at como "11 de julio de 2024"
+            $formattedDate = Carbon::parse($resolution->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+            $year_res = Carbon::parse($resolution->updated_at)->locale('es')->isoFormat('YYYY');
+
+            $docresnum = $resolution->docres_num_res;
+
+            $office = DocOf::where('_id', $resolution->docof_id)->first();
+            $num_of = $office->of_num_of;
+            $year_of = Carbon::parse($office->updated_at)->locale('es')->isoFormat('YYYY');
+    
+            $solicitude = Solicitude::where('student_id', $office->student_id)->first();
+            $tittle = mb_strtoupper($solicitude->sol_title_inve, 'UTF-8');
+
+            $student = Student::where('_id', $office->student_id)->first();
+            $name_student = ucwords(strtolower($student->stu_name)) . ' ' . mb_strtoupper($student->stu_lastname_m, 'UTF-8') . ' ' . mb_strtoupper($student->stu_lastname_f, 'UTF-8');
+
+            $adviser = Adviser::where('_id', $solicitude->adviser_id)->first();
+            $name_adviser = ucwords(strtolower($adviser->adv_name . ' ' . $adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f));
+
+            $presidente = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'presidente')->first();
+            $name_presidente = Adviser::where('_id', $presidente->adviser_id)->first();
+            $name_presidente = ucwords(strtolower($name_presidente->adv_name . ' ' . $name_presidente->adv_lastname_m . ' ' . $name_presidente->adv_lastname_f));
+            
+            $secretario = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'secretario')->first();
+            $name_secretario = Adviser::where('_id', $secretario->adviser_id)->first();
+            $name_secretario = ucwords(strtolower($name_secretario->adv_name . ' ' . $name_secretario->adv_lastname_m . ' ' . $name_secretario->adv_lastname_f));
+            
+            $vocal = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'vocal')->first();
+            $name_vocal = Adviser::where('_id', $vocal->adviser_id)->first();
+            $name_vocal = ucwords(strtolower($name_vocal->adv_name . ' ' . $name_vocal->adv_lastname_m . ' ' . $name_vocal->adv_lastname_f));
+            
+            // Pasar los datos a la vista
+            $pdf = Pdf::loadView('res_apt', compact(
+                'resolution',
+                'formattedDate',
+                'year_res',
+                'num_of',
+                'year_of',
+                'tittle',
+                'name_student',
+                'name_adviser',
+                'name_presidente',
+                'name_secretario',
+                'name_vocal'
+            ));
+            return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
+        }
+
+        public function downloadResApproveThesis($docres_id) {
+            $resolution = DocResolution::where('_id', $docres_id)->first();
+            // Verifica si el registro no se encuentra
+            if (!$resolution) {
+                return redirect()->back()->with('error', 'Resolucion no encontrada');
+            }
+
+            // Formatear la fecha updated_at como "11 de julio de 2024"
+            $formattedDate = Carbon::parse($resolution->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+            $year_res = Carbon::parse($resolution->updated_at)->locale('es')->isoFormat('YYYY');
+
+            $docresnum = $resolution->docres_num_res;
+
+            $office = DocOf::where('_id', $resolution->docof_id)->first();
+            $num_of = $office->of_num_of;
+            $year_of = Carbon::parse($office->updated_at)->locale('es')->isoFormat('YYYY');
+    
+            $solicitude = Solicitude::where('student_id', $office->student_id)->first();
+            $tittle = mb_strtoupper($solicitude->sol_title_inve, 'UTF-8');
+
+            $student = Student::where('_id', $office->student_id)->first();
+            $name_student = ucwords(strtolower($student->stu_name)) . ' ' . mb_strtoupper($student->stu_lastname_m, 'UTF-8') . ' ' . mb_strtoupper($student->stu_lastname_f, 'UTF-8');
+
+            $adviser = Adviser::where('_id', $solicitude->adviser_id)->first();
+            $name_adviser = ucwords(strtolower($adviser->adv_name . ' ' . $adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f));
+
+            $presidente = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'presidente')->first();
+            $name_presidente = Adviser::where('_id', $presidente->adviser_id)->first();
+            $name_presidente = ucwords(strtolower($name_presidente->adv_name . ' ' . $name_presidente->adv_lastname_m . ' ' . $name_presidente->adv_lastname_f));
+            
+            $secretario = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'secretario')->first();
+            $name_secretario = Adviser::where('_id', $secretario->adviser_id)->first();
+            $name_secretario = ucwords(strtolower($name_secretario->adv_name . ' ' . $name_secretario->adv_lastname_m . ' ' . $name_secretario->adv_lastname_f));
+            
+            $vocal = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'vocal')->first();
+            $name_vocal = Adviser::where('_id', $vocal->adviser_id)->first();
+            $name_vocal = ucwords(strtolower($name_vocal->adv_name . ' ' . $name_vocal->adv_lastname_m . ' ' . $name_vocal->adv_lastname_f));
+            
+            // Pasar los datos a la vista
+            $pdf = Pdf::loadView('res_apt', compact(
+                'resolution',
+                'formattedDate',
+                'year_res',
+                'num_of',
+                'year_of',
+                'tittle',
+                'name_student',
+                'name_adviser',
+                'name_presidente',
+                'name_secretario',
+                'name_vocal'
+            ));
+        return $pdf->download(' RES-APT-' . $name_student .'.pdf'); // Puedes especificar un nombre para el archivo PDF
+        }
 }
