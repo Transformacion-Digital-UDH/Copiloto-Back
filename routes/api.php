@@ -10,6 +10,7 @@ use App\Http\Controllers\DocOfController;
 use App\Http\Controllers\DocResolutionController;
 use App\Http\Controllers\GoogleDocumentController;
 use App\Http\Controllers\HistoryReviewController;
+use App\Http\Controllers\GoogleDocumentEndController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CommentControllerDocs;
@@ -168,6 +169,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 //RUTA PARA DOCUMENTO GOOGLE
 Route::post('/create-document', [GoogleDocumentController::class, 'createDocument']); //Crear gocumento de google docs (Tesis)
 Route::get('document-link/{solicitudeId}', [GoogleDocumentController::class, 'getDocumentLink']); //Obtener link del documento de google docs (Tesis)
+Route::post('/create-informe', [GoogleDocumentEndController::class, 'createInforme']);
+
 
 
 
