@@ -628,4 +628,6 @@ class DocResolutionController extends Controller
 
             return response()->json($result);
         }
+
+        
 }

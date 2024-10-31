@@ -120,22 +120,23 @@
         <p><strong>Presente.</strong></p>
         <p style="text-indent: 30px;">De mi consideración:</p>
         <p style="text-indent: 30px;">Por medio del presente me dirijo a Usted, para saludarla cordialmente y a la vez remitirle el Expediente
-             <strong>N° {{$num_exp}}</strong> del Bachiller: <strong>{{$student}}</strong>, quien solicita Aprobación del Trabajo de Investigación Tesis. </p>
+             <strong>N° {{$num_exp}}</strong> del Bachiller: <strong>{{$student}}</strong>, quien solicita <strong>Aprobación del informe Final del Trabajo de Investigación Tesis.</strong> </p>
         
-        <p style="text-indent: 30px;">Se pone en conocimiento que, mediante <strong> RESOLUCIÓN N° {{$num_res}}-{{$res_year}}-D-FI-UDH</strong> de fecha {{$res_date}}, perteneciente 
-            a la Bachiller: <strong>{{$student}}</strong> se le designo como asesor de Tesis al <strong>{{$asesor}}</strong>, y a su vez informar que, 
-            el Jurado Revisor del Trabajo de Investigación Tesis titulado: “<strong>{{$tittle}}</strong>” 
-            del P.A. de Ingeniería de sistemas <strong>– Sede – La esperanza – Huánuco</strong>, integrado por los siguientes docentes Revisores del Trabajo de Investigación de Tesis:</p>
-        <p style="text-indent: 30px;">
-            <span style="display: block; padding-left: 10px;">- {{$presidente}}</span>
-            <span style="display: block; padding-left: 10px;">- {{$secretario}}</span>
-            <span style="display: block; padding-left: 10px;">- {{$vocal}}</span>
-        </p>       
-        <p style="text-indent: 30px;">Quienes declaran <strong>APTO</strong> para ser ejecutado el Trabajo de Investigación Tesis. </p>
-        <p style="text-indent: 30px;">
-            <strong>Adjunto: </strong>
-            <span style="display: block; padding-left: 10px;">- Informe de Conformidad de los Jurados Revisores del Trabajo de Investigación de Tesis.</span>
-            <span style="display: block; padding-left: 10px;">- Trabajo de Investigación Tesis en PDF.</span>
+        <p style="text-indent: 30px;">Se pone en conocimiento que, mediante <strong> RESOLUCIÓN N° {{$num_res}}-{{$res_year}}-D-FI-UDH</strong> de fecha {{$res_date}}, se aprobó el trabajo de investigación y su ejecución del Bachiller <strong>{{$student}}</strong>
+         Así mismo el informe final del trabajo de investigación (Tesis) titulado: “<strong>{{$tittle}}</strong>” 
+         Fue revisado por los siguientes <strong>JURADOS REVISORES:</strong></p>
+         <ul style="margin-left: 20mm;">
+            <li>{{$presidente}}</li>
+            <li>{{$secretario}}</li>
+            <li>{{$vocal}}</li>
+        </ul>      
+        <p style="text-indent: 30px;">Dichos jurados revisores declararon <strong>APTO</strong> para la sustentación. Por lo que se remite a su despacho para su conocimiento y fines pertinentes </p>
+        <ul><strong style="text-indent: 30px;">Adjunto:</strong></ul>
+        <ul style="margin-left: 20mm; list-style-type: disc;">
+            <li>Informes de conformidad de los Jurados Revisores del Trabajo de Investigación de Tesis.</li>
+            <li>Trabajo de Investigación de Tesis digitalizado en formato PDF</li>
+            <li>Informe de Conformidad del Docente Asesor</li>
+        </ul>
 
         <p style="text-indent: 30px;">Sin otro particular, me despido recordándole las muestras de mi especial consideración y estima personal.</p>
         <p style="text-align: center;">Atentamente,</p>
