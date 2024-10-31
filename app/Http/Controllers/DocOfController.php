@@ -1318,6 +1318,6 @@ class DocOfController extends Controller
                 
             // Pasar los datos a la vista
             $pdf = Pdf::loadView('of_aif', compact('asesor', 'office', 'tittle', 'formattedDate', 'presidente', 'secretario', 'vocal', 'student', 'year', 'num_exp', 'num_res', 'res_date', 'res_year'));
-            return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
+            return $pdf->download('OFF-AIF-' . $student . '.pdf'); // Puedes especificar un nombre para el archivo PDF
         }
 }
