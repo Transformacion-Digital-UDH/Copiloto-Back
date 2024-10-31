@@ -1081,4 +1081,125 @@ class DocOfController extends Controller
             $pdf = Pdf::loadView('of_dj_if', compact('office', 'tittle', 'formattedDate', 'presidente', 'secretario', 'vocal', 'student', 'year', 'num_exp', 'num_res', 'res_date', 'res_year'));
             return $pdf->download('OFF-DJIF-' . $student . '.pdf'); // Puedes especificar un nombre para el archivo PDF
         }
+
+        public function soliciteOfficeApproveInforme($student_id)
+    {
+        // Verificar si el estudiante existe
+        $student = Student::where('_id', $student_id)->first();
+        if (!$student) {
+            return response()->json([
+                'mensaje' => 'El estudiante no existe',
+            ], 400);
+        }
+
+        // Verificar si el estudiante tiene todos los jurados aprobados
+        $presidente = Review::where('student_id', $student_id)
+            ->where('rev_adviser_rol', 'presidente')
+            ->where('rev_type', 'informe')
+            ->where('rev_status', 'aprobado')
+            ->first();
+        $secretario = Review::where('student_id', $student_id)
+            ->where('rev_adviser_rol', 'secretario')
+            ->where('rev_type', 'informe')
+            ->where('rev_status', 'aprobado')
+            ->first();
+        $vocal = Review::where('student_id', $student_id)
+            ->where('rev_adviser_rol', 'vocal')
+            ->where('rev_type', 'informe')
+            ->where('rev_status', 'aprobado')
+            ->first();
+
+        if (!$presidente || !$secretario || !$vocal) {
+            return response()->json([
+                'mensaje' => 'El estudiante aún no tiene la conformidad de sus jurados',
+            ], 400);
+        }
+
+        // Verificar si ya existe una solicitud de "Aprobación de tesis" pendiente
+        $existingOffice = DocOf::where('student_id', $student_id)
+            ->where('of_name', 'Aprobación de informe')
+            ->where('of_status', 'pendiente') // Añadimos condición de estado "pendiente"
+            ->first();
+
+        if ($existingOffice) {
+            return response()->json([
+                'mensaje' => 'El estudiante ya tiene una solicitud de aprobación de informe final pendiente',
+            ], 400);
+        }
+
+        // Crear nueva solicitud de aprobación de tesis
+        $office = DocOf::create([
+            'student_id' => $student_id,
+            'of_name' => 'Aprobación de informe',
+            'of_num_of' => null,
+            'of_num_exp' => null,
+            'of_status' => 'pendiente',
+            'of_observation' => null,
+        ]);
+
+        // Guardar el nuevo documento en la base de datos
+        return response()->json([
+            'mensaje' => 'Aprobación de informe creada correctamente',
+            'estado' => $office->of_status,
+        ], 200);
+    }
+
+    public function getOfficeApproveInforme() {
+
+        // Obtener todas las solicitudes con el nombre 'Aprobación de tesis'
+        $solicitude_docof = DocOf::where('of_name', 'Aprobación de informe')->get();
+
+        // Definir el orden deseado
+        $order = ['pendiente', 'observado', 'tramitado'];
+
+        // Ordenar manualmente las solicitudes por 'of_status'
+        $sortedSolicitudes = $solicitude_docof->sort(function ($a, $b) use ($order) {
+            return array_search($a->of_status, $order) <=> array_search($b->of_status, $order);
+        })->values(); // Para asegurar que se mantenga como una colección indexada.
+
+        // Crear un array para almacenar los resultados finales
+        $result = [];
+
+        // Recorrer cada solicitud ordenada y obtener los datos del estudiante y de la solicitud
+        foreach ($sortedSolicitudes as $solicitude) {
+            // Obtener el estudiante relacionado
+            $student = Student::find($solicitude->student_id);
+            // Obtener la solicitud relacionada
+            $tittle = Solicitude::where('student_id', $solicitude->student_id)->first();
+            
+            $asesor = Review::where('student_id', $student->_id)
+                                ->where('rev_type', 'informe')
+                                ->where('rev_adviser_rol', 'asesor')
+                                ->first();
+            $presidente = Review::where('student_id', $student->_id)
+                                ->where('rev_type', 'informe')
+                                ->where('rev_adviser_rol', 'presidente')
+                                ->first();
+            $secretario = Review::where('student_id', $student->_id)
+                                ->where('rev_type', 'informe')
+                                ->where('rev_adviser_rol', 'secretario')
+                                ->first();
+            $vocal = Review::where('student_id', $student->_id)
+                                ->where('rev_type', 'informe')
+                                ->where('rev_adviser_rol', 'vocal')
+                                ->first();            
+            // Si los datos existen, agregar al resultado
+            if ($student && $tittle) {
+                $result[] = [
+                    'oficio_id' => $solicitude->_id,
+                    'nombre' => ucwords(strtolower($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name)),
+                    'titulo' => $tittle->sol_title_inve,
+                    'revision_id_asesor' => $asesor->_id,
+                    'revision_id_presidente' => $presidente->_id,
+                    'revision_id_secretario' => $secretario->_id,
+                    'revision_id_vocal' => $vocal->_id,
+                    'estado' => $solicitude->of_status,
+                ];
+            }
+        }
+
+        // Devolver los resultados en formato JSON
+        return response()->json($result);
+
+        }
 }
