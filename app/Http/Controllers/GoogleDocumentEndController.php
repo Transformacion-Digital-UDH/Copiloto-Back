@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
 
@@ -25,8 +26,8 @@ class GoogleDocumentEndController extends GoogleDocumentController
 
             // Personaliza el nombre del documento y el ID de la plantilla para el informe
             $documentName = "Informe_" . $solicitude->sol_title_inve . "_" . $student->stu_name;
-            $templateId = '1ud0cDToshwGaLxlSO6SvPF63ua0x1akKjZE9MoKvUic'; // Cambia por el ID del template para el informe
-            $folderId = '1ga2gIsAw5-Kit-oMbBuWavaXtiRunwhz'; // Cambia por el ID de la carpeta para el informe
+            $templateId = '1ud0cDToshwGaLxlSO6SvPF63ua0x1akKjZE9MoKvUic';
+            $folderId = '1ga2gIsAw5-Kit-oMbBuWavaXtiRunwhz';
 
             // Crear el documento desde la plantilla específica del informe
             $documentId = $this->createDocumentFromTemplate($templateId, $documentName);
@@ -37,18 +38,25 @@ class GoogleDocumentEndController extends GoogleDocumentController
             // Reemplazar los marcadores de posición
             $this->replaceDocumentPlaceholders($documentId, $solicitude, $student, $adviser);
 
-            // Asignar permisos y mover el documento a la carpeta del informe
+            // Asignar permisos
             $this->assignPermissions($documentId, $paisiUser, $studentUser, $adviserUser);
-            $this->moveDocumentToFolder($documentId, $folderId); // Cambiado para incluir $folderId
+            
+            // Mover el documento a la carpeta específica del informe
+            $this->moveDocumentToFolder($documentId, $folderId);
 
             // Obtener el enlace del documento y actualizar usando 'informe_link'
             $link = $this->getDocumentLink($documentId);
-            $this->updateSolicitudeWithLink($solicitude, $link, 'informe_link'); // Cambiado para manejar 'informe_link'
+            if (!$link) {
+                return response()->json(['error' => 'No se pudo obtener el enlace del documento'], 500);
+            }
+
+            // Usar el nuevo parámetro linkType para especificar que es un informe_link
+            $this->updateSolicitudeWithLink($solicitude, $link, 'informe_link');
 
             return response()->json(['success' => true, 'informe_link' => $link]);
 
         } catch (\Exception $e) {
-            \Log::error('Error creating informe: ' . $e->getMessage());
+            Log::error('Error creating informe: ' . $e->getMessage());
             return response()->json(['error' => 'Error al crear el informe: ' . $e->getMessage()], 500);
         }
     }
