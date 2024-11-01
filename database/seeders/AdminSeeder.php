@@ -42,7 +42,7 @@ class AdminSeeder extends Seeder
         // Crear el primer usuario con el rol de "admin"
         User::create([
             'name' => 'Super Admin',
-            'email' => 'admin@example.com',
+            'email' => 'admin@udh.edu.pe',
             'password' => bcrypt('password123'), // Hashear la contraseña
             'role_id' => $adminRole->_id, // Asignar el ID del rol de admin
         ]);

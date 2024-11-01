@@ -96,33 +96,28 @@
         <p class="fecha">Huánuco, {{$formattedDate}}</p>
         <div class="parrafo">
             <p>
-                Visto, el Oficio N° {{$num_of}}-{{$year_of}}-CA-PAISI-FI-UDH, mediante el cual el Coordinador
-                Académico de Ingeniería de Sistemas e Informática, remite el dictamen de los jurados revisores, del
-                Trabajo de Investigación (Tesis) intitulado: <strong>“{{$tittle}}”</strong>, presentado por el (la) Bach. <strong>{{$name_student}}</strong>.
+                Visto, el Oficio N° {{$num_of}}-{{$year_of}}-CA-PAISI-FI-UDH,mediante el cual el Coordinador Académico de Ingeniería de Sistemas de Informática, 
+                remite el dictamen de los jurados revisores, del Informe Final de Trabajo de investigación (Tesis) intitulado: <strong>“{{$tittle}}”</strong>, 
+                presentado por el (la) Bach. <strong>{{$name_student}}</strong>.
             </p>
             <p><strong>CONSIDERANDO:</strong></p>
             <p>Que, según mediante Resolución N° 006-2001-R-AU-UDH, de fecha 24 de julio de 2001, se crea la Facultad de Ingeniería, y;</p>
             
-            <p>Que, mediante Resolución de Consejo Directivo N° 076-2019-SUNEDU/CD, de fecha
-                05 de junio de 2019, otorga la Licencia a la Universidad de Huánuco para ofrecer el servicio
-                educativo superior universitario, y;</p>
-            <p>Que, mediante Resolución N° {{$num_res_da}}-{{$year_res_da}}-D-FI-UDH, de fecha {{$date_res_da}},
-                perteneciente al Bach. <strong>{{$name_student}}</strong> se le designó como ASESOR(A) de Tesis al Mg.
-                {{$name_adviser}}, docente adscrito al Programa Académico de Ingeniería de Sistemas e
-                Informática de la Facultad de Ingeniería, y;</p>
-            <p>Que, según Oficio N° {{$num_of}}-{{$year_of}}-CA-PAISI-FI-UDH, del Coordinador Académico quien
-                informa que los JURADOS REVISORES del Trabajo de Investigación (Tesis) intitulado: <strong>“{{$tittle}}”</strong>, presentado
+            <p>Que, mediante Resolución de Consejo Directivo N° 076-2019-SUNEDU/CD, de fecha 05 de junio de 2019, otorga la Licencia a la Universidad de 
+                Huánuco para ofrecer el servicio educativo superior universitario, y;</p>
+            <p>Que, mediante Resolución N° {{$num_res_da}}-{{$year_res_da}}-D-FI-UDH, de fecha {{$date_res_da}}, se aprobó el Trabajo de Investigación (Tesis) 
+                y su ejecución, del Bach. <strong>{{$name_student}}</strong></p>
+
+            <p>Que, según Oficio N° {{$num_of}}-{{$year_of}}-CA-PAISI-FI-UDH, del Coordinador Académico quien informa que los 
+                JURADOS REVISORES del Informe Final de Trabajo de Investigación (Tesis) intitulado: <strong>“{{$tittle}}”</strong>, presentado
                 por el (la) Bach. <strong>{{$name_student}}</strong>, integrado por los siguientes docentes: Mg. {{$name_presidente}} (Presidente), Mg. {{$name_secretario}} (Secretario) e 
                 Ing. {{$name_vocal}} (Vocal), quienes declaran APTO para ser ejecutado el proyecto de Tesis, y;</p>
                 <p>
             <p>Estando a las atribuciones conferidas al Decano de la Facultad de Ingeniería y con cargo a dar cuenta en el próximo Consejo de Facultad.</p>
             <p><strong>SE RESUELVE:</strong></p>
-            <p><strong style="text-decoration: underline;">Artículo Primero</strong><strong>.-. APROBAR,</strong> el Trabajo de Investigación (Tesis) y su ejecución
-                intitulado: <strong>“{{$tittle}}”</strong>, presentado por el (la) Bach. <strong>{{$name_student}}</strong> para optar el Título Profesional
-                de Ingeniero(a) de Sistemas e Informática, del Programa Académico de Ingeniería de Sistemas e
-                Informática de la Universidad de Huánuco.</p>
-            <p><strong style="text-decoration: underline;">Artículo Segundo</strong>. - El interesado tendrá un plazo máximo de 6 meses para solicitar revisión del Trabajo de Investigación (Tesis). En todo caso deberá de solicitar nuevamente el trámite con el costo económico vigente.</p>
-            <p style="text-align: center"><br><strong>REGÍSTRESE, COMUNÍQUESE Y ARCHÍVESE</strong></p>
+            <p><strong style="text-decoration: underline;">Artículo Único</strong><strong>.-. APROBAR,</strong> el Informe Final de Trabajo de Investigación (Tesis) intitulado: 
+                <strong>“{{$tittle}}”</strong>, presentado por el (la) Bach. <strong>{{$name_student}}</strong> para optar el Título Profesional de Ingeniero(a) de Sistemas e Informáticas, 
+                del Programa Académico de Ingeniería de Sistemas e Informática, de la Universidad de Huánuco.</p>
             <br>
         </div>
 

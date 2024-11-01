@@ -1202,4 +1202,122 @@ class DocOfController extends Controller
         return response()->json($result);
 
         }
+
+        public function viewOfficeApproveInforme($docof_id){
+        
+            $office = DocOf::where('_id', $docof_id)->first();
+
+            // Verifica si el registro no se encuentra
+            if (!$office) {
+                return redirect()->back()->with('error', 'Solicitud no encontrada');
+            }
+
+            $num_exp = $office->of_num_exp;
+            // Formatear la fecha updated_at como "11 de julio de 2024"
+            $formattedDate = Carbon::parse($office->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+            $year = Carbon::parse($office->updated_at)->locale('es')->isoFormat('YYYY');
+            
+            $student = Student::where('_id', $office->student_id)->first();
+            $student = strtoupper($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name);
+
+            $revision_presidente = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'presidente')->where('rev_type', 'informe')->first();
+            $revision_secretario = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'secretario')->where('rev_type', 'informe')->first();
+            $revision_vocal = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'vocal')->where('rev_type', 'informe')->first();
+            $revision_asesor = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'asesor')->where('rev_type', 'informe')->first();
+    
+    
+        
+            // Recibe el id del Asesor
+            $presidente = Adviser::where('_id', $revision_presidente->adviser_id)->first();
+            $secretario = Adviser::where('_id', $revision_secretario->adviser_id)->first();
+            $vocal = Adviser::where('_id', $revision_vocal->adviser_id)->first();
+            $asesor = Adviser::where('_id', $revision_asesor->adviser_id)->first();
+    
+    
+            $presidente = ucwords(strtolower($presidente->adv_name . ' ' . $presidente->adv_lastname_m . ' ' . $presidente->adv_lastname_f));
+            $presidente = 'Ing. ' . $presidente . ' - ' . strtoupper($revision_presidente->rev_adviser_rol);
+            
+            $secretario = ucwords(strtolower($secretario->adv_name . ' ' . $secretario->adv_lastname_m . ' ' . $secretario->adv_lastname_f));
+            $secretario = 'Ing. ' . $secretario . ' - ' . strtoupper($revision_secretario->rev_adviser_rol);
+    
+            $vocal = ucwords(strtolower($vocal->adv_name . ' ' . $vocal->adv_lastname_m . ' ' . $vocal->adv_lastname_f));
+            $vocal = 'Ing. ' . $vocal . ' - ' . strtoupper($revision_vocal->rev_adviser_rol);
+
+            $asesor = ucwords(strtolower($asesor->adv_name . ' ' . $asesor->adv_lastname_m . ' ' . $asesor->adv_lastname_f));
+            $asesor = 'Ing. ' . $asesor;
+                   
+            $tittle = Solicitude::where('student_id', $office->student_id)->first();
+            $tittle = mb_strtoupper($tittle->sol_title_inve, 'UTF-8');
+    
+
+            $resolucion = DocOf::where('student_id', $office->student_id)->where('of_name', 'Aprobación de tesis')->first();
+            $resolucion = DocResolution::where('docof_id', $resolucion->_id)->first();
+    
+            $num_res = $resolucion->docres_num_res;
+            $res_date = Carbon::parse($resolucion->updated_at)->locale('es')->isoFormat('DD [de] MMMM [de] YYYY');
+            $res_year = Carbon::parse($resolucion->updated_at)->locale('es')->isoFormat('YYYY');
+                
+            // Pasar los datos a la vista
+            $pdf = Pdf::loadView('of_aif', compact('asesor', 'office', 'tittle', 'formattedDate', 'presidente', 'secretario', 'vocal', 'student', 'year', 'num_exp', 'num_res', 'res_date', 'res_year'));
+            return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
+        }
+        
+        public function downloadOfficeApproveInforme($docof_id){
+        
+            $office = DocOf::where('_id', $docof_id)->first();
+
+            // Verifica si el registro no se encuentra
+            if (!$office) {
+                return redirect()->back()->with('error', 'Solicitud no encontrada');
+            }
+
+            $num_exp = $office->of_num_exp;
+            // Formatear la fecha updated_at como "11 de julio de 2024"
+            $formattedDate = Carbon::parse($office->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
+            $year = Carbon::parse($office->updated_at)->locale('es')->isoFormat('YYYY');
+            
+            $student = Student::where('_id', $office->student_id)->first();
+            $student = strtoupper($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name);
+
+            $revision_presidente = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'presidente')->where('rev_type', 'informe')->first();
+            $revision_secretario = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'secretario')->where('rev_type', 'informe')->first();
+            $revision_vocal = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'vocal')->where('rev_type', 'informe')->first();
+            $revision_asesor = Review::where('student_id', $office->student_id)->where('rev_adviser_rol', 'asesor')->where('rev_type', 'informe')->first();
+    
+    
+        
+            // Recibe el id del Asesor
+            $presidente = Adviser::where('_id', $revision_presidente->adviser_id)->first();
+            $secretario = Adviser::where('_id', $revision_secretario->adviser_id)->first();
+            $vocal = Adviser::where('_id', $revision_vocal->adviser_id)->first();
+            $asesor = Adviser::where('_id', $revision_asesor->adviser_id)->first();
+    
+    
+            $presidente = ucwords(strtolower($presidente->adv_name . ' ' . $presidente->adv_lastname_m . ' ' . $presidente->adv_lastname_f));
+            $presidente = 'Ing. ' . $presidente . ' - ' . strtoupper($revision_presidente->rev_adviser_rol);
+            
+            $secretario = ucwords(strtolower($secretario->adv_name . ' ' . $secretario->adv_lastname_m . ' ' . $secretario->adv_lastname_f));
+            $secretario = 'Ing. ' . $secretario . ' - ' . strtoupper($revision_secretario->rev_adviser_rol);
+    
+            $vocal = ucwords(strtolower($vocal->adv_name . ' ' . $vocal->adv_lastname_m . ' ' . $vocal->adv_lastname_f));
+            $vocal = 'Ing. ' . $vocal . ' - ' . strtoupper($revision_vocal->rev_adviser_rol);
+
+            $asesor = ucwords(strtolower($asesor->adv_name . ' ' . $asesor->adv_lastname_m . ' ' . $asesor->adv_lastname_f));
+            $asesor = 'Ing. ' . $asesor;
+                   
+            $tittle = Solicitude::where('student_id', $office->student_id)->first();
+            $tittle = mb_strtoupper($tittle->sol_title_inve, 'UTF-8');
+    
+
+            $resolucion = DocOf::where('student_id', $office->student_id)->where('of_name', 'Aprobación de tesis')->first();
+            $resolucion = DocResolution::where('docof_id', $resolucion->_id)->first();
+    
+            $num_res = $resolucion->docres_num_res;
+            $res_date = Carbon::parse($resolucion->updated_at)->locale('es')->isoFormat('DD [de] MMMM [de] YYYY');
+            $res_year = Carbon::parse($resolucion->updated_at)->locale('es')->isoFormat('YYYY');
+                
+            // Pasar los datos a la vista
+            $pdf = Pdf::loadView('of_aif', compact('asesor', 'office', 'tittle', 'formattedDate', 'presidente', 'secretario', 'vocal', 'student', 'year', 'num_exp', 'num_res', 'res_date', 'res_year'));
+            return $pdf->download('OFF-AIF-' . $student . '.pdf'); // Puedes especificar un nombre para el archivo PDF
+        }
 }
