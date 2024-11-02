@@ -288,7 +288,7 @@ class StudentController extends Controller
             // Solo agregar al array si se encuentra una resolución o un registro válido
             if ($res_apt) {
                 $data[] = [
-                    'student_id' => $student->_id,
+                    'id_' => $student->_id,
                     'id_solicitud' => $sol_da->_id,
                     'informe_link' => $sol_da->informe_link,
                     'nombre' => "{$student->stu_name} {$student->stu_lastname_m} {$student->stu_lastname_f}",
