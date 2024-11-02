@@ -214,9 +214,9 @@ class GoogleDocumentController extends Controller
         $this->driveService->permissions->create($documentId, $permission);
     }
 
-    protected function moveDocumentToFolder($documentId)
+    protected function moveDocumentToFolder($documentId, $folderId = '1Diiq8CbTzB5EdXvZCJnEEq4MEMOUiA8I')
     {
-        $folderId = '1Diiq8CbTzB5EdXvZCJnEEq4MEMOUiA8I'; // Reemplaza con el folderId correcto
+        // Usar el $folderId proporcionado o el valor por defecto
         $emptyFileMetadata = new Google_Service_Drive_DriveFile();
         $this->driveService->files->update($documentId, $emptyFileMetadata, [
             'addParents' => $folderId,
@@ -231,9 +231,13 @@ class GoogleDocumentController extends Controller
         return $file->getWebViewLink();
     }
 
-    protected function updateSolicitudeWithLink($solicitude, $link)
+    protected function updateSolicitudeWithLink($solicitude, $link, $linkType = 'document_link')
     {
-        $solicitude->document_link = $link;
+        if (!in_array($linkType, ['document_link', 'informe_link'])) {
+            $linkType = 'document_link'; // valor por defecto si no es válido
+        }
+        
+        $solicitude->{$linkType} = $link;
         $solicitude->save();
     }
 
