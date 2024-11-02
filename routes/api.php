@@ -122,11 +122,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/estudiante/info-juries/informe/{student_id}', [StudentController::class, 'infoOfficeJuriesForInforme']);
     // Crear oficio para solicitud de jurados para informe final --->Estudiante
     Route::get('/oficio/crear-solicitud-jurados/informe/{student_id}', [DocOfController::class, 'createOfficeJuriesForInforme']);
-    //Ruta para para vista de APROBACION DE INFORME FINAL ---> ESTUDIANTE
+    //Ruta para para vista de APROBACION DE INFORME FINAL ---> ESTUDIANTEc
     Route::get('/estudiante/get-info-aprobar/informe/{student_id}', [StudentController::class, 'getInfoApproveInforme']);
 });
-
-
+    //Ruta para para vista de validación de TU COACH UDH ---> ESTUDIANTEc
+    Route::get('/estudiante/get-certificado-buenas-practicas/{student_id}', [StudentController::class, 'getStateTuCoachUDH']);
 
 
 // RUTAS PARA REVISIONES

@@ -12,6 +12,7 @@ use App\Models\Student;
 use App\Models\Adviser;
 use App\Models\Review;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use MongoDB\Laravel\Eloquent\Casts\ObjectId;
 
@@ -289,6 +290,7 @@ class StudentController extends Controller
                 $data[] = [
                     'id_' => $student->_id,
                     'id_solicitud' => $sol_da->_id,
+                    'informe_link' => $sol_da->informe_link,
                     'nombre' => "{$student->stu_name} {$student->stu_lastname_m} {$student->stu_lastname_f}",
                     'asesor' => $asesor,
                     'estado' => $status,
@@ -516,5 +518,44 @@ class StudentController extends Controller
             'resolucion_id' => $docres->_id,
             'resolucion_estado' => $docres->docres_status,
         ], 200);
+    }
+
+
+    public function getStateTuCoachUDH($student_id)
+    {
+        $student = Student::where('_id', $student_id)->first();
+
+        if (!$student){
+            return response()->json([
+                'error' => 'Estudiante no existe'
+            ], 404);
+        }
+
+        $stu_code = $student->stu_code;
+
+        $response = Http::get("https://tucoach.udh.edu.pe/api/validar/{$stu_code}@udh.edu.pe");
+
+        // Verifica si la solicitud fue exitosa antes de procesar la respuesta
+        if ($response->successful()) {
+            $data = $response->json();
+
+            $tucoach = 'aprobado';
+
+            if (!$data['status'] or $data['status'] === 'false') {
+                $tucoach = 'pendiente';
+            }
+
+            return response()->json([
+
+                'doc_name' => 'Certificado de buenas prácticas - TUCOACH.UDH',
+                'doc_estado'=> $tucoach,
+                'doc_ver' => $data['url'] ?? '',
+            ],200);
+        }
+
+        // Devuelve un error si la solicitud no fue exitosa
+        return response()->json([
+            'error' => 'No se pudo conectar con la API'
+        ], 500);
     }
 }
