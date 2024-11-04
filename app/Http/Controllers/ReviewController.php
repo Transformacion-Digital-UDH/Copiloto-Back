@@ -94,6 +94,7 @@ class ReviewController extends Controller
             // Contar cuántas revisiones tiene el estudiante
             $count = HistoryReview::where('student_id', $student_id)
                                 ->where('adviser_id', $review->adviser_id)    
+                                ->where('rev_adviser_rol', $review->rev_adviser_rol)    
                                 ->where('rev_type', $review->rev_type)    
                                 ->count();
     
