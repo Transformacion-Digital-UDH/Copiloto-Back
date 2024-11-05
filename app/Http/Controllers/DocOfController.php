@@ -1376,4 +1376,42 @@ class DocOfController extends Controller
                 'message' => 'Solicitud enviada correctamente',
             ], 200);
         }
-}
+
+        public function getOfficeDeclareApto(){
+            // Obtener todas las solicitudes con el nombre 'declaracion como apto'
+            $solicitude_docof = DocOf::where('of_name', 'declaracion como apto')->get();
+
+            // Definir el orden deseado
+            $order = ['pendiente', 'observado', 'tramitado'];
+
+            // Ordenar manualmente las solicitudes por 'of_status'
+            $sortedSolicitudes = $solicitude_docof->sort(function ($a, $b) use ($order) {
+                return array_search($a->of_status, $order) <=> array_search($b->of_status, $order);
+            })->values(); // Para asegurar que se mantenga como una colección indexada.
+
+            // Crear un array para almacenar los resultados finales
+            $result = [];
+
+            // Recorrer cada solicitud ordenada y obtener los datos del estudiante y de la solicitud
+            foreach ($sortedSolicitudes as $solicitude) {
+                // Obtener el estudiante relacionado
+                $student = Student::find($solicitude->student_id);
+                // Obtener la solicitud relacionada
+                $tittle = Solicitude::where('student_id', $solicitude->student_id)->first();
+                
+                // Si los datos existen, agregar al resultado
+                if ($student && $tittle) {
+                    $result[] = [
+                        'oficio_id' => $solicitude->_id,
+                        'nombre' => ucwords(strtolower($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name)),
+                        'titulo' => $tittle->sol_title_inve,
+                        'estado' => $solicitude->of_status,
+                    ];
+                }
+            }
+            return response()->json([
+                $result,
+            ], 200);
+        }
+
+    }

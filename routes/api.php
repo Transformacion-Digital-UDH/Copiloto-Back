@@ -81,8 +81,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
     //Ruta para solicitar el oficio de designacion de fecha y hora para la sustentacion --->ESTUDANTE
     Route::get('/oficio/desigancion-fecha-hora-sustentacion/{student_id}', [DocOfController::class, 'soliciteOfficeDesignationDate']);
-
-
+    //Ruta para para ver oficios de DECLARAR APTO PARA SUSTENTAR con orden --->PAISI
+    Route::get('/oficio/get/declarar-apto', [DocOfController::class, 'getOfficeDeclareApto']);
 
 //RUTAS PARA RESOLUCIONES
 Route::middleware(['auth:sanctum'])->group(function () {   
@@ -124,9 +124,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/oficio/crear-solicitud-jurados/informe/{student_id}', [DocOfController::class, 'createOfficeJuriesForInforme']);
     //Ruta para para vista de APROBACION DE INFORME FINAL ---> ESTUDIANTEc
     Route::get('/estudiante/get-info-aprobar/informe/{student_id}', [StudentController::class, 'getInfoApproveInforme']);
-});
     //Ruta para para vista de validación de TU COACH UDH ---> ESTUDIANTEc
     Route::get('/estudiante/get-certificado-buenas-practicas/{student_id}', [StudentController::class, 'getStateTuCoachUDH']);
+});
+    
 
 
 // RUTAS PARA REVISIONES
@@ -164,13 +165,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
     // Ruta para listar jurados y sus revisiones, con rol, estudiante, tiempo transcurrido en dias ---> PAISI
     Route::get('/juries/get-select', [AdviserController::class, 'getSelectJuriesTesis']); 
-
-});
-
     // Ruta para listar revisiones a asesores jurados ---> ASESOR
     Route::get('/jurado/get-revision-estudiantes/informe/{adviser_id}', [AdviserController::class, 'getReviewInforme']); 
     // Ver revisiones de informe final --->Estudiante
     Route::get('/estudiante/get-revision-jurados/informe/{student_id}', [StudentController::class, 'getReviewJuriesInforme']);
+
+});
+
+    
 
 
 //RUTA PARA DOCUMENTO GOOGLE
