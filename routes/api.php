@@ -79,8 +79,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/oficio/get-aprobar/informe', [DocOfController::class, 'getOfficeApproveInforme']);
 
 });
-
-
+    //Ruta para solicitar el oficio de designacion de fecha y hora para la sustentacion --->ESTUDANTE
+    Route::get('/oficio/desigancion-fecha-hora-sustentacion/{student_id}', [DocOfController::class, 'soliciteOfficeDesignationDate']);
 
 
 

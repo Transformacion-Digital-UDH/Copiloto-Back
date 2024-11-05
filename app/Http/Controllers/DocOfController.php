@@ -1320,4 +1320,60 @@ class DocOfController extends Controller
             $pdf = Pdf::loadView('of_aif', compact('asesor', 'office', 'tittle', 'formattedDate', 'presidente', 'secretario', 'vocal', 'student', 'year', 'num_exp', 'num_res', 'res_date', 'res_year'));
             return $pdf->download('OFF-AIF-' . $student . '.pdf'); // Puedes especificar un nombre para el archivo PDF
         }
+
+        public function soliciteOfficeDesignationDate($student_id)
+        {
+            $off = DocOf::where('student_id', $student_id)
+                            ->where('of_name', 'Aprobación de informe')
+                            ->first();            
+
+            if(!$off){
+                return response()->json([
+                    'estado' => 'no iniciado',
+                    'message' => 'Este estudiante no tiene aprobación de informe por la facultad.'
+                ], 404);
+            }
+
+            $res = DocResolution::where('docof_id', $off->_id)
+                            ->where('docres_name', 'Aprobación de informe')
+                            ->where('docres_status', 'tramitado')
+                            ->first();
+
+            if(!$res){
+                return response()->json([
+                    'estado' => 'no iniciado',
+                    'message' => 'Este estudiante no tiene aprobación de informe por la facultad.'
+                ], 404);
+            }
+            
+
+            // Verificar si ya existe una solicitud de jurados
+            if ($off != null && $off->of_name == 'declaracion como apto') {
+                return response()->json([
+                    'estado' => 'pendiente',
+                    'message' => 'Este estudiante ya tiene una solicitud en proceso.'
+                ], 404);
+            }
+
+            
+            // Crear una nueva solicitud
+            $docOf = new DocOf([
+                'student_id' => $student_id,
+                'of_name' => 'declaracion como apto',  
+                'of_num_of' => null,  
+                'of_num_exp' => null,  
+                'of_date_sus' => null,  
+                'of_status' => 'pendiente',  
+                'of_observation' => null,  
+            ]);
+
+            // Guardar el nuevo documento en la base de datos
+            $docOf->save();
+
+            return response()->json([
+                'estado' => $docOf->of_status,
+                'status' => true,
+                'message' => 'Solicitud enviada correctamente',
+            ], 200);
+        }
 }
