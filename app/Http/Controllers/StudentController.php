@@ -558,4 +558,31 @@ class StudentController extends Controller
             'error' => 'No se pudo conectar con la API'
         ], 500);
     }
+
+    public function getInfoDeclareApto($student_id){
+        $docof = DocOf::where('student_id', $student_id)
+                    ->where('of_name', 'declaracion como apto')
+                    ->first();
+
+        if (!$docof){
+            return response()->json([
+                'estudiante_id' => $student_id ?? '',
+                'oficio_id' => $docof->_id ?? '',
+                'oficio_estado' => $docof->of_status ?? '',
+                'resolucion_id' => $docres->_id ?? '',
+                'resolucion_estado' => $docres->docres_status ?? '',
+            ], 200);
+        };
+
+        $docres = DocResolution::where('docof_id', $docof->_id)
+            ->first();
+
+        return response()->json([
+            'estudiante_id' => $student_id ?? '',
+            'oficio_id' => $docof->_id ?? '',
+            'oficio_estado' => $docof->of_status ?? '',
+            'resolucion_id' => $docres->_id ?? '',
+            'resolucion_estado' => $docres->docres_status ?? '',
+        ], 200);
+    }
 }
