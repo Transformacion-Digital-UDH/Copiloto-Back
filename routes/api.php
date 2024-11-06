@@ -77,12 +77,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/oficio/solicitud-aprobar/informe/{student_id}', [DocOfController::class, 'soliciteOfficeApproveInforme']);
     //Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI
     Route::get('/oficio/get-aprobar/informe', [DocOfController::class, 'getOfficeApproveInforme']);
-
-});
     //Ruta para solicitar el oficio de designacion de fecha y hora para la sustentacion --->ESTUDANTE
     Route::get('/oficio/desigancion-fecha-hora-sustentacion/{student_id}', [DocOfController::class, 'soliciteOfficeDesignationDate']);
     //Ruta para para ver oficios de DECLARAR APTO PARA SUSTENTAR con orden --->PAISI
     Route::get('/oficio/get/declarar-apto', [DocOfController::class, 'getOfficeDeclareApto']);
+
+});
+    
 
 //RUTAS PARA RESOLUCIONES
 Route::middleware(['auth:sanctum'])->group(function () {   
@@ -99,6 +100,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
 });
 
+    //Ruta para ver las resoluciones DECLARAR APTO ---> FACULTAD
+    Route::get('/resolucion/get/declarar-apto/informe', [DocResolutionController::class, 'getResolutionDeclareApto']);
 
 
 
@@ -126,11 +129,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/estudiante/get-info-aprobar/informe/{student_id}', [StudentController::class, 'getInfoApproveInforme']);
     //Ruta para para vista de validación de TU COACH UDH ---> ESTUDIANTE
     Route::get('/estudiante/get-certificado-buenas-practicas/{student_id}', [StudentController::class, 'getStateTuCoachUDH']);
-});
     //Ruta para para vista de DECLARAR APTO PARA SUSTENTAR ---> ESTUDIANTE
     Route::get('/estudiante/get-info/declarar-apto/{student_id}', [StudentController::class, 'getInfoDeclareApto']);
+});
+ 
     
-
 
 // RUTAS PARA REVISIONES
 Route::middleware(['auth:sanctum'])->group(function () {  
@@ -223,12 +226,19 @@ Route::get('/resolucion/download-resolucion-jurados/informe/{res_id}', [DocResol
 
 //Ruta para ver oficio de aprobacion de INFORME FINAL ---> ESTUDIANTE, PAISI, FACULTAD
 Route::get('/oficio/ver-aprobacion/informe/{office_id}', [DocOfController::class, 'viewOfficeApproveInforme']);
-Route::get('/oficio/descargar-aprobacion/informe/{office_id}}', [DocOfController::class, 'downloadOfficeApproveInforme']);
+Route::get('/oficio/descargar-aprobacion/informe/{office_id}', [DocOfController::class, 'downloadOfficeApproveInforme']);
 
 //Ruta para ver resolucion de aprobacion de INFORME FINAL (APT) ---> ESTUDIANTE, PAISI, FACULTAD
 Route::get('/resolucion/ver-aprobacion/informe/{resolution_id}', [DocResolutionController::class, 'viewResApproveInforme']);
 Route::get('/resolucion/download-aprobacion/informe/{resolution_id}', [DocResolutionController::class, 'downloadResApproveInforme']);
 
+//Ruta para ver oficio de aprobacion de DECLARAR APTO PARA LA SUSTENTACION ---> ESTUDIANTE, PAISI, FACULTAD
+Route::get('/oficio/ver/declarar-apto/{office_id}', [DocOfController::class, 'viewOfficeDeclareApto']);
+Route::get('/oficio/descargar/declarar-apto/{office_id}', [DocOfController::class, 'downloadOfficeDeclareApto']);
+
+//Ruta para ver resolucion de aprobacion de DECLARAR APTO PARA LA SUSTENTACION ---> ESTUDIANTE, PAISI, FACULTAD
+Route::get('/resolucion/ver/declarar-apto/{resolution_id}', [DocResolutionController::class, 'viewResDeclareApto']);
+Route::get('/resolucion/descargar/declarar-apto/{resolution_id}', [DocResolutionController::class, 'downloadResDeclareApto']);
 
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);

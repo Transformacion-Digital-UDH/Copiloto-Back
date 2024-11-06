@@ -756,4 +756,43 @@ class DocResolutionController extends Controller
             ));
             return $pdf->download(' RES-AIF-' . $name_student .'.pdf'); 
         }
+
+        public function getResolutionDeclareApto()
+        {
+            $resolutions = DocResolution::where('docres_name', 'declaracion como apto')->get(); // Cambié 'docof_name' a 'docres_name', asumiendo que 'docof_name' es incorrecto.
+
+            // Definir el orden deseado
+            $order = ['pendiente', 'observado', 'tramitado'];
+
+            // Ordenar manualmente las solicitudes por 'docres_status' (asumiendo que es el campo correcto)
+            $sorted_resolution = $resolutions->sort(function ($a, $b) use ($order) {
+                return array_search($a->docres_status, $order) <=> array_search($b->docres_status, $order);
+            })->values();
+
+            // Crear un array para almacenar los resultados finales
+            $result = [];
+
+            // Recorrer cada solicitud ordenada y obtener los datos del estudiante y de la solicitud
+            foreach ($sorted_resolution as $resolution) {
+                // Obtener la solicitud relacionada con DocOf
+                $office = DocOf::find($resolution->docof_id); // Cambié 'where' a 'find' para buscar por ID directamente
+
+                // Obtener el estudiante relacionado
+                $student = Student::find($office->student_id);
+
+                // Obtener la solicitud relacionada al título del estudiante
+                $tittle = Solicitude::where('student_id', $office->student_id)->first(); // Corrijo para usar 'student_id' de 'office'
+
+                // Agregar los resultados al array final
+                $result[] = [
+                    'resolucion_id' => $resolution->_id,
+                    'oficio_id' => $office->_id,
+                    'nombre' => ucwords(strtolower($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name)),
+                    'titulo' => $tittle->sol_title_inve,
+                    'estado' => $resolution->docres_status, // Cambié 'of_status' a 'docres_status', asumiendo que es el campo correcto
+                ];
+            }
+
+            return response()->json($result);
+        }
 }
