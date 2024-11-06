@@ -1454,7 +1454,6 @@ class DocOfController extends Controller
                 'of_name' => 'designacion de fecha y hora',  
                 'of_num_of' => null,  
                 'of_num_exp' => null,  
-                'of_date_sus' => null,  
                 'of_status' => 'pendiente',  
                 'of_observation' => null,  
             ]);

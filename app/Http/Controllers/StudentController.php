@@ -585,4 +585,36 @@ class StudentController extends Controller
             'resolucion_estado' => $docres->docres_status ?? '',
         ], 200);
     }
+
+    public function getInfoDesignationDate($student_id){
+        $docof = DocOf::where('student_id', $student_id)
+                    ->where('of_name', 'designacion de fecha y hora')
+                    ->first();
+
+        if (!$docof){
+            return response()->json([
+                'estudiante_id' => $student_id ?? '',
+                'def_fecha_hora' => $def->def_date ?? '',
+                'def_jurado_presidente' => $def_pre ?? '',
+                'def_jurado_secretario' => $def_sec ?? '',
+                'def_jurado_vocal' => $def_voc ?? '',
+                'def_jurado_accesitario' => $def_acc ?? '',
+                'oficio_id' => $docof->_id ?? '',
+                'oficio_estado' => $docof->of_status ?? '',
+                'resolucion_id' => $docres->_id ?? '',
+                'resolucion_estado' => $docres->docres_status ?? '',
+            ], 200);
+        };
+
+        $docres = DocResolution::where('docof_id', $docof->_id)
+            ->first();
+
+        return response()->json([
+            'estudiante_id' => $student_id ?? '',
+            'oficio_id' => $docof->_id ?? '',
+            'oficio_estado' => $docof->of_status ?? '',
+            'resolucion_id' => $docres->_id ?? '',
+            'resolucion_estado' => $docres->docres_status ?? '',
+        ], 200);
+    }
 }
