@@ -78,9 +78,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI
     Route::get('/oficio/get-aprobar/informe', [DocOfController::class, 'getOfficeApproveInforme']);
     //Ruta para solicitar el oficio de designacion de fecha y hora para la sustentacion --->ESTUDANTE
-    Route::get('/oficio/desigancion-fecha-hora-sustentacion/{student_id}', [DocOfController::class, 'soliciteOfficeDesignationDate']);
+    Route::get('/oficio/desigancion-fecha-hora-sustentacion/{student_id}', [DocOfController::class, 'soliciteOfficeDeclareApto']);
     //Ruta para para ver oficios de DECLARAR APTO PARA SUSTENTAR con orden --->PAISI
     Route::get('/oficio/get/declarar-apto', [DocOfController::class, 'getOfficeDeclareApto']);
+    //Ruta para para crear oficio de DESIGNACION DE FECHA Y HORA con orden --->PAISI
+    Route::get('/oficio/desigancion-fecha-hora-sustentacion/{student_id}', [DocOfController::class, 'soliciteOfficeDesignationDate']);
+    //Ruta para para ver oficios de DESIGNACION DE FECHA Y HORA con orden --->PAISI
+    Route::get('/oficio/get/desigancion-fecha-hora-sustentacion', [DocOfController::class, 'getOfficeDesignationDate']);
 
 });
     
@@ -97,11 +101,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/resolucion/get-aprobar/informe', [DocResolutionController::class, 'getReslutionApproveInforme']);
     //Ruta para las resoluciones de solicitud de juados pendientes ---> FACULTAD
     Route::get('/resolucion/solicitud-jurados/informe', [DocResolutionController::class, 'getResolutionForJuriesInforme']);
-    
-});
-
     //Ruta para ver las resoluciones DECLARAR APTO ---> FACULTAD
     Route::get('/resolucion/get/declarar-apto/informe', [DocResolutionController::class, 'getResolutionDeclareApto']);
+});
+
+    
 
 
 

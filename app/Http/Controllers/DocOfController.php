@@ -1321,7 +1321,7 @@ class DocOfController extends Controller
             return $pdf->download('OFF-AIF-' . $student . '.pdf'); // Puedes especificar un nombre para el archivo PDF
         }
 
-        public function soliciteOfficeDesignationDate($student_id)
+        public function soliciteOfficeDeclareApto($student_id)
         {
             $off = DocOf::where('student_id', $student_id)
                             ->where('of_name', 'Aprobación de informe')
@@ -1362,7 +1362,6 @@ class DocOfController extends Controller
                 'of_name' => 'declaracion como apto',  
                 'of_num_of' => null,  
                 'of_num_exp' => null,  
-                'of_date_sus' => null,  
                 'of_status' => 'pendiente',  
                 'of_observation' => null,  
             ]);
@@ -1414,4 +1413,96 @@ class DocOfController extends Controller
             ], 200);
         }
 
+        public function soliciteOfficeDesignationDate($student_id)
+        {
+            $off = DocOf::where('student_id', $student_id)
+                            ->where('of_name', 'declaracion como apto')
+                            ->first();            
+
+            if(!$off){
+                return response()->json([
+                    'estado' => 'no iniciado',
+                    'message' => 'Este estudiante no fue declarado apto para la sustentación.'
+                ], 404);
+            }
+
+            $res = DocResolution::where('docof_id', $off->_id)
+                            ->where('docres_name', 'declaracion como apto')
+                            ->where('docres_status', 'tramitado')
+                            ->first();
+
+            if(!$res){
+                return response()->json([
+                    'estado' => 'no iniciado',
+                    'message' => 'Este estudiante no fue declarado apto para la sustentación.'
+                ], 404);
+            }
+            
+
+            // Verificar si ya existe una solicitud de jurados
+            if ($off != null && $off->of_name == 'designacion de fecha y hora') {
+                return response()->json([
+                    'estado' => 'pendiente',
+                    'message' => 'Este estudiante ya tiene una solicitud en proceso.'
+                ], 404);
+            }
+
+            
+            // Crear una nueva solicitud
+            $docOf = new DocOf([
+                'student_id' => $student_id,
+                'of_name' => 'designacion de fecha y hora',  
+                'of_num_of' => null,  
+                'of_num_exp' => null,  
+                'of_date_sus' => null,  
+                'of_status' => 'pendiente',  
+                'of_observation' => null,  
+            ]);
+
+            // Guardar el nuevo documento en la base de datos
+            $docOf->save();
+
+            return response()->json([
+                'estado' => $docOf->of_status,
+                'status' => true,
+                'message' => 'Solicitud enviada correctamente',
+            ], 200);
+        }
+
+        public function getOfficeDesignationDate(){
+            // Obtener todas las solicitudes con el nombre 'designacion de fecha y hora'
+            $solicitude_docof = DocOf::where('of_name', 'designacion de fecha y hora')->get();
+
+            // Definir el orden deseado
+            $order = ['pendiente', 'observado', 'tramitado'];
+
+            // Ordenar manualmente las solicitudes por 'of_status'
+            $sortedSolicitudes = $solicitude_docof->sort(function ($a, $b) use ($order) {
+                return array_search($a->of_status, $order) <=> array_search($b->of_status, $order);
+            })->values(); // Para asegurar que se mantenga como una colección indexada.
+
+            // Crear un array para almacenar los resultados finales
+            $result = [];
+
+            // Recorrer cada solicitud ordenada y obtener los datos del estudiante y de la solicitud
+            foreach ($sortedSolicitudes as $solicitude) {
+                // Obtener el estudiante relacionado
+                $student = Student::find($solicitude->student_id);
+                // Obtener la solicitud relacionada
+                $tittle = Solicitude::where('student_id', $solicitude->student_id)->first();
+                
+                // Si los datos existen, agregar al resultado
+                if ($student && $tittle) {
+                    $result[] = [
+                        'oficio_id' => $solicitude->_id,
+                        'nombre' => ucwords(strtolower($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name)),
+                        'titulo' => $tittle->sol_title_inve,
+                        'estado' => $solicitude->of_status,
+                    ];
+                }
+            }
+            return response()->json([
+                $result,
+            ], 200);
+        }
     }
