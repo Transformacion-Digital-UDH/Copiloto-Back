@@ -204,7 +204,7 @@ class GoogleDocumentController extends Controller
         $this->assignDrivePermissions($documentId, $adviserUser->email, 'commenter');
     }
 
-    protected function assignDrivePermissions($documentId, $email, $role)
+    public function assignDrivePermissions($documentId, $email, $role)
     {
         $permission = new Google_Service_Drive_Permission();
         $permission->setType('user');

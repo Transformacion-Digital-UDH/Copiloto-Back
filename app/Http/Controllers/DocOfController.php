@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\DocOfResource;
+use App\Http\Controllers\GoogleDocumentController;
 use App\Models\Adviser;
 use App\Models\DocOf;
 use App\Models\DocResolution;
@@ -10,6 +11,7 @@ use App\Models\History;
 use App\Models\Review;
 use App\Models\Solicitude;
 use App\Models\Student;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -17,6 +19,14 @@ use Illuminate\Support\Facades\Validator;
 
 class DocOfController extends Controller
 {
+    protected $googleDocumentController;
+
+    // Inyección de dependencia para GoogleDocumentController
+    public function __construct(GoogleDocumentController $googleDocumentController)
+    {
+        $this->googleDocumentController = $googleDocumentController;
+    }
+
     public function offPDF($id) {
 
         $office = DocOf::where('_id', $id)->first();
@@ -311,6 +321,14 @@ class DocOfController extends Controller
     }
 
 
+    // Función para asignar permisos a los jurados en el documento de Google Drive
+    protected function assignJuriesPermissions($documentId, $juradoEmails)
+    {
+        foreach ($juradoEmails as $email) {
+            $this->googleDocumentController->assignDrivePermissions($documentId, $email, 'commenter');
+        }
+    }
+
     public function updateSoliciteJuriesForTesis(Request $request, $docof_id)
     {
         // Obtener el registro correspondiente en la base de datos
@@ -416,6 +434,41 @@ class DocOfController extends Controller
                 $secretario->save();
                 $vocal->save();
 
+                // Obtener el enlace del documento desde la tabla solicitude
+                $solicitude = Solicitude::where('_id', $docof->solicitude_id)->first();
+                if ($solicitude && $solicitude->document_link) {
+                    preg_match('/[-\w]{25,}/', $solicitude->document_link, $matches);
+                    $documentId = $matches[0] ?? null;
+
+                    if ($documentId) {
+                        // Obtener correos electrónicos de los jurados
+                        $juradoEmails = [];
+                        $roles = ['presidente', 'secretario', 'vocal'];
+                        foreach ($roles as $rol) {
+                            $adviser = Adviser::find($request->input($rol));
+                            if ($adviser) {
+                                $user = User::find($adviser->user_id);
+                                if ($user) {
+                                    $juradoEmails[] = $user->email;
+                                } else {
+                                    return response()->json(['error' => "El usuario con rol $rol no fue encontrado"], 404);
+                                }
+                            } else {
+                                return response()->json(['error' => "El asesor con rol $rol no fue encontrado"], 404);
+                            }
+                        }
+
+                        // Asignar permisos de comentar a los jurados en el documento
+                        foreach ($juradoEmails as $email) {
+                            $this->googleDocumentController->assignDrivePermissions($documentId, $email, 'commenter');
+                        }
+                    } else {
+                        return response()->json(['error' => 'Document ID no encontrado en el enlace'], 404);
+                    }
+                } else {
+                    return response()->json(['error' => 'Solicitud o enlace de documento no encontrado'], 404);
+                }
+
                 
                 $docof->update([
                     'of_status' => $request->input('estado'),
@@ -423,9 +476,6 @@ class DocOfController extends Controller
                     'of_num_exp' => $request->input('expediente'),
                     'of_observation' => null,
                 ]);
-
-                
-                
 
                 return response()->json([
                     'message' => 'Oficio tramitado',
