@@ -241,12 +241,12 @@ Route::get('/resolucion/ver-aprobacion/informe/{resolution_id}', [DocResolutionC
 Route::get('/resolucion/download-aprobacion/informe/{resolution_id}', [DocResolutionController::class, 'downloadResApproveInforme']);
 
 //Ruta para ver oficio de aprobacion de DECLARAR APTO PARA LA SUSTENTACION ---> ESTUDIANTE, PAISI, FACULTAD
-Route::get('/oficio/ver/declarar-apto/{office_id}', [DocOfController::class, 'viewOfficeDeclareApto']);
-Route::get('/oficio/descargar/declarar-apto/{office_id}', [DocOfController::class, 'downloadOfficeDeclareApto']);
+Route::get('/oficio/ver/declarar-apto/{office_id}', [DocOfController::class, 'viewOfficeDeclareApto']);  // FALTA CONTROLADOR
+Route::get('/oficio/descargar/declarar-apto/{office_id}', [DocOfController::class, 'downloadOfficeDeclareApto']); // FALTA CONTROLADOR
 
 //Ruta para ver resolucion de aprobacion de DECLARAR APTO PARA LA SUSTENTACION ---> ESTUDIANTE, PAISI, FACULTAD
-Route::get('/resolucion/ver/declarar-apto/{resolution_id}', [DocResolutionController::class, 'viewResDeclareApto']);
-Route::get('/resolucion/descargar/declarar-apto/{resolution_id}', [DocResolutionController::class, 'downloadResDeclareApto']);
+Route::get('/resolucion/ver/declarar-apto/{resolution_id}', [DocResolutionController::class, 'viewResDeclareApto']); // FALTA CONTROLADOR
+Route::get('/resolucion/descargar/declarar-apto/{resolution_id}', [DocResolutionController::class, 'downloadResDeclareApto']); // FALTA CONTROLADOR
 
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);

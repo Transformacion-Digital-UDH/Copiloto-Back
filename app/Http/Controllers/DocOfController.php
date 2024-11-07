@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\DocOfResource;
 use App\Models\Adviser;
+use App\Models\Defense;
 use App\Models\DocOf;
 use App\Models\DocResolution;
 use App\Models\History;
@@ -728,7 +729,70 @@ class DocOfController extends Controller
                             'errors' => $validator->errors()
                         ], 400);
                     }
-                    
+                    if ($docof->of_name == 'designacion de fecha y hora'){
+
+                        $rules = [
+                            'fecha' => 'required|string',
+                            'hora' => 'required|string',
+                            'accesitario_id' => 'required|string',
+                        ];
+
+                        $validator = Validator::make($request->all(), $rules);
+
+                        $rev_pres_inf = Review::where('student_id', $docof->student_id)
+                                        ->where('rev_type', 'informe')
+                                        ->where('rev_adviser_rol', 'presidente')
+                                        ->first();
+                        $rev_secr_inf = Review::where('student_id', $docof->student_id)
+                                        ->where('rev_type', 'informe')
+                                        ->where('rev_adviser_rol', 'secretario')
+                                        ->first();
+                        $rev_voca_inf = Review::where('student_id', $docof->student_id)
+                                        ->where('rev_type', 'informe')
+                                        ->where('rev_adviser_rol', 'vocal')
+                                        ->first();
+
+                        $rev_pres_sus =  Review::create([
+                                'student_id' => $docof->student_id,
+                                'adviser_id' => $rev_pres_inf->adviser_id,
+                                'rev_count' => 0,
+                                'rev_status' => 'pendiente',
+                                'rev_type' => 'sustentacion',
+                                'rev_adviser_rol' => $rev_pres_inf->rev_adviser_rol,
+                            ]);
+                        $rev_secr_sus =  Review::create([
+                                'student_id' => $docof->student_id,
+                                'adviser_id' => $rev_secr_inf->adviser_id,
+                                'rev_count' => 0,
+                                'rev_status' => 'pendiente',
+                                'rev_type' => 'sustentacion',
+                                'rev_adviser_rol' => $rev_secr_inf->rev_adviser_rol,
+                            ]);
+                        $rev_voca_sus =  Review::create([
+                                'student_id' => $docof->student_id,
+                                'adviser_id' => $rev_voca_inf->adviser_id,
+                                'rev_count' => 0,
+                                'rev_status' => 'pendiente',
+                                'rev_type' => 'sustentacion',
+                                'rev_adviser_rol' => $rev_voca_inf->rev_adviser_rol,
+                            ]);
+                        $rev_acce_sus =  Review::create([
+                                'student_id' => $docof->student_id,
+                                'adviser_id' => $request->input('accesitario_id'),
+                                'rev_count' => 0,
+                                'rev_status' => 'pendiente',
+                                'rev_type' => 'sustentacion',
+                                'rev_adviser_rol' => 'accesitario',
+                            ]);
+                        $defense = Defense::create([
+                            'student_id' => $docof->student_id,
+                            'def_fecha' => $request->input('fecha'),
+                            'def_hora' => $request->input('hora'),
+                            'def_status' => 'pendiente',
+                        ]);
+
+                    };
+
                     $this->validate($request, $rules);
 
                     $docres =  DocResolution::create([
