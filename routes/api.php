@@ -137,9 +137,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/estudiante/get-certificado-buenas-practicas/{student_id}', [StudentController::class, 'getStateTuCoachUDH']);
     //Ruta para para vista de DECLARAR APTO PARA SUSTENTAR ---> ESTUDIANTE
     Route::get('/estudiante/get-info/declarar-apto/{student_id}', [StudentController::class, 'getInfoDeclareApto']);
-});
     //Ruta para para vista de DESIGNACION DE FECHA Y HORA PARA SUSTENTACION ---> ESTUDIANTE
     Route::get('/estudiante/get-info/desigancion-fecha-hora-sustentacion/{student_id}', [StudentController::class, 'getInfoDesignationDate']);
+});
+    
  
     
 
@@ -177,13 +178,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para listar solicitudes ordenando por estado (PENDIENTE, ACEPTADO, RECHAZADO) por id de asesor    
     Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
     // Ruta para listar jurados y sus revisiones, con rol, estudiante, tiempo transcurrido en dias ---> PAISI
-    Route::get('/juries/get-select', [AdviserController::class, 'getSelectJuriesTesis']); 
+    Route::get('/juries/get-select/{oficio_id}', [AdviserController::class, 'getSelectJuriesTesis']); 
     // Ruta para listar revisiones a asesores jurados ---> ASESOR
     Route::get('/jurado/get-revision-estudiantes/informe/{adviser_id}', [AdviserController::class, 'getReviewInforme']); 
     // Ver revisiones de informe final --->Estudiante
     Route::get('/estudiante/get-revision-jurados/informe/{student_id}', [StudentController::class, 'getReviewJuriesInforme']);
 
 });
+
 
     
 
