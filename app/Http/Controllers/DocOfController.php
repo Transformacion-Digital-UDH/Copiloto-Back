@@ -1693,7 +1693,8 @@ class DocOfController extends Controller
             $res_year = Carbon::parse($resolucion->updated_at)->locale('es')->isoFormat('YYYY');
 
             $def = Defense::where('student_id', $office->student_id)->first() ;
-            $dateString = '2024-11-10';
+
+            $dateString = $def->def_fecha;
             $date = DateTime::createFromFormat('Y-m-d', $dateString);
             // Configura el idioma a español
             setlocale(LC_TIME, 'es_PE.UTF-8', 'es_ES.UTF-8', 'Spanish_Peru.1252', 'Spanish_Spain.1252');

@@ -20,7 +20,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh; /* Centra verticalmente */
+            /* height: 100vh; Centra verticalmente */
             color: #012160;
         }
 
@@ -96,30 +96,49 @@
         <p class="fecha">Huánuco, {{$formattedDate}}</p>
         <div class="parrafo">
             <p>
-                Visto, el Oficio N° {{$num_of}}-{{$year_of}}-CA-PAISI-FI-UDH, mediante el cual el Coordinador Académico de Ingeniería de Sistemas de Informática, 
-                remite el dictamen de los jurados revisores, del Informe Final de Trabajo de investigación (Tesis) intitulado: <strong>“{{$tittle}}”</strong>, 
-                presentado por el (la) Bach. <strong>{{$name_student}}</strong>.
+            Visto, el Expediente N° {{$num_exp}}, presentado por el (la) Bach. <strong>{{$name_student}}</strong>, en la que solicita se 
+            fije la fecha y hora para la Sustentación de 
+            Tesis, para optar el Título Profesional de Ingeniero de Sistemas e Informática; </strong>.
             </p>
             <p><strong>CONSIDERANDO:</strong></p>
-            <p>Que, según mediante Resolución N° 006-2001-R-AU-UDH, de fecha 24 de julio de 2001, se crea la Facultad de Ingeniería, y;</p>
+            <p>Que, de acuerdo a la Nueva Ley Universitaria 30220, Capítulo V, Art 45º inc. 45.2, y 
+            con opinión favorable del Jurado Evaluador, y; </p>
             
-            <p>Que, mediante Resolución de Consejo Directivo N° 076-2019-SUNEDU/CD, de fecha 05 de junio de 2019, otorga la Licencia a la Universidad de 
-                Huánuco para ofrecer el servicio educativo superior universitario, y;</p>
-            <p>Que, mediante Resolución N° {{$num_res_da}}-{{$year_res_da}}-D-FI-UDH, de fecha {{$date_res_da}}, se aprobó el Trabajo de Investigación (Tesis) 
-                y su ejecución, del Bach. <strong>{{$name_student}}</strong></p>
-
-            <p>Que, según Oficio N° {{$num_of}}-{{$year_of}}-CA-PAISI-FI-UDH, del Coordinador Académico quien informa que los 
-                JURADOS REVISORES del Informe Final de Trabajo de Investigación (Tesis) intitulado: <strong>“{{$tittle}}”</strong>, presentado
-                por el (la) Bach. <strong>{{$name_student}}</strong>, integrado por los siguientes docentes: Mg. {{$name_presidente}} (Presidente), Mg. {{$name_secretario}} (Secretario) e 
-                Ing. {{$name_vocal}} (Vocal), quienes declaran APTO para ser ejecutado el proyecto de Tesis, y;</p>
+            <p>Que, para la Sustentación de Tesis, es necesario nombrar un Jurado Evaluador, fijar 
+                hora, lugar y fecha, para dicho Acto Académico y que estará integrada por tres miembros docentes 
+                de la Facultad de Ingeniería, y;  </p>
+            
+            <p>Que, según Oficio N° {{$num_of}}-{{$year_of}}-CA-PAISI-FI-UDH, presentado por el Coordinador 
+                del Programa Académico de Ingeniería de Sistemas e Informática, en el que indica que la fecha y 
+                hora de sustentación será el día {{$def_fecha}} a las {{$def_hora}}, para la Sustentación 
+                de Tesis del Bach. <strong>{{$name_student}}</strong>,  para optar el Título Profesional de 
+                Ingeniero de Sistemas e Informática, y; </p>
                 <p>
-            <p>Estando a las atribuciones conferidas al Decano de la Facultad de Ingeniería y con cargo a dar cuenta en el próximo Consejo de Facultad.</p>
+            <p>Estando a las atribuciones conferidas al Decano de la Facultad de Ingeniería y con 
+            cargo a dar cuenta en el próximo Consejo de Facultad. </p>
             <p><strong>SE RESUELVE:</strong></p>
-            <p><strong style="text-decoration: underline;">Artículo Único</strong><strong>.-. APROBAR,</strong> el Informe Final de Trabajo de Investigación (Tesis) intitulado: 
-                <strong>“{{$tittle}}”</strong>, presentado por el (la) Bach. <strong>{{$name_student}}</strong> para optar el Título Profesional de Ingeniero(a) de Sistemas e Informáticas, 
-                del Programa Académico de Ingeniería de Sistemas e Informática, de la Universidad de Huánuco.</p>
-            <p style="text-align: center"><br><strong>REGÍSTRESE, COMUNÍQUESE Y ARCHÍVESE</strong></p><br>
+            <p><strong style="text-decoration: underline;">Artículo Primero</strong><strong>.- NOMBRAR,</strong>
+             el Jurado Evaluador en la modalidad de 
+                Sustentación de Tesis intitulada: <strong>"{{$tittle}}"</strong>, 
+                para optar el Título Profesional de Ingeniero de Sistemas e Informática, del 
+                Bach. <strong>{{$name_student}}</strong> de, el mismo que está integrado por los siguientes 
+                docentes: </p>
+
+                <ul style="margin-left: 20mm; text-indent: 1mm;">
+                    <li>{{$name_presidente}} - PRESIDENTE</li>
+                    <li>{{$name_secretario}} - SECRETARIO</li>
+                    <li>{{$name_vocal}} - VOCAL</li>
+                </ul>  
+            <p><strong style="text-decoration: underline;">Artículo Segundo</strong><strong>.- DESIGNAR,</strong>
+            como docente accesitario al <strong>Ing. {{$name_adviser}}</strong>, quien asumirá funciones ante cualquier contratiempo que se suscitara con los Jurados 
+            Titulares. </p>
+            <p><strong style="text-decoration: underline;">Artículo Tercero</strong>.- 
+                El Acto de Evaluación se realizará el día {{$def_fecha}} a las {{$def_hora}}, 
+                en el Auditorio de la Universidad, Aula 403-P2 Ciudad Universitaria de la 
+                Esperanza. </p>
         </div>
+
+        <p style="text-align: center"><br><strong>REGÍSTRESE, COMUNÍQUESE Y ARCHÍVESE</strong></p><br>
 
         <div class="firma ">
             <img src="{{ public_path('/img/sello.jpg') }}" alt="Firma 1">
@@ -128,8 +147,8 @@
         <div class="pie">
             <p style="text-decoration: underline;">Distribución:</p>
             <p>
-            Fac. de Ingeniería – PAISI – Exp. Graduando – Interesado - Archivo.<br>
-                BCR/EJML/nto.
+            C PAISI– Jurados (03) - Mat. y Reg. Acad – Exp. Graduando – VRI – Of. Red de Informática – Interesado – Archivo. <br>
+            BLCR/EJML/nto
             </p>
 
 

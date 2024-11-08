@@ -247,8 +247,8 @@ Route::get('/oficio/ver/declarar-apto/{office_id}', [DocOfController::class, 'vi
 Route::get('/oficio/descargar/declarar-apto/{office_id}', [DocOfController::class, 'downloadOfficeDeclareApto']);
 
 //Ruta para ver resolucion de aprobacion de DECLARAR APTO PARA LA SUSTENTACION ---> ESTUDIANTE, PAISI, FACULTAD
-Route::get('/resolucion/ver/declarar-apto/{resolution_id}', [DocResolutionController::class, 'viewResDeclareApto']); // FALTA CONTROLADOR
-Route::get('/resolucion/descargar/declarar-apto/{resolution_id}', [DocResolutionController::class, 'downloadResDeclareApto']); // FALTA CONTROLADOR
+Route::get('/resolucion/ver/declarar-apto/{resolution_id}', [DocResolutionController::class, 'viewResDeclareApto']); 
+Route::get('/resolucion/descargar/declarar-apto/{resolution_id}', [DocResolutionController::class, 'downloadResDeclareApto']); 
 
 //Ruta para ver oficio de aprobacion de DECLARAR APTO PARA LA SUSTENTACION ---> ESTUDIANTE, PAISI, FACULTAD
 Route::get('/oficio/ver/desigancion-fecha-hora-sustentacion/{office_id}', [DocOfController::class, 'viewOfficeDesignationDate']);
