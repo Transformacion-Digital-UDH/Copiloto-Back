@@ -210,6 +210,7 @@ class ReviewController extends Controller
 
         // Agregar los datos de la revisión al array resultante
         $result[] = [
+            'solicitude_id' => $solicitude->_id,
             'review_id' => $review->_id,
             'stu_id' => $student->_id,
             'stu_name' => $studentName,
