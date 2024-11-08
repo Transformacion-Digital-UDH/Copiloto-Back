@@ -178,14 +178,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para listar solicitudes ordenando por estado (PENDIENTE, ACEPTADO, RECHAZADO) por id de asesor    
     Route::get('/adviser/getSolicitude/{adviser_id}', [SolicitudeController::class, 'getSolicitudeToAdviser']); 
     // Ruta para listar jurados y sus revisiones, con rol, estudiante, tiempo transcurrido en dias ---> PAISI
+    Route::get('/juries/get-select/{oficio_id}', [AdviserController::class, 'getSelectJuriesTesis']); 
     // Ruta para listar revisiones a asesores jurados ---> ASESOR
     Route::get('/jurado/get-revision-estudiantes/informe/{adviser_id}', [AdviserController::class, 'getReviewInforme']); 
     // Ver revisiones de informe final --->Estudiante
     Route::get('/estudiante/get-revision-jurados/informe/{student_id}', [StudentController::class, 'getReviewJuriesInforme']);
 
 });
-
-Route::get('/juries/get-select/{oficio_id}', [AdviserController::class, 'getSelectJuriesTesis']); 
 
     
 
