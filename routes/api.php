@@ -243,13 +243,20 @@ Route::get('/resolucion/ver-aprobacion/informe/{resolution_id}', [DocResolutionC
 Route::get('/resolucion/download-aprobacion/informe/{resolution_id}', [DocResolutionController::class, 'downloadResApproveInforme']);
 
 //Ruta para ver oficio de aprobacion de DECLARAR APTO PARA LA SUSTENTACION ---> ESTUDIANTE, PAISI, FACULTAD
-Route::get('/oficio/ver/declarar-apto/{office_id}', [DocOfController::class, 'viewOfficeDeclareApto']);  // FALTA CONTROLADOR
-Route::get('/oficio/descargar/declarar-apto/{office_id}', [DocOfController::class, 'downloadOfficeDeclareApto']); // FALTA CONTROLADOR
+Route::get('/oficio/ver/declarar-apto/{office_id}', [DocOfController::class, 'viewOfficeDeclareApto']);
+Route::get('/oficio/descargar/declarar-apto/{office_id}', [DocOfController::class, 'downloadOfficeDeclareApto']);
 
 //Ruta para ver resolucion de aprobacion de DECLARAR APTO PARA LA SUSTENTACION ---> ESTUDIANTE, PAISI, FACULTAD
 Route::get('/resolucion/ver/declarar-apto/{resolution_id}', [DocResolutionController::class, 'viewResDeclareApto']); // FALTA CONTROLADOR
 Route::get('/resolucion/descargar/declarar-apto/{resolution_id}', [DocResolutionController::class, 'downloadResDeclareApto']); // FALTA CONTROLADOR
 
+//Ruta para ver oficio de aprobacion de DECLARAR APTO PARA LA SUSTENTACION ---> ESTUDIANTE, PAISI, FACULTAD
+Route::get('/oficio/ver/desigancion-fecha-hora-sustentacion/{office_id}', [DocOfController::class, 'viewOfficeDesignationDate']);
+Route::get('/oficio/descargar/desigancion-fecha-hora-sustentacion/{office_id}', [DocOfController::class, 'downloadOfficeDesignationDate']);
+
+//Ruta para ver resolucion de aprobacion de DECLARAR APTO PARA LA SUSTENTACION ---> ESTUDIANTE, PAISI, FACULTAD
+Route::get('/resolucion/ver/desigancion-fecha-hora-sustentacion/{resolution_id}', [DocResolutionController::class, 'viewResDesignationDate']); // FALTA CONTROLADOR
+Route::get('/resolucion/descargar/desigancion-fecha-hora-sustentacion/{resolution_id}', [DocResolutionController::class, 'downloadResDesignationDate']); // FALTA CONTROLADOR
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
 
