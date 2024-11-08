@@ -10,6 +10,7 @@ use App\Models\DocResolution;
 use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\Adviser;
+use App\Models\Defense;
 use App\Models\Review;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -586,35 +587,61 @@ class StudentController extends Controller
         ], 200);
     }
 
-    public function getInfoDesignationDate($student_id){
+    public function getInfoDesignationDate($student_id)
+    {
         $docof = DocOf::where('student_id', $student_id)
                     ->where('of_name', 'designacion de fecha y hora')
                     ->first();
 
-        if (!$docof){
+        // Verificar si existe el registro $docof
+        if (!$docof) {
             return response()->json([
-                'estudiante_id' => $student_id ?? '',
-                'def_fecha_hora' => $def->def_date ?? '',
-                'def_jurado_presidente' => $def_pre ?? '',
-                'def_jurado_secretario' => $def_sec ?? '',
-                'def_jurado_vocal' => $def_voc ?? '',
-                'def_jurado_accesitario' => $def_acc ?? '',
+                'estado' => 'no iniciado',
+                'error' => 'Oficio no encontrado'
+            ], 404);
+        }
+
+        $docres = DocResolution::where('docof_id', $docof->_id)->first();
+
+        if (($docres->docres_status ?? '') !== 'tramitado') {
+            return response()->json([
                 'oficio_id' => $docof->_id ?? '',
                 'oficio_estado' => $docof->of_status ?? '',
                 'resolucion_id' => $docres->_id ?? '',
                 'resolucion_estado' => $docres->docres_status ?? '',
-            ], 200);
-        };
+                'error' => 'Su solicitud está en proceso'
+            ], 400);
+        }
 
-        $docres = DocResolution::where('docof_id', $docof->_id)
-            ->first();
+        $rev_sus = Review::where('student_id', $student_id)
+                    ->where('rev_type', 'sustentacion')
+                    ->get();
+
+        $data = [];
+        foreach ($rev_sus as $rev) {
+            $adviser = Adviser::where('_id', $rev->adviser_id)->first();
+            if ($adviser) {
+                $adv_full_name = strtoupper("{$adviser->adv_name} {$adviser->adv_lastname_m} {$adviser->adv_lastname_f}");
+                $adv_role = $adviser->rev_adviser_rol;
+
+                $data[] = [
+                    'asesor_nombre' => $adv_full_name,
+                    'asesor_rol' => $adv_role,
+                ];
+            }
+        }
+
+        $sus = Defense::where('student_id', $student_id)->first();
 
         return response()->json([
-            'estudiante_id' => $student_id ?? '',
+            'data' => $data,
+            'sus_fecha' => $sus->def_fecha ?? '',
+            'sus_hora' => $sus->def_hora ?? '',
             'oficio_id' => $docof->_id ?? '',
             'oficio_estado' => $docof->of_status ?? '',
             'resolucion_id' => $docres->_id ?? '',
             'resolucion_estado' => $docres->docres_status ?? '',
         ], 200);
     }
+
 }

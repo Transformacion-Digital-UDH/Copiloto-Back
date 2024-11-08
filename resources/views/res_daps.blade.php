@@ -10,7 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Old+Uyghur&display=swap" rel="stylesheet">
     <style>
         @page {
-            size: 215.9mm 385.6mm; /*tamaño normal size: 215.9mm 365.6mm; */ 
+            size: 215.9mm 365.6mm; /*tamaño normal size: 215.9mm 365.6mm; */ 
             margin: 2mm;
         }
 
@@ -96,29 +96,28 @@
         <p class="fecha">Huánuco, {{$formattedDate}}</p>
         <div class="parrafo">
             <p>
-                Visto, el Oficio N° {{$num_of}}-{{$year_of}}-CA-PAISI-FI-UDH, mediante el cual el Coordinador Académico de Ingeniería de Sistemas de Informática, 
-                remite el dictamen de los jurados revisores, del Informe Final de Trabajo de investigación (Tesis) intitulado: <strong>“{{$tittle}}”</strong>, 
-                presentado por el (la) Bach. <strong>{{$name_student}}</strong>.
+                Visto, el Expediente con Registro Virtual N° {{$num_exp}}presentado por
+                el Coordinador del Programa Académico de Ingeniería de Sistemas e Informática, quien informa
+                que el (la) Bach. <strong>{{$name_student}}</strong>,  del Programa Académico de Ingeniería de 
+                Sistemas e Informática, quién solicita se le declare Apto para sustentar el Trabajo de Investigación 
+                (Tesis) para optar el Título Profesional de Ingeniero de Sistemas e Informática. 
             </p>
             <p><strong>CONSIDERANDO:</strong></p>
-            <p>Que, según mediante Resolución N° 006-2001-R-AU-UDH, de fecha 24 de julio de 2001, se crea la Facultad de Ingeniería, y;</p>
+            <p>Que, mediante Resolución Nº 466-2016-R-CU-UDH, de fecha 23 de mayo de 2016, 
+                y el  Art. 37º del Reglamento de Grados y Títulos de la Universidad de Huánuco, se aprueba que el 
+                Bachiller debe ser declarado Apto para Sustentar por Resolución para obtener el título profesional;</p>
             
-            <p>Que, mediante Resolución de Consejo Directivo N° 076-2019-SUNEDU/CD, de fecha 05 de junio de 2019, otorga la Licencia a la Universidad de 
-                Huánuco para ofrecer el servicio educativo superior universitario, y;</p>
-            <p>Que, mediante Resolución N° {{$num_res_da}}-{{$year_res_da}}-D-FI-UDH, de fecha {{$date_res_da}}, se aprobó el Trabajo de Investigación (Tesis) 
-                y su ejecución, del Bach. <strong>{{$name_student}}</strong></p>
-
-            <p>Que, según Oficio N° {{$num_of}}-{{$year_of}}-CA-PAISI-FI-UDH, del Coordinador Académico quien informa que los 
-                JURADOS REVISORES del Informe Final de Trabajo de Investigación (Tesis) intitulado: <strong>“{{$tittle}}”</strong>, presentado
-                por el (la) Bach. <strong>{{$name_student}}</strong>, integrado por los siguientes docentes: Mg. {{$name_presidente}} (Presidente), Mg. {{$name_secretario}} (Secretario) e 
-                Ing. {{$name_vocal}} (Vocal), quienes declaran APTO para ser ejecutado el proyecto de Tesis, y;</p>
-                <p>
-            <p>Estando a las atribuciones conferidas al Decano de la Facultad de Ingeniería y con cargo a dar cuenta en el próximo Consejo de Facultad.</p>
+            <p>Estando a lo expuesto y en uso de las atribuciones conferidas por el Art. 118º del 
+                Estatuto de la Universidad de Huánuco;  </p>
+            
             <p><strong>SE RESUELVE:</strong></p>
-            <p><strong style="text-decoration: underline;">Artículo Único</strong><strong>.-. APROBAR,</strong> el Informe Final de Trabajo de Investigación (Tesis) intitulado: 
-                <strong>“{{$tittle}}”</strong>, presentado por el (la) Bach. <strong>{{$name_student}}</strong> para optar el Título Profesional de Ingeniero(a) de Sistemas e Informáticas, 
-                del Programa Académico de Ingeniería de Sistemas e Informática, de la Universidad de Huánuco.</p>
-            <p style="text-align: center"><br><strong>REGÍSTRESE, COMUNÍQUESE Y ARCHÍVESE</strong></p><br>
+            <p><strong style="text-decoration: underline;">Artículo Único</strong><strong>.- DECLARAR,</strong>
+            al Bachiller en Ingeniería de Sistemas e Informática <strong>Sr. {{$name_student}}</strong>
+            apto para sustentar el Trabajo de Investigación 
+            <strong>(TESIS)</strong> para obtener el Título Profesional de <strong>INGENIERO DE SISTEMAS E INFORMÁTICA.</strong> </p>
+
+            <p style="text-align: center"><br><strong>REGÍSTRESE, COMUNÍQUESE Y ARCHÍVESE</strong></p>
+            <br>
         </div>
 
         <div class="firma ">
@@ -128,8 +127,8 @@
         <div class="pie">
             <p style="text-decoration: underline;">Distribución:</p>
             <p>
-            Fac. de Ingeniería – PAISI – Exp. Graduando – Interesado - Archivo.<br>
-                BCR/EJML/nto.
+            Exp. De Título–  Interesado -  Archivo  <br>
+            BLCR/EJML/nto  
             </p>
 
 
