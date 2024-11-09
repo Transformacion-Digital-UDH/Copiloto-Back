@@ -30,40 +30,41 @@ class AdviserController extends Controller
     }
 
     public function getSelectJuriesTesis($docof_id)
-{
-    $docof = DocOf::where('_id', $docof_id)->first();
-    $student_id = $docof->student_id;
+    {
+        $docof = DocOf::where('_id', $docof_id)->first();
+        $student_id = $docof->student_id;
 
-    // Obtener todos los asesores que tienen 'adv_is_jury' en true
-    $advisers = Adviser::where('adv_is_jury', true)->get();
-    
-    // Obtener los IDs de los asesores
-    $adviser_ids = $advisers->pluck('_id');
-    
-    // Obtener todas las revisiones relacionadas con el `student_id` actual
-    $existing_reviews = Review::whereIn('adviser_id', $adviser_ids)
-                    ->where('student_id', $student_id)
-                    ->get();
+        // Obtener todos los asesores que tienen 'adv_is_jury' en true
+        $advisers = Adviser::where('adv_is_jury', true)->get();
+        
+        // Obtener los IDs de los asesores
+        $adviser_ids = $advisers->pluck('_id');
+        
+        // Obtener todas las revisiones relacionadas con el `student_id` actual
+        $existing_reviews = Review::whereIn('adviser_id', $adviser_ids)
+                        ->where('student_id', $student_id)
+                        ->where('rev_adviser_rol','asesor')
+                        ->get();
 
-    // Filtrar asesores que no tienen ninguna revisión asignada para el estudiante actual
-    $filtered_advisers = $advisers->filter(function($adviser) use ($existing_reviews) {
-        return !$existing_reviews->contains('adviser_id', $adviser->_id);
-    });
+        // Filtrar asesores que no tienen ninguna revisión asignada para el estudiante actual
+        $filtered_advisers = $advisers->filter(function($adviser) use ($existing_reviews) {
+            return !$existing_reviews->contains('adviser_id', $adviser->_id);
+        });
 
-    // Crear un array para almacenar los nombres y IDs de los asesores junto con sus revisiones
-    $adviser_info = $filtered_advisers->map(function($adviser) {
-        return [
-            'asesor' => strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name),
-            'asesor_id' => $adviser->_id,
-            'revisiones' => [] // No hay revisiones para este asesor con el estudiante actual
-        ];
-    });
-    
-    // Retornar los asesores que no tienen revisiones con el `student_id` actual en la respuesta JSON
-    return response()->json([
-        'data' => $adviser_info
-    ], 200); 
-}
+        // Crear un array para almacenar los nombres y IDs de los asesores junto con sus revisiones
+        $adviser_info = $filtered_advisers->map(function($adviser) {
+            return [
+                'asesor' => strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name),
+                'asesor_id' => $adviser->_id,
+                'revisiones' => [] // No hay revisiones para este asesor con el estudiante actual
+            ];
+        });
+        
+        // Retornar los asesores que no tienen revisiones con el `student_id` actual en la respuesta JSON
+        return response()->json([
+            'data' => $adviser_info
+        ], 200); 
+    }
 
 
     

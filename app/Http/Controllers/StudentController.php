@@ -94,20 +94,23 @@ class StudentController extends Controller
             ->where('rev_adviser_rol', '!=', 'asesor')
             ->where('rev_type', 'tesis')
             ->get();  
-        
+    
         // Crear un array para almacenar asesores y roles
-        $jurados = $reviews->map(function($review) {
+        $jurados = [];
+    
+        foreach ($reviews as $review) {
             // Obtener el asesor correspondiente a la revisión
             $adviser = Adviser::where('_id', $review->adviser_id)->first(); // Obtener el asesor
             
             // Verificar si el asesor existe
             $adviser_name = $adviser ? strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name) : 'No disponible';
     
-            return [
+            // Agregar el asesor y su rol al array de jurados
+            $jurados[] = [
                 'asesor' => $adviser_name, // Convertir a mayúsculas
                 'rol' => $review->rev_adviser_rol
             ];
-        });
+        }
     
         // Obtener el documento de oficio
         $docof = DocOf::where('student_id', $student_id)
@@ -133,6 +136,7 @@ class StudentController extends Controller
             'jurados' => $jurados,
         ], 200);
     }
+    
 
     public function getInfoApproveThesis($student_id){
         $docof = DocOf::where('student_id', $student_id)

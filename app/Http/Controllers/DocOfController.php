@@ -316,7 +316,7 @@ class DocOfController extends Controller
     public function updateSoliciteJuriesForTesis(Request $request, $docof_id)
     {
         // Obtener el registro correspondiente en la base de datos
-        $docof = DocOf::where('_id', $docof_id)->first();
+        $docof = DocOf::where('_id', $docof_id)->where('of_status', '!=' ,'tramitado')->first();
 
         if (!$docof) {
             return response()->json(['error' => 'Oficio no encontrado'], 404);
