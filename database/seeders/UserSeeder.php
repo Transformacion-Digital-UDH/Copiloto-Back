@@ -164,7 +164,7 @@ class UserSeeder extends Seeder
                     'adv_lastname_m' => 'fernandez',
                     'adv_lastname_f' => 'panduro',
                     'adv_orcid' => '1231493212314907',
-                    'adv_is_jury' => true,
+                    'adv_is_jury' => false,
                 ]
             ],
             [
@@ -176,7 +176,7 @@ class UserSeeder extends Seeder
                     'adv_lastname_m' => 'HUAPAYA',
                     'adv_lastname_f' => 'CONDORI',
                     'adv_orcid' => '000000249622314907',
-                    'adv_is_jury' => false,
+                    'adv_is_jury' => true,
                 ]
             ],
             [
@@ -188,7 +188,7 @@ class UserSeeder extends Seeder
                     'adv_lastname_m' => 'JARA',
                     'adv_lastname_f' => 'TRUJILLO',
                     'adv_orcid' => '0000002098',
-                    'adv_is_jury' => false,
+                    'adv_is_jury' => true,
                 ]
             ],
             [
@@ -212,7 +212,7 @@ class UserSeeder extends Seeder
                     'adv_lastname_m' => 'CAMPOS',
                     'adv_lastname_f' => 'RIOS',
                     'adv_orcid' => '0000000043',
-                    'adv_is_jury' => false,
+                    'adv_is_jury' => true,
                 ]
             ],
             [
@@ -224,7 +224,7 @@ class UserSeeder extends Seeder
                     'adv_lastname_m' => 'SUAREZ',
                     'adv_lastname_f' => 'PAUCAR',
                     'adv_orcid' => '0000001247',
-                    'adv_is_jury' => false,
+                    'adv_is_jury' => true,
                 ]
             ],
             [
@@ -236,7 +236,7 @@ class UserSeeder extends Seeder
                     'adv_lastname_m' => 'LOPEZ',
                     'adv_lastname_f' => 'DE LA CRUZ',
                     'adv_orcid' => '0000001378',
-                    'adv_is_jury' => false,
+                    'adv_is_jury' => true,
                 ]
             ],
             [
@@ -248,7 +248,7 @@ class UserSeeder extends Seeder
                     'adv_lastname_m' => 'HUAPALLA',
                     'adv_lastname_f' => 'GARCIA',
                     'adv_orcid' => '0000003284',
-                    'adv_is_jury' => false,
+                    'adv_is_jury' => true,
                 ]
             ],
             [
@@ -260,7 +260,7 @@ class UserSeeder extends Seeder
                     'adv_lastname_m' => 'BALDEON',
                     'adv_lastname_f' => 'CANCHAYA',
                     'adv_orcid' => '0000001756',
-                    'adv_is_jury' => false,
+                    'adv_is_jury' => true,
                 ]
             ],
             // con rol jurado
