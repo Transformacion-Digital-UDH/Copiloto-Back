@@ -436,8 +436,9 @@ class DocOfController extends Controller
                 $secretario->save();
                 $vocal->save();
 
+                
                 // Obtener el enlace del documento desde la tabla solicitude
-                $solicitude = Solicitude::where('_id', $docof->solicitude_id)->first();
+                $solicitude = Solicitude::where('student_id', $docof->student_id)->first();
                 if ($solicitude && $solicitude->document_link) {
                     preg_match('/[-\w]{25,}/', $solicitude->document_link, $matches);
                     $documentId = $matches[0] ?? null;
