@@ -153,7 +153,7 @@ class GoogleDocumentController extends Controller
     {
         $templates = [
             'cientifica' => '1772-BG2ADrPsFJxSMNr3rOxjw9VDROeIbtveWPvXp0g',
-            'tecnologica' => 'ID_PLANTILLA_TECNOLOGICA'
+            'tecnologica' => '1SoVMrPlTg0Rswo1qU-vCXMTQSbel0kvtrGQehPPyfyw'
         ];
 
         return isset($templates[$investigationType]) ? $templates[$investigationType] : null;
@@ -204,7 +204,7 @@ class GoogleDocumentController extends Controller
         $this->assignDrivePermissions($documentId, $adviserUser->email, 'commenter');
     }
 
-    protected function assignDrivePermissions($documentId, $email, $role)
+    public function assignDrivePermissions($documentId, $email, $role)
     {
         $permission = new Google_Service_Drive_Permission();
         $permission->setType('user');
