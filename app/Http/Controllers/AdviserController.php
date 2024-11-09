@@ -51,16 +51,38 @@ class AdviserController extends Controller
             return !$existing_reviews->contains('adviser_id', $adviser->_id);
         });
 
-        // Crear un array para almacenar los nombres y IDs de los asesores junto con sus revisiones
-        $adviser_info = $filtered_advisers->map(function($adviser) {
+        $adviser_ids = $filtered_advisers->pluck('_id');
+
+        // Obtener todas las revisiones (reviews) relacionadas con los asesores
+        $reviews = Review::whereIn('adviser_id', $adviser_ids)->get();
+        
+        $adviser_info = $advisers->map(function($adviser) use ($reviews) {
+            // Filtrar revisiones del asesor actual que no tienen 'rev_status' igual a 'aprobado'
+            $adviser_reviews = $reviews->where('adviser_id', $adviser->_id)
+                ->where('rev_status', '!=', 'aprobado');
+    
             return [
                 'asesor' => strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name),
                 'asesor_id' => $adviser->_id,
-                'revisiones' => [] // No hay revisiones para este asesor con el estudiante actual
+                'revisiones' => $adviser_reviews->map(function($review) {
+                    // Calcular cuántos días han pasado desde la fecha de creación hasta hoy
+                    $days_passed = Carbon::parse($review->created_at)->diffInDays(Carbon::now());
+                    
+                    // Obtener el estudiante relacionado
+                    $student = Student::where('_id', $review->student_id)->first(); // Obtener el primer estudiante
+    
+                    // Verificar si el estudiante existe
+                    $student_name = $student ? strtoupper($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name) : 'No disponible';
+    
+                    return [
+                        'rol' => $review->rev_adviser_rol,
+                        'estudiante' => $student_name,
+                        'tiempo_dias' => $days_passed, // Días transcurridos
+                    ];
+                })->values()  // Usar values() para reiniciar los índices
             ];
         });
-        
-        // Retornar los asesores que no tienen revisiones con el `student_id` actual en la respuesta JSON
+
         return response()->json([
             'data' => $adviser_info
         ], 200); 
