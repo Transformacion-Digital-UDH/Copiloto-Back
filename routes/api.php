@@ -185,6 +185,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/estudiante/get-revision-jurados/informe/{student_id}', [StudentController::class, 'getReviewJuriesInforme']);
 
 });
+Route::get('/juries/get-select/{oficio_id}', [AdviserController::class, 'getSelectJuriesTesis']); 
 
     
 
