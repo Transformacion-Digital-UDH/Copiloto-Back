@@ -1465,9 +1465,10 @@ class DocOfController extends Controller
                 ], 404);
             }
             
+            $search = DocOf::where('student_id', $off->student_id)->where('of_name','declaracion como apto')->first();
 
             // Verificar si ya existe una solicitud de jurados
-            if ($off != null && $off->of_name == 'declaracion como apto') {
+            if ($search) {
                 return response()->json([
                     'estado' => 'pendiente',
                     'message' => 'Este estudiante ya tiene una solicitud en proceso.'
