@@ -342,9 +342,11 @@ class DocOfController extends Controller
         
         if ($docof->of_name != 'Solicitud de jurados para revision de tesis') {
             $tipo = 'informe';
+            $name_doc = 'informe_link';
         }
         else{
             $tipo = 'tesis';
+            $name_doc = 'document_link';
         }
 
         $state = $request->input('estado');
@@ -435,46 +437,6 @@ class DocOfController extends Controller
                 $presidente->save();
                 $secretario->save();
                 $vocal->save();
-
-                
-                // Obtener el enlace del documento desde la tabla solicitude
-                $solicitude = Solicitude::where('student_id', $docof->student_id)
-                                        ->where('sol_status', 'aceptado')
-                                        ->first();
-                                        
-                if ($solicitude && $solicitude->document_link) {
-                    preg_match('/[-\w]{25,}/', $solicitude->document_link, $matches);
-                    $documentId = $matches[0] ?? null;
-
-                    if ($documentId) {
-                        // Obtener correos electrónicos de los jurados
-                        $juradoEmails = [];
-                        $roles = ['presidente', 'secretario', 'vocal'];
-                        foreach ($roles as $rol) {
-                            $adviser = Adviser::find($request->input($rol));
-                            if ($adviser) {
-                                $user = User::find($adviser->user_id);
-                                if ($user) {
-                                    $juradoEmails[] = $user->email;
-                                } else {
-                                    return response()->json(['error' => "El usuario con rol $rol no fue encontrado"], 404);
-                                }
-                            } else {
-                                return response()->json(['error' => "El asesor con rol $rol no fue encontrado"], 404);
-                            }
-                        }
-
-                        // Asignar permisos de comentar a los jurados en el documento
-                        foreach ($juradoEmails as $email) {
-                            $this->googleDocumentController->assignDrivePermissions($documentId, $email, 'commenter');
-                        }
-                    } else {
-                        return response()->json(['error' => 'Document ID no encontrado en el enlace'], 404);
-                    }
-                } else {
-                    return response()->json(['error' => 'Solicitud o enlace de documento no encontrado'], 404);
-                }
-
                 
                 $docof->update([
                     'of_status' => $request->input('estado'),
@@ -482,6 +444,44 @@ class DocOfController extends Controller
                     'of_num_exp' => $request->input('expediente'),
                     'of_observation' => null,
                 ]);
+
+                // // Obtener el enlace del documento desde la tabla solicitude
+                // $solicitude = Solicitude::where('student_id', $docof->student_id)
+                //                         ->where('sol_status', 'aceptado')
+                //                         ->first();
+                                        
+                // if ($solicitude && $solicitude->$name_doc) {
+                //     preg_match('/[-\w]{25,}/', $solicitude->$name_doc, $matches);
+                //     $documentId = $matches[0] ?? null;
+
+                //     if ($documentId) {
+                //         // Obtener correos electrónicos de los jurados
+                //         $juradoEmails = [];
+                //         $roles = ['presidente', 'secretario', 'vocal'];
+                //         foreach ($roles as $rol) {
+                //             $adviser = Adviser::find($request->input($rol));
+                //             if ($adviser) {
+                //                 $user = User::find($adviser->user_id);
+                //                 if ($user) {
+                //                     $juradoEmails[] = $user->email;
+                //                 } else {
+                //                     return response()->json(['error' => "El usuario con rol $rol no fue encontrado"], 404);
+                //                 }
+                //             } else {
+                //                 return response()->json(['error' => "El asesor con rol $rol no fue encontrado"], 404);
+                //             }
+                //         }
+
+                //         // Asignar permisos de comentar a los jurados en el documento
+                //         foreach ($juradoEmails as $email) {
+                //             $this->googleDocumentController->assignDrivePermissions($documentId, $email, 'commenter');
+                //         }
+                //     } else {
+                //         return response()->json(['error' => 'Document ID no encontrado en el enlace'], 404);
+                //     }
+                // } else {
+                //     return response()->json(['error' => 'Solicitud o enlace de documento no encontrado'], 404);
+                // }
 
                 return response()->json([
                     'message' => 'Oficio tramitado',

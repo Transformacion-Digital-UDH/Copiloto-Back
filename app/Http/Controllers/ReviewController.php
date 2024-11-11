@@ -401,6 +401,7 @@ class ReviewController extends Controller
                     break;
     
                 case 'aprobado':
+                    
                     $rules['rev_num_of'] = 'required|string'; // Agrega la regla para rev_num_of
                     
                     $this->validate($request, ['rev_num_of' => $rules['rev_num_of']]);
