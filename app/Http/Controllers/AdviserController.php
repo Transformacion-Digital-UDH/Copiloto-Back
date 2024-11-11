@@ -45,6 +45,15 @@ class AdviserController extends Controller
                             ->where('rev_adviser_rol', 'asesor')
                             ->get();
                             
+        if($docof->of_name == 'designacion de fecha y hora'){
+
+            $existing_reviews = Review::where('student_id', $student_id)
+                                    ->whereIn('rev_adviser_rol', ['asesor', 'presidente', 'secretario', 'vocal'])
+                                    ->where('rev_type', 'informe')
+                                    ->get();
+
+        }
+                            
         // Filtrar asesores que no tienen ninguna revisión asignada para el estudiante actual
         $filtered_advisers = [];
         foreach ($advisers as $adviser) {
