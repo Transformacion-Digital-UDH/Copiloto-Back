@@ -626,7 +626,7 @@ class StudentController extends Controller
             $adviser = Adviser::where('_id', $rev->adviser_id)->first();
             if ($adviser) {
                 $adv_full_name = strtoupper("{$adviser->adv_name} {$adviser->adv_lastname_m} {$adviser->adv_lastname_f}");
-                $adv_role = $adviser->rev_adviser_rol;
+                $adv_role = $rev->rev_adviser_rol;
 
                 $data[] = [
                     'asesor_nombre' => $adv_full_name,
