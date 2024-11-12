@@ -1535,38 +1535,39 @@ class DocOfController extends Controller
 
         public function soliciteOfficeDesignationDate($student_id)
         {
-            $off = DocOf::where('student_id', $student_id)
-                            ->where('of_name', 'declaracion como apto')
+            $requisito_off = DocOf::where('student_id', $student_id)
+                                ->where('of_name', 'declaracion como apto')
+                                ->where('of_status', 'tramitado')
+                                ->first();            
+
+            if(!$requisito_off){
+                return response()->json([
+                    'estado' => 'no iniciado',
+                    'message' => 'Faltan requisitos.'
+                ], 404);
+            }
+
+            $requisito_res = DocResolution::where('docof_id', $requisito_off->id)
+                            ->where('docres_status', 'tramitado')
                             ->first();            
 
-            if(!$off){
+            if(!$requisito_res){
                 return response()->json([
                     'estado' => 'no iniciado',
                     'message' => 'Este estudiante no fue declarado apto para la sustentación.'
                 ], 404);
             }
 
-            $res = DocResolution::where('docof_id', $off->_id)
-                            ->where('docres_name', 'declaracion como apto')
-                            ->where('docres_status', 'tramitado')
+            $off_exist = DocOf::where('student_id', $student_id)
+                            ->where('of_name', 'designacion de fecha y hora')
                             ->first();
 
-            if(!$res){
-                return response()->json([
-                    'estado' => 'no iniciado',
-                    'message' => 'Este estudiante no fue declarado apto para la sustentación.'
-                ], 404);
-            }
-            
-
-            // Verificar si ya existe una solicitud de jurados
-            if ($off != null && $off->of_name == 'designacion de fecha y hora') {
+            if($off_exist){
                 return response()->json([
                     'estado' => 'pendiente',
-                    'message' => 'Este estudiante ya tiene una solicitud en proceso.'
+                    'message' => 'Este estudiante tiene una solicitud pendiente.'
                 ], 404);
             }
-
             
             // Crear una nueva solicitud
             $docOf = new DocOf([

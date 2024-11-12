@@ -594,7 +594,7 @@ class StudentController extends Controller
     public function getInfoDesignationDate($student_id)
     {
         $docof = DocOf::where('student_id', $student_id)
-                    ->where('of_name', 'declaracion como apto')
+                    ->where('of_name', 'designacion de fecha y hora')
                     ->first();
 
         // Verificar si existe el registro $docof
@@ -602,16 +602,6 @@ class StudentController extends Controller
             return response()->json([
                 'estado' => 'no iniciado',
                 'error' => 'Oficio no encontrado, faltan requisitos'
-            ], 404);
-        }
-
-        $docof = DocOf::where('student_id', $student_id)
-                        ->where('of_name', 'designacion de fecha y hora')
-                        ->first();
-        if ($docof) {
-            return response()->json([
-                'estado' => 'pendiente',
-                'error' => 'Oficio está en trámite'
             ], 404);
         }
        
