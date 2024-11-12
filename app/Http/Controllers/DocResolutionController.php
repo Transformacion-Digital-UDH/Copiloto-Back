@@ -798,44 +798,48 @@ class DocResolutionController extends Controller
             return response()->json($result);
         }
 
-        public function getResolutionDesignationDate()
-        {
-            $resolutions = DocResolution::where('docres_name', 'designacion de fecha y hora')->get(); // Cambié 'docof_name' a 'docres_name', asumiendo que 'docof_name' es incorrecto.
+    public function getResolutionDesignationDate()
+    {
+        $resolutions = DocResolution::where('docres_name', 'designacion de fecha y hora')->get();
 
-            // Definir el orden deseado
-            $order = ['pendiente', 'observado', 'tramitado'];
+        // Definir el orden deseado
+        $order = ['pendiente', 'observado', 'tramitado'];
 
-            // Ordenar manualmente las solicitudes por 'docres_status' (asumiendo que es el campo correcto)
-            $sorted_resolution = $resolutions->sort(function ($a, $b) use ($order) {
-                return array_search($a->docres_status, $order) <=> array_search($b->docres_status, $order);
-            })->values();
+        // Ordenar manualmente las solicitudes por 'docres_status'
+        $sorted_resolution = $resolutions->sort(function ($a, $b) use ($order) {
+            return array_search($a->docres_status, $order) <=> array_search($b->docres_status, $order);
+        })->values();
 
-            // Crear un array para almacenar los resultados finales
-            $result = [];
+        // Crear un array para almacenar los resultados finales
+        $result = [];
 
-            // Recorrer cada solicitud ordenada y obtener los datos del estudiante y de la solicitud
-            foreach ($sorted_resolution as $resolution) {
-                // Obtener la solicitud relacionada con DocOf
-                $office = DocOf::find($resolution->docof_id); // Cambié 'where' a 'find' para buscar por ID directamente
+        // Recorrer cada solicitud ordenada y obtener los datos del estudiante y de la solicitud
+        foreach ($sorted_resolution as $resolution) {
+            // Obtener la solicitud relacionada con DocOf
+            $office = DocOf::where('_id', $resolution->docof_id)->first();
 
+            // Verificar si $office no es null
+            if ($office) {
                 // Obtener el estudiante relacionado
-                $student = Student::find($office->student_id);
+                $student = Student::where('_id', $office->student_id)->first();
 
                 // Obtener la solicitud relacionada al título del estudiante
-                $tittle = Solicitude::where('student_id', $office->student_id)->first(); // Corrijo para usar 'student_id' de 'office'
+                $tittle = Solicitude::where('student_id', $office->student_id)->first();
 
                 // Agregar los resultados al array final
                 $result[] = [
                     'resolucion_id' => $resolution->_id,
                     'oficio_id' => $office->_id,
                     'nombre' => ucwords(strtolower($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name)),
-                    'titulo' => $tittle->sol_title_inve,
-                    'estado' => $resolution->docres_status, // Cambié 'of_status' a 'docres_status', asumiendo que es el campo correcto
+                    'titulo' => $tittle ? $tittle->sol_title_inve : null,
+                    'estado' => $resolution->docres_status,
                 ];
             }
-
-            return response()->json($result);
         }
+
+        return response()->json($result);
+    }
+
 
         public function viewResDeclareApto($docres_id) {
             $resolution = DocResolution::where('_id', $docres_id)->first();

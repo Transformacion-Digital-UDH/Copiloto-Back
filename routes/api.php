@@ -107,6 +107,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/resolucion/get/desigancion-fecha-hora-sustentacion', [DocResolutionController::class, 'getResolutionDesignationDate']);
 });
 
+
     
 
 
