@@ -82,12 +82,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para para ver oficios de DECLARAR APTO PARA SUSTENTAR con orden --->PAISI
     Route::get('/oficio/get/declarar-apto', [DocOfController::class, 'getOfficeDeclareApto']);
     //Ruta para para crear oficio de DESIGNACION DE FECHA Y HORA con orden --->PAISI
+    Route::get('/oficio/desigancion-fecha-hora-sustentacion/{student_id}', [DocOfController::class, 'soliciteOfficeDesignationDate']);
     //Ruta para para ver oficios de DESIGNACION DE FECHA Y HORA con orden --->PAISI
     Route::get('/oficio/get/desigancion-fecha-hora-sustentacion', [DocOfController::class, 'getOfficeDesignationDate']);
 
 });
     
-Route::get('/oficio/desigancion-fecha-hora-sustentacion/{student_id}', [DocOfController::class, 'soliciteOfficeDesignationDate']);
 
 //RUTAS PARA RESOLUCIONES
 Route::middleware(['auth:sanctum'])->group(function () {   
