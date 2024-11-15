@@ -734,7 +734,7 @@ class DocOfController extends Controller
         public function updateStatusOfficeApproveThesis(Request $request, $docof_id)
         {
             // Obtener el registro correspondiente en la base de datos
-            $docof = DocOf::where('_id', $docof_id)->first();
+            $docof = DocOf::where('_id', $docof_id)->where('of_status', '!=', 'tramitado')->first();
 
             if (!$docof) {
                 return response()->json(['error' => 'Oficio no encontrado'], 404);
@@ -771,12 +771,6 @@ class DocOfController extends Controller
 
                 case 'tramitado':
 
-                    if ($docof->of_status == 'tramitado'){
-                        return response()->json([
-                            'message' => 'oficio ya tramitado',
-                        ], 404);
-                    }
-                    
                     $rules = [
                         'numero_oficio' => 'required|string',
                         'expediente' => 'required|string',
@@ -1243,7 +1237,6 @@ class DocOfController extends Controller
         // Verificar si ya existe una solicitud de "Aprobación de tesis" pendiente
         $existingOffice = DocOf::where('student_id', $student_id)
             ->where('of_name', 'Aprobación de informe')
-            ->where('of_status', 'pendiente') // Añadimos condición de estado "pendiente"
             ->first();
 
         if ($existingOffice) {
