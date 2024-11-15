@@ -77,7 +77,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/oficio/solicitud-aprobar/informe/{student_id}', [DocOfController::class, 'soliciteOfficeApproveInforme']);
     //Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI
     Route::get('/oficio/get-aprobar/informe', [DocOfController::class, 'getOfficeApproveInforme']);
-    //Ruta para solicitar el oficio de designacion de fecha y hora para la sustentacion --->ESTUDANTE
+    //Ruta para solicitar el oficio de DECLARAR APTO PARA SUSTENTAR --->ESTUDANTE
     Route::get('/oficio/declarar-apto/{student_id}', [DocOfController::class, 'soliciteOfficeDeclareApto']);
     //Ruta para para ver oficios de DECLARAR APTO PARA SUSTENTAR con orden --->PAISI
     Route::get('/oficio/get/declarar-apto', [DocOfController::class, 'getOfficeDeclareApto']);
