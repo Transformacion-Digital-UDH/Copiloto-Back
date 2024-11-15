@@ -771,6 +771,12 @@ class DocOfController extends Controller
 
                 case 'tramitado':
 
+                    if ($docof->of_status == 'tramitado'){
+                        return response()->json([
+                            'message' => 'oficio ya tramitado',
+                        ], 404);
+                    }
+                    
                     $rules = [
                         'numero_oficio' => 'required|string',
                         'expediente' => 'required|string',
