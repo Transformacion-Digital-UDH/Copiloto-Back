@@ -140,9 +140,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/estudiante/get-info/declarar-apto/{student_id}', [StudentController::class, 'getInfoDeclareApto']);
     //Ruta para para vista de DESIGNACION DE FECHA Y HORA PARA SUSTENTACION ---> ESTUDIANTE
     Route::get('/estudiante/get-info/desigancion-fecha-hora-sustentacion/{student_id}', [StudentController::class, 'getInfoDesignationDate']);
-});
     //Ruta para para vista de SUSTENTACION ---> ESTUDIANTE
     Route::get('/estudiante/get/resultado-sustentacion/{student_id}', [StudentController::class, 'getInfoDefenseStudent']);
+});
+    
  
     
 
@@ -166,10 +167,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/review/create-revision/informe/{student_id}', [ReviewController::class, 'createReviewInforme']);
     //Ruta para ver todos los estudiantes a espera de revision de informe  ---> ASESOR
     Route::get('/asesor/get-revisiones/informe/{adviser_id}', [ReviewController::class, 'getInfoConfAdviserInforme']);
-});
-
     //Ruta para ver todos los estudiantes a espera de revision de sustentacion  ---> ASESOR
     Route::get('/asesor/get-revisiones/sustentacion/{adviser_id}', [ReviewController::class, 'getInfoDefenseAdviser']);
+});
+
+    
+
+
+   
 
 
 
