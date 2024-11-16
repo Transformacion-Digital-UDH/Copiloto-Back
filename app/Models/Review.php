@@ -21,6 +21,7 @@ class Review extends Model
         "rev_status", // pendiente || aprobado || observado
         "rev_type", //tesis || informe
         "rev_adviser_rol", // asesor, presidente, secretario, vocal
+        "rev_score", // nota cuantitativa
     ];
 
 }
