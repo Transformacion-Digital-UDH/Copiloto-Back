@@ -649,4 +649,24 @@ class StudentController extends Controller
         ], 200);
     }
 
+    public function getInfoDefenseStudent($student_id){
+
+        $sus = Defense::where('student_id', $student_id)->first();
+
+        if(!$sus){
+            return response()->json([
+                'error' => 'este estudiante aun no tiene designacion de fecha y hora',
+                'estado' => 'no iniciado',
+                'status' => false,
+            ], 404);
+        }
+
+        return response()->json([
+            'sus_id' => $sus->_id,
+            'sus_nota' => $sus->def_score,
+            'sus_fecha' => $sus->updated_at,
+            'sus_estado' => $sus->def_status,
+        ], 200);
+    }
+
 }
