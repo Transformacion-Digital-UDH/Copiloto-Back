@@ -372,7 +372,7 @@ class ReviewController extends Controller
         if ($review) {
             // Define las reglas de validación
             $rules = [
-                'rev_status' => 'required|string|in:pendiente,aprobado,observado',
+                'rev_status' => 'required|string|in:pendiente,aprobado,observado,calificar',
                 'rev_num_of' => 'nullable|string',
             ];
     
@@ -452,11 +452,29 @@ class ReviewController extends Controller
                     ], 200);
                     
                     break;
+
+                case 'calificar':
+
+                    $rules['rev_score'] = 'required|string'; // Agrega la regla para rev_num_of
+                    
+                    $this->validate($request, ['rev_score' => $rules['rev_score']]);
+
+                    // Actualiza la revisión
+                    $review->update([
+                        'rev_status' => 'calificado',
+                        'rev_score' => $request->input('rev_score'),
+                    ]);
+
+                    return response()->json([
+                        'estado' => $review->rev_status,
+                        'message' => 'calificado con éxito'
+                    ], 200);
+
+                    break;
     
                 default:
                     return response()->json(['message' => 'Estado no válido.'], 400);
             }
-    
             return response()->json(['message' => 'Estado de la revisión actualizado correctamente.'], 200);
         } else {
             return response()->json(['message' => 'Revisión no encontrada.'], 404);
