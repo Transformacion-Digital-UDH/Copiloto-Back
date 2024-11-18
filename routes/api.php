@@ -14,6 +14,7 @@ use App\Http\Controllers\GoogleDocumentEndController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CommentControllerDocs;
+use App\Http\Controllers\DefenseController;
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
@@ -107,9 +108,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/resolucion/get/desigancion-fecha-hora-sustentacion', [DocResolutionController::class, 'getResolutionDesignationDate']);
 });
 
+//RUTAS PARA SUSTENTACION
+Route::middleware(['auth:sanctum'])->group(function () {   
 
-    
+});
 
+    //Ruta para las resoluciones de solicitud de juados pendientes ---> ASESOR
+    Route::put('/sustentacion/{sustetancion_id}/status', [DefenseController::class, 'updateStatusReview']);
 
 
 
