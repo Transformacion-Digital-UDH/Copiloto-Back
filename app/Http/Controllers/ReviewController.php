@@ -372,7 +372,7 @@ class ReviewController extends Controller
         if ($review) {
             // Define las reglas de validación
             $rules = [
-                'rev_status' => 'required|string|in:pendiente,aprobado,observado,calificar',
+                'rev_status' => 'required|string|in:pendiente,aprobado,observado,calificado',
                 'rev_num_of' => 'nullable|string',
             ];
     
@@ -453,7 +453,7 @@ class ReviewController extends Controller
                     
                     break;
 
-                case 'calificar':
+                case 'calificado':
 
                     $rules['rev_score'] = 'required|string'; // Agrega la regla para rev_num_of
                     

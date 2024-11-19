@@ -114,7 +114,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 });
 
     //Ruta para las resoluciones de solicitud de juados pendientes ---> ASESOR
-    Route::put('/sustentacion/{sustetancion_id}/status', [DefenseController::class, 'updateStatusReview']);
+    Route::put('/sustentacion/{sustetancion_id}/status', [DefenseController::class, 'updateStatusDefense']);
 
 
 
@@ -167,7 +167,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para ver las reviciones pendientes de los jurados con informacion del estudiante ---> ESTUDIANTE
     Route::get('/review/get-review-jury/{student_id}', [ReviewController::class, 'getInfoReviewJuriesByStudent']);
     // Ruta para actualizar los estados por id de revicion ---> ESTUDIANTE - ASESOR
-    Route::put('/review/{review_id}/status', [ReviewController::class, 'updateStatusReviewJuries']);
     //Ruta para crear la revision para el asesor del informe final  ---> ESTUDIANTE
     Route::get('/review/create-revision/informe/{student_id}', [ReviewController::class, 'createReviewInforme']);
     //Ruta para ver todos los estudiantes a espera de revision de informe  ---> ASESOR
@@ -178,6 +177,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     
 
+Route::put('/review/{review_id}/status', [ReviewController::class, 'updateStatusReviewJuries']);
 
    
 
