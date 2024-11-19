@@ -16,7 +16,7 @@ class Defense extends Model
         "student_id",
         "def_fecha",
         "def_hora",
-        "def_status", //pendiente, reprobado, aprobado, emitido
+        "def_status", //pendiente, emitido
         "def_score",
     ];
 }
