@@ -19,7 +19,9 @@ class Adviser extends Model
         'adv_lastname_f',
         'adv_orcid',
         'user_id',
-        'adv_is_jury'
+        'adv_is_jury',
+        'adv_college',
+        'adv_faculty',
     ];
 
     // Relación con el usuario

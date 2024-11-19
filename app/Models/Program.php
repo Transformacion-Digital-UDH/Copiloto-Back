@@ -11,12 +11,16 @@ class Paisi extends Model
     use HasFactory;
     
     protected $connection = 'mongodb';
-    protected $collection = 'paisis'; // Nombre de la colección en MongoDB
+    protected $collection = 'programs'; // Nombre de la colección en MongoDB
     protected $fillable = [
-        'pai_name',
-        'pai_lastname_m',
-        'pai_lastname_f',
+
         'user_id',
+        'pa_rank',
+        'pa_name',
+        'pa_lastname_m',
+        'pa_lastname_f',
+        'pa_faculty',
+
     ];
 
     // Relación con el usuario

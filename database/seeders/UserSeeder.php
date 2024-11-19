@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'adviser' => [
                 'confirm-solicitude'
             ],
-            'paisi' => [
+            'pa' => [
                 'create-link',
                 'confirm-carte',
                 'view-document'
@@ -32,10 +32,12 @@ class UserSeeder extends Seeder
                 'confirm-trade',
                 'view-document'
             ],
-            'jury' => [
-                'confirm-correction',
-                'upload-correction',
-                'make-correction'
+
+            'vri' => [
+
+            ],
+            'turnitin' => [
+
             ]
         ];
 
@@ -54,9 +56,10 @@ class UserSeeder extends Seeder
         $roles = [
             'estudiante' => $permissions['student'],
             'asesor' => $permissions['adviser'],
-            'paisi' => $permissions['paisi'],
+            'pa' => $permissions['pa'],
             'facultad' => $permissions['faculty'],
-            'jurado' => $permissions['jury'],
+            'vri' => $permissions['vri'],
+            'turnitin' => $permissions['turnitin'],
         ];
 
         // crear roles con sus respectivos permisos
@@ -80,6 +83,8 @@ class UserSeeder extends Seeder
                     'stu_lastname_f' => 'forever',
                     'stu_dni' => '27137222',
                     'stu_code' => '2020203012',
+                    'stu_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'stu_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
@@ -92,8 +97,26 @@ class UserSeeder extends Seeder
                     'stu_lastname_f' => 'PACHECO',
                     'stu_dni' => '76370345',
                     'stu_code' => '2018110451',
+                    'stu_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'stu_faculty' => 'INGENIERÍA',
                 ]
             ],
+
+            [
+                'name' => 'JEAN',
+                'email' => '2018210149@udh.edu.pe',
+                'role' => 'estudiante',
+                'role_data' => [
+                    'stu_name' => 'JEAN RICHARD',
+                    'stu_lastname_m' => 'LINO',
+                    'stu_lastname_f' => 'BECERRA',
+                    'stu_dni' => '77417459',
+                    'stu_code' => '2018210149',
+                    'stu_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'stu_faculty' => 'INGENIERÍA',
+                ]
+            ],
+
             [
                 'name' => 'RENZO',
                 'email' => '2018110461@udh.edu.pe',
@@ -104,6 +127,8 @@ class UserSeeder extends Seeder
                     'stu_lastname_f' => 'ESTELA',
                     'stu_dni' => '72269360',
                     'stu_code' => '2018110461',
+                    'stu_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'stu_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
@@ -116,6 +141,8 @@ class UserSeeder extends Seeder
                     'stu_lastname_f' => 'CALDERON',
                     'stu_dni' => '70220442',
                     'stu_code' => '2018110397',
+                    'stu_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'stu_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
@@ -128,6 +155,8 @@ class UserSeeder extends Seeder
                     'stu_lastname_f' => 'MOSCOSO',
                     'stu_dni' => '72938469',
                     'stu_code' => '2020160035',
+                    'stu_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'stu_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
@@ -140,6 +169,8 @@ class UserSeeder extends Seeder
                     'stu_lastname_f' => 'NOEL',
                     'stu_dni' => '77327670',
                     'stu_code' => '2020210311',
+                    'stu_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'stu_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
@@ -152,10 +183,13 @@ class UserSeeder extends Seeder
                     'stu_lastname_f' => 'ROSALES',
                     'stu_dni' => '46695251',
                     'stu_code' => '0200811311',
+                    'stu_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'stu_faculty' => 'INGENIERÍA',
                 ]
             ],
             // con rol asesor
             [
+                'adv_rank' => 'ING.',
                 'name' => 'Asesor',
                 'email' => 'asesor@udh.edu.pe',
                 'role' => 'asesor',
@@ -165,135 +199,210 @@ class UserSeeder extends Seeder
                     'adv_lastname_f' => 'panduro',
                     'adv_orcid' => '1231493212314907',
                     'adv_is_jury' => false,
+                    'adv_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'adv_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
-                'name' => 'DR. FREDDY',
-                'email' => '0000002496@udh.edu.pe',
+                'adv_rank' => 'DR.',
+                'name' => 'FREDDY',
+                'email' => 'freddy.huapaya@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_name' => 'FREDDY RONALD',
                     'adv_lastname_m' => 'HUAPAYA',
                     'adv_lastname_f' => 'CONDORI',
-                    'adv_orcid' => '000000249622314907',
+                    'adv_orcid' => '0000-0003-4783-3803',
                     'adv_is_jury' => true,
+                    'adv_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'adv_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
-                'name' => 'MG. ALBERTO',
-                'email' => '0000002098@udh.edu.pe',
+                'adv_rank' => 'MG.',
+                'name' => 'ALBERTO',
+                'email' => 'alberto.jara@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_name' => 'ALBERTO CARLOS',
                     'adv_lastname_m' => 'JARA',
                     'adv_lastname_f' => 'TRUJILLO',
-                    'adv_orcid' => '0000002098',
+                    'adv_orcid' => '0000-0001-8392-1769',
                     'adv_is_jury' => true,
+                    'adv_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'adv_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
-                'name' => 'MG. ALDO',
-                'email' => '0000003685@udh.edu.pe',
+                'adv_rank' => 'MG.',
+                'name' => 'ALDO',
+                'email' => 'aldo.ramirez@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_name' => 'ALDO ENRIQUE',
                     'adv_lastname_m' => 'RAMIREZ',
                     'adv_lastname_f' => 'CHAUPIS',
-                    'adv_orcid' => '0000003685',
+                    'adv_orcid' => '0009-0006-6249-516X',
                     'adv_is_jury' => false,
+                    'adv_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'adv_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
-                'name' => 'MG. BERTHA',
-                'email' => '0000000043@udh.edu.pe',
+                'adv_rank' => 'MG.',
+                'name' => 'BERTHA',
+                'email' => 'bertha.campos@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_name' => 'BERTHA LUCILA',
                     'adv_lastname_m' => 'CAMPOS',
                     'adv_lastname_f' => 'RIOS',
-                    'adv_orcid' => '0000000043',
+                    'adv_orcid' => '0000-0002-5662-554X',
                     'adv_is_jury' => true,
+                    'adv_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'adv_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
-                'name' => 'MG. CARLOS',
-                'email' => '0000001247@udh.edu.pe',
+                'adv_rank' => 'MG.',
+                'name' => 'CARLOS',
+                'email' => 'carlos.suarez@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_name' => 'CARLOS ENRIQUE',
                     'adv_lastname_m' => 'SUAREZ',
                     'adv_lastname_f' => 'PAUCAR',
-                    'adv_orcid' => '0000001247',
+                    'adv_orcid' => '0000-0001-5123-2088',
                     'adv_is_jury' => true,
+                    'adv_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'adv_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
-                'name' => 'MG. EDGARDO',
-                'email' => '0000001378@udh.edu.pe',
+                'adv_rank' => 'MG.',
+                'name' => 'EDGARDO',
+                'email' => 'edgardo.lopez@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_name' => 'EDGARDO CRISTIAM IVAN',
                     'adv_lastname_m' => 'LOPEZ',
                     'adv_lastname_f' => 'DE LA CRUZ',
-                    'adv_orcid' => '0000001378',
+                    'adv_orcid' => '0000-0001-9815-7708',
                     'adv_is_jury' => true,
+                    'adv_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'adv_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
-                'name' => 'MG. JUAN',
-                'email' => '0000003284@udh.edu.pe',
+                'adv_rank' => 'MG',
+                'name' => 'JUAN',
+                'email' => 'juan.huapalla@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_name' => 'JUAN MANUEL',
                     'adv_lastname_m' => 'HUAPALLA',
                     'adv_lastname_f' => 'GARCIA',
-                    'adv_orcid' => '0000003284',
+                    'adv_orcid' => '0000-0002-2823-3768',
                     'adv_is_jury' => true,
+                    'adv_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'adv_faculty' => 'INGENIERÍA',
                 ]
             ],
             [
-                'name' => 'MG. WALTER',
-                'email' => '0000001756@udh.edu.pe',
+                'adv_rank' => 'MG.',
+                'name' => 'WALTER',
+                'email' => 'walter.baldeon@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_name' => 'WALTER TEOFILO',
                     'adv_lastname_m' => 'BALDEON',
                     'adv_lastname_f' => 'CANCHAYA',
-                    'adv_orcid' => '0000001756',
+                    'adv_orcid' => '0000-0002-4270-073X',
                     'adv_is_jury' => true,
+                    'adv_college' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'adv_faculty' => 'INGENIERÍA',
                 ]
             ],
-            // con rol jurado
-            [
-                'name' => 'Jurado',
-                'email' => 'jurado@udh.edu.pe',
-                'role' => 'jurado',
-                'role_data' => [
-                    'adv_name' => 'jurado',
-                    'adv_lastname_m' => 'marcos',
-                    'adv_lastname_f' => 'antonio',
-                    'adv_orcid' => '1231493212314907',
-                    'adv_is_jury' => true,
-                ]
-            ],
+         
             // con rol paisi
             [
-                'name' => 'PAISI',
-                'email' => 'paisi@udh.edu.pe',
-                'role' => 'paisi',
+                'name' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                'email' => 'programa.sistemas@udh.edu.pe',
+                'role' => 'pa',
                 'role_data' => [
-                    'pai_name' => 'Lorena',
-                    'pai_lastname_m' => 'Ramirez',
-                    'pai_lastname_f' => 'Flores',
+                    'pa_rank' => 'ING.',
+                    'pa_name' => 'PAOLO',
+                    'pa_lastname_m' => 'SOLIS',
+                    'pa_lastname_f' => 'JARA',
+                    'pa_faculty' => 'INGENIERÍA',
                 ]
             ],
+
+            [
+                'name' => 'INGENIERÍA CIVIL',
+                'email' => 'programa.civil@udh.edu.pe',
+                'role' => 'pa',
+                'role_data' => [
+                    'pa_rank' => 'ING.',
+                    'pa_name' => 'ERIKA',
+                    'pa_lastname_m' => 'ARRATEA',
+                    'pa_lastname_f' => 'SALVADOR',
+                ]
+            ],
+
+            [
+                'name' => 'ARQUITECTURA',
+                'email' => 'programa.arquitectura@udh.edu.pe',
+                'role' => 'pa',
+                'role_data' => [
+                    'pa_rank' => 'ARQ.',
+                    'pa_name' => 'ALBERTO',
+                    'pa_lastname_m' => 'JARA',
+                    'pa_lastname_f' => 'TRUJILLO',
+                ]
+            ],
+
             // con rol facultad
             [
-                'name' => 'FACULTAD',
-                'email' => 'facultad@udh.edu.pe',
+                'name' => 'INGENIERÍA',
+                'email' => 'facultad.ingenieria@udh.edu.pe',
                 'role' => 'facultad',
+                'role_data' => [
+                    'pa_rank' => 'MG.',
+                    'pa_name' => 'BERTHA LUCILA',
+                    'pa_lastname_m' => 'CAMPOS',
+                    'pa_lastname_f' => 'RIOS',
+                ]
+            ],
+
+            [
+                'name' => 'CIENCIAS DE LA SALUD',
+                'email' => 'facultad.salud@udh.edu.pe',
+                'role' => 'facultad',
+                'role_data' => [
+                    'pa_rank' => 'DRA.',
+                    'pa_name' => 'JULIA',
+                    'pa_lastname_m' => 'PALACIOS',
+                    'pa_lastname_f' => 'SANCHEZ',
+                ]
+            ],
+
+            // con rol vri
+            [
+                'name' => 'VICERRECTORADO DE INVESTIGACIÓN',
+                'email' => 'vri@udh.edu.pe',
+                'role' => 'vri',
+                'role_data' => []
+            ],
+
+            // con rol turnitin
+            [
+                'name' => 'TURNITIN',
+                'email' => 'turnitin@udh.edu.pe',
+                'role' => 'turnitin',
                 'role_data' => []
             ]
+            
         ];
 
         // Crear todos los usuarios en un solo batch insert
@@ -334,19 +443,33 @@ class UserSeeder extends Seeder
                         // Otros campos específicos de la tabla `asesors`
                     ]);
                     break;
-                case 'paisi':
-                    \DB::table('paisis')->insert([
+                case 'pa':
+                    \DB::table('programs')->insert([
                         'user_id' => $createdUser->_id,
-                        'pai_name' => $user['role_data']['pai_name'],
-                        'pai_lastname_m' => $user['role_data']['pai_lastname_m'],
-                        'pai_lastname_f' => $user['role_data']['pai_lastname_f'],
-                        // Otros campos específicos de la tabla `paisis`
+                        'pa_name' => $user['role_data']['pa_name'],
+                        'pa_lastname_m' => $user['role_data']['pa_lastname_m'],
+                        'pa_lastname_f' => $user['role_data']['pa_lastname_f'],
+                        // Otros campos específicos de la tabla `pasis`
                     ]);
                     break;
+
                 case 'facultad':
                     \DB::table('faculties')->insert([
                         'user_id' => $createdUser->_id,
                     ]);
+                    break;
+
+                case 'vri':
+                    \DB::table('vri')->insert([
+                        'user_id' => $createdUser->_id,
+                    ]);
+                    break;
+
+                case 'turnitin':
+                    \DB::table('turnitin')->insert([
+                        'user_id' => $createdUser->_id,
+                    ]);
+
                     break;
             }
         }
