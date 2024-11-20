@@ -13,12 +13,12 @@ class Adviser extends Model
     protected $connection = 'mongodb';
     protected $collection = 'advisers'; // Nombre de la colección en MongoDB
     protected $fillable = [
+        'user_id',
         'adv_rank',
         'adv_name',
         'adv_lastname_m',
         'adv_lastname_f',
         'adv_orcid',
-        'user_id',
         'adv_is_jury',
         'adv_college',
         'adv_faculty',

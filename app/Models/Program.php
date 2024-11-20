@@ -19,6 +19,7 @@ class Paisi extends Model
         'pa_name',
         'pa_lastname_m',
         'pa_lastname_f',
+        'pa_program',
         'pa_faculty',
 
     ];
