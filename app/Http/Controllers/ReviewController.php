@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Adviser;
+use App\Models\Defense;
 use App\Models\DocOf;
 use App\Models\DocResolution;
 use App\Models\HistoryReview;
@@ -587,7 +588,6 @@ class ReviewController extends Controller
                             ->where('rev_type', 'sustentacion')
                             ->get();
     
-    
         // Mapear los resultados asignando prioridad al estado usando sortBy
         $sortedReviews = $reviews->sortBy(function ($review) {
             switch ($review->rev_status) {
@@ -609,7 +609,7 @@ class ReviewController extends Controller
             // Obtener la solicitud y el estudiante relacionado a la revisión actual
             $solicitude = Solicitude::where('student_id', $review->student_id)->first();
             $student = Student::where('_id', $review->student_id)->first();
-    
+            $defense = Defense::where('student_id',$student->_id)->first();
             // Manejar casos donde el estudiante no exista
             if (!$student) {
                 continue;
@@ -628,6 +628,7 @@ class ReviewController extends Controller
                 'link_informe' => $solicitude->informe_link,
                 'actualizado' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
                 'rol' => $review->rev_adviser_rol,
+                'sustentacion' => $defense->_id,
             ];
         }
     
