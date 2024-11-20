@@ -267,8 +267,12 @@ Route::get('/oficio/ver/desigancion-fecha-hora-sustentacion/{office_id}', [DocOf
 Route::get('/oficio/descargar/desigancion-fecha-hora-sustentacion/{office_id}', [DocOfController::class, 'downloadOfficeDesignationDate']);
 
 //Ruta para ver resolucion de aprobacion de DECLARAR APTO PARA LA SUSTENTACION ---> ESTUDIANTE, PAISI, FACULTAD
-Route::get('/resolucion/ver/desigancion-fecha-hora-sustentacion/{resolution_id}', [DocResolutionController::class, 'viewResDesignationDate']); // FALTA CONTROLADOR
-Route::get('/resolucion/descargar/desigancion-fecha-hora-sustentacion/{resolution_id}', [DocResolutionController::class, 'downloadResDesignationDate']); // FALTA CONTROLADOR
+Route::get('/resolucion/ver/desigancion-fecha-hora-sustentacion/{resolution_id}', [DocResolutionController::class, 'viewResDesignationDate']);
+Route::get('/resolucion/descargar/desigancion-fecha-hora-sustentacion/{resolution_id}', [DocResolutionController::class, 'downloadResDesignationDate']);
+
+Route::get('/sustentacion/ver-acta/{sustentacion_id}', [DocResolutionController::class, 'viewResDesignationDate']);
+Route::get('/sustentacion/descargar-acta/{sustentacion_id}', [DocResolutionController::class, 'downloadResDesignationDate']);
+
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
 

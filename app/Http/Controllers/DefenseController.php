@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Defense;
 use App\Models\Review;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 
 class DefenseController extends Controller
@@ -124,5 +125,16 @@ class DefenseController extends Controller
                     return response()->json(['message' => 'Estado no válido.'], 400);
             }
     }
+
+    public function viewActDefense($defense_id) {
+
+        
+    
+        // Pasar los datos a la vista
+        $pdf = Pdf::loadView('sus_', compact('siglas', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year'));
+    
+        return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
+    }
+
 }  
 
