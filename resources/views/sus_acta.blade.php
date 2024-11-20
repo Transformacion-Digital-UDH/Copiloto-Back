@@ -121,8 +121,10 @@
             <li>vocal</li>
         </ul>      
 
-        <p>Nombrados mediante la Resolusión</p>
-        <p style="text-indent: 30px;">De mi consideración:</p>
+        <p>Nombrados mediante la Resolución Nº 0471-2024-D-FI-UDH para evaluar la Tesis intitulada: “AUDITORIA” Presentado por el (la) Bach: EVARISTO, para optar el Título Profesional de 
+            Ingeniero(a) de Sistemas e Informática. </p>
+        <p>Dicho acto de sustentación se desarrolló en dos etapas: exposición y absolución de preguntas: procediéndose luego a la evaluación por parte de los 
+            miembros del Jurado.</p>
         <p style="text-indent: 30px;">Por medio del presente me dirijo a Usted, para saludarla cordialmente y a la vez remitirle el Expediente
              <strong>N° {{$num_exp}}</strong> del Bachiller: <strong>{{$student}}</strong>, quien solicita <strong>Aprobación del informe Final del Trabajo de Investigación Tesis.</strong> </p>
         
