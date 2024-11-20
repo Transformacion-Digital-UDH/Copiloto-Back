@@ -270,8 +270,8 @@ Route::get('/oficio/descargar/desigancion-fecha-hora-sustentacion/{office_id}', 
 Route::get('/resolucion/ver/desigancion-fecha-hora-sustentacion/{resolution_id}', [DocResolutionController::class, 'viewResDesignationDate']);
 Route::get('/resolucion/descargar/desigancion-fecha-hora-sustentacion/{resolution_id}', [DocResolutionController::class, 'downloadResDesignationDate']);
 
-Route::get('/sustentacion/ver-acta/{sustentacion_id}', [DocResolutionController::class, 'viewResDesignationDate']);
-Route::get('/sustentacion/descargar-acta/{sustentacion_id}', [DocResolutionController::class, 'downloadResDesignationDate']);
+Route::get('/sustentacion/ver-acta/{sustentacion_id}', [DefenseController::class, 'viewActDefense']);
+Route::get('/sustentacion/descargar-acta/{sustentacion_id}', [DefenseController::class, 'downloadActDefense']);
 
 
 Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);

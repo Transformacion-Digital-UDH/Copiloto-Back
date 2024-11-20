@@ -111,13 +111,17 @@
     </div>
 
     <div class="content">
-        <p><strong>SEÑOR (A): <br>
-            MG. BERTHA LUCILA CAMPOS RIOS <br>
-            DECANA (E) DE LA FACULTAD DE INGENIERÍA <br>
-            UNIVERSIDAD DE HUÁNUCO</strong></p>
-            
+        <p>En la ciudad de Huánuco, siendo las 17:00 horas del dia viernes 08 del mes de marzo del año 2024, se lleva a cabo la sustentación presencial en cumpliento 
+            de lo señalado en el Reglamento de Grados y Títulos de la Universidad de Huánuco, quienes se reunieron los <strong>Jurados Calificadores</strong> integrado por los Docente:
+        </p>
 
-        <p><strong>Presente.</strong></p>
+        <ul style="margin-left: 20mm;">
+            <li>presi</li>
+            <li>secre</li>
+            <li>vocal</li>
+        </ul>      
+
+        <p>Nombrados mediante la Resolusión</p>
         <p style="text-indent: 30px;">De mi consideración:</p>
         <p style="text-indent: 30px;">Por medio del presente me dirijo a Usted, para saludarla cordialmente y a la vez remitirle el Expediente
              <strong>N° {{$num_exp}}</strong> del Bachiller: <strong>{{$student}}</strong>, quien solicita <strong>Aprobación del informe Final del Trabajo de Investigación Tesis.</strong> </p>
