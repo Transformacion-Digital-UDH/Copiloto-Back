@@ -625,7 +625,7 @@ class ReviewController extends Controller
                 'estudiante_nombre' => $studentName,
                 'titulo' => $solicitude ? $solicitude->sol_title_inve : 'No title', // Maneja si no hay solicitud
                 'revision_estado' => $review->rev_status,
-                'link-informe' => $solicitude->informe_link,
+                'link_informe' => $solicitude->informe_link,
                 'actualizado' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
                 'rol' => $review->rev_adviser_rol,
             ];
