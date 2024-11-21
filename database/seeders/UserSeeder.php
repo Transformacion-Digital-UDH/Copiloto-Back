@@ -464,7 +464,7 @@ class UserSeeder extends Seeder
                     ]);
                     break;
                 case 'pa':
-                    \DB::table('programs')->insert([
+                    \DB::table('paisis')->insert([
                         'user_id' => $createdUser->_id,
                         'pa_rank' => $user['role_data']['pa_rank'],
                         'pa_name' => $user['role_data']['pa_name'],
