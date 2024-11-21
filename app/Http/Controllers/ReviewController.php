@@ -593,12 +593,10 @@ class ReviewController extends Controller
             switch ($review->rev_status) {
                 case 'pendiente':
                     return 1;
-                case 'observado':
+                case 'calificado':
                     return 2;
-                case 'aprobado':
-                    return 3;
                 default:
-                    return 4;  // Si hay un estado no esperado
+                    return 3;  // Si hay un estado no esperado
             }
         });
     
@@ -609,7 +607,8 @@ class ReviewController extends Controller
             // Obtener la solicitud y el estudiante relacionado a la revisión actual
             $solicitude = Solicitude::where('student_id', $review->student_id)->first();
             $student = Student::where('_id', $review->student_id)->first();
-            $defense = Defense::where('student_id',$student->_id)->first();
+            $defense = Defense::where('student_id',$review->student_id)->first();
+
             // Manejar casos donde el estudiante no exista
             if (!$student) {
                 continue;
@@ -628,7 +627,8 @@ class ReviewController extends Controller
                 'link_informe' => $solicitude->informe_link,
                 'actualizado' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
                 'rol' => $review->rev_adviser_rol,
-                'sustentacion' => $defense->_id,
+                'sustentacion' => $defense->_id ?? '',
+                'sustentacion_estado' => $defense->def_status ?? '',
             ];
         }
     
