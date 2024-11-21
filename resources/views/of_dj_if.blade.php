@@ -30,7 +30,7 @@
         .cabecera img {
             max-width: 100%; /* Asegúrate de que la imagen no desborde */
             height: auto; /* Mantiene la proporción de la imagen */
-            margin-left: -90px;
+            margin-left: -80px;
         }
         .fecha{
             text-align: right;

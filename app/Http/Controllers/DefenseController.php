@@ -128,8 +128,9 @@ class DefenseController extends Controller
 
     public function viewActDefense($defense_id) {
     
+        $a = 'a';
         // Pasar los datos a la vista
-        $pdf = Pdf::loadView('sus_', compact(''));
+        $pdf = Pdf::loadView('sus_acta', compact('a'));
     
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
     }

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Oficio N° {{$office->of_num_of}}-{{$year}}-CA-PAISI-FI-UDH</title>
+    <title>ACTA DE SUSTENTACION</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,68 +32,31 @@
         .cabecera img {
             max-width: 100%;
             /* Asegúrate de que la imagen no desborde */
-            height: auto;
             /* Mantiene la proporción de la imagen */
-            margin-left: -90px;
-        }
-
-        .firma {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            width: 200px;
-            height: 200px;
-        }
-
-        .firma img {
-            max-width: 100%;
-            /* Asegúrate de que la imagen no desborde */
-            height: auto;
-            /* Mantiene la proporción de la imagen */
-            margin-left: 220px;
-            margin-top: -10px;
-        }
-
-        .data-oficio {
-            text-align: left;
-            text-decoration: underline;
+            margin-left: -80px;
+            margin-top: -50px;
         }
 
         .content {
             text-align: justify;
             line-height: 5mm;
+            text-indent: 20mm;
         }
 
-        .titulo-tesis {
-            text-indent: 40px;
-            text-align: justify;
-            line-height: 5mm;
-            margin-left: 7mm;
-        }
 
-        .estudiante {
-            text-indent: 40px;
-            text-align: justify;
-            line-height: 5mm;
-            margin-left: 7mm;
-        }
-
-        .header {
+        .tittle {
             text-align: center;
+            font-weight: bold;
+            font-size: 20px;
         }
 
         .signature {
             margin-top: -50px;
             text-align: center;
         }
-
-        .fecha-hoy {
-            margin-top: auto;
-            text-align: right;
-        }
-        .pie{
-            text-align: left;
-            font-size: 11px;
+        .spam{
+            text-align: center;
+            font-size: 10px;
         }
     </style>
 </head>
@@ -103,67 +66,55 @@
         <img src="{{ public_path('/img/portada.jpg') }}" alt="Cabecera Programa Académico Ingeniería de Sistemas">
     </div>
 
-    <div class="header">
-        <p class="fecha-hoy">
-            Huánuco, {{ $formattedDate }}
-        </p>
-        <p class="data-oficio"><strong>OFICIO N° {{$office->of_num_of}}-{{$year}}-CA-PAISI-FI-UDH</strong></p>
+    <div class="tittle">
+        <p>ACTA DE SUSTENTACIÓN DE TESIS PARA OPTAR EL TÍTULO PROFESIONAL DE INGENIERO(A) DE SISTEMAS E INFORMÁTICA</p>
     </div>
 
     <div class="content">
-        <p>En la ciudad de Huánuco, siendo las 17:00 horas del dia viernes 08 del mes de marzo del año 2024, se lleva a cabo la sustentación presencial en cumpliento 
+        <p>En la ciudad de Huánuco, siendo las 17:00 horas del dia viernes 08 del mes de marzo del año 2024, se lleva a cabo la sustentación presencial en cumpliento
             de lo señalado en el Reglamento de Grados y Títulos de la Universidad de Huánuco, quienes se reunieron los <strong>Jurados Calificadores</strong> integrado por los Docente:
         </p>
+    </div>
 
-        <ul style="margin-left: 20mm;">
-            <li>presi</li>
-            <li>secre</li>
-            <li>vocal</li>
-        </ul>      
+    <ul style="margin-left: 20mm;">
+        <li>presi</li>
+        <li>secre</li>
+        <li>vocal</li>
+    </ul>
 
-        <p>Nombrados mediante la Resolución Nº 0471-2024-D-FI-UDH para evaluar la Tesis intitulada: “AUDITORIA” Presentado por el (la) Bach: EVARISTO, para optar el Título Profesional de 
+    <div class="content">
+        <p>Nombrados mediante la Resolución Nº 0471-2024-D-FI-UDH para evaluar la Tesis intitulada: <strong>“AUDITORIA”</strong> 
+        Presentado por el (la) Bach: <strong>EVARISTO</strong>, para optar el Título Profesional de
             Ingeniero(a) de Sistemas e Informática. </p>
-        <p>Dicho acto de sustentación se desarrolló en dos etapas: exposición y absolución de preguntas: procediéndose luego a la evaluación por parte de los 
+        <p>Dicho acto de sustentación se desarrolló en dos etapas: exposición y absolución de preguntas: procediéndose luego a la evaluación por parte de los
             miembros del Jurado.</p>
-        <p style="text-indent: 30px;">Por medio del presente me dirijo a Usted, para saludarla cordialmente y a la vez remitirle el Expediente
-             <strong>N° {{$num_exp}}</strong> del Bachiller: <strong>{{$student}}</strong>, quien solicita <strong>Aprobación del informe Final del Trabajo de Investigación Tesis.</strong> </p>
-        
-        <p style="text-indent: 30px;">Se pone en conocimiento que, mediante <strong> RESOLUCIÓN N° {{$num_res}}-{{$res_year}}-D-FI-UDH</strong> de fecha {{$res_date}}, se aprobó el trabajo de investigación y su ejecución del Bachiller <strong>{{$student}}</strong>
-         Así mismo el informe final del trabajo de investigación (Tesis) titulado: “<strong>{{$tittle}}</strong>” 
-         Fue revisado por los siguientes <strong>JURADOS REVISORES:</strong></p>
-         <ul style="margin-left: 20mm;">
-            <li>{{$presidente}}</li>
-            <li>{{$secretario}}</li>
-            <li>{{$vocal}}</li>
-        </ul>      
-        <p style="text-indent: 30px;">Dichos jurados revisores declararon <strong>APTO</strong> para la sustentación. Por lo que se remite a su despacho para su conocimiento y fines pertinentes </p>
-        <ul><strong style="text-indent: 30px;">Adjunto:</strong></ul>
-        <ul style="margin-left: 20mm; list-style-type: disc;">
-            <li>Informes de conformidad de los Jurados Revisores del Trabajo de Investigación de Tesis.</li>
-            <li>Trabajo de Investigación de Tesis digitalizado en formato PDF</li>
-            <li>Informe de Conformidad del Docente Asesor</li>
-        </ul>
 
-        <p style="text-indent: 30px;">Sin otro particular, me despido recordándole las muestras de mi especial consideración y estima personal.</p>
-        <p style="text-align: center;">Atentamente,</p>
+        <p>Habiendo absuelto las objeciones que le fueron formuladas por los miembros del Jurado de conformidad con las respectivas disposiciones 
+            reglamentarias procedieron a deliberar y calificar,
+            declarándolo(a) <strong>APROBADO</strong> por <strong>UNANIMIDAD</strong> con el calificativo cuantitativo de <strong>12</strong> 
+            y cualitativo de <strong>SUFICIENTE</strong> según el (Art.47).</p>
+        <p>Siendo las <strong>18:44</strong> horas del día 08 del mes de marzo del año 2024, los miembros del Jurado Calificador firman la presente Acta en señal de conformidad.</p>
     </div>
 
-    <div class="firma">
-        <img src="{{ public_path('/img/firma.jpg') }}" alt="Cabecera Programa Académico Ingeniería de Sistemas">
-    </div>
-    <div class="signature">
+    <table style="width: 100%; border-collapse: collapse; text-align: center;">
+        <tr>
+            <td>
+                <img src="{{ public_path('/img/firma.jpg') }}" alt="Firma 1" style="width: 200px; height: 200px; object-fit: cover; margin-top: -20px"><br>
+                <span class="spam">Nombre<br>Orcid<br>DNI<br>rol</span>
+            </td>
+            <td>
+                <img src="{{ public_path('/img/firma.jpg') }}" alt="Firma 2" style="width: 200px; height: 200px; object-fit: cover; margin-top: -20px"><br>
+                <span class="spam">Nombre<br>Orcid<br>DNI<br>rol</span>
+            </td>
+        </tr>
+        <tr>
+            <td colspan="2"text-align: center;">
+                <img src="{{ public_path('/img/firma.jpg') }}" alt="Firma 3" style="width: 200px; height: 200px; object-fit: cover; margin-top: -20px"><br>
+                <span class="spam">Nombre<br>Orcid<br>DNI<br>rol</span>
+            </td>
+        </tr>
+    </table>
 
-        <p><strong>
-                Ing. Paolo E. Solís Jara <br>
-            </strong>Coordinador Académico</p>
-    </div>
-    
-    <div class="pie">
-            <p>
-                c.c. <br>
-                Archivo <br>
-                PESJ/dnmr <br>
-            </p>
-        </div>
 </body>
+
 </html>
