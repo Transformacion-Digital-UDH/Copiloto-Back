@@ -61,8 +61,8 @@ class FilterController extends Controller
 
         // Guardar el nuevo documento en la base de datos
         return response()->json([
-            'mensaje' => 'Aprobación de informe creada correctamente',
-            'estado' => $office->of_status,
+            'mensaje' => 'Revision en Primer filtro',
+            'estado' => $filter->fil_status,
         ], 200);
     }
 }

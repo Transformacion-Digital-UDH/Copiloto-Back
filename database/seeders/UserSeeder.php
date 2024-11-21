@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'adviser' => [
                 'confirm-solicitude'
             ],
-            'pa' => [
+            'paisi' => [
                 'create-link',
                 'confirm-carte',
                 'view-document'
@@ -379,7 +379,7 @@ class UserSeeder extends Seeder
             // con rol facultad
             [
                 'name' => 'INGENIERÍA',
-                'email' => 'facultad.ingenieria@udh.edu.pe',
+                'email' => 'facultad@udh.edu.pe',
                 'role' => 'facultad',
                 'role_data' => [
                     'fa_rank' => 'MG.',
