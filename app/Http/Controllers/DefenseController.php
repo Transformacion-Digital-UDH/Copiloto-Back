@@ -230,5 +230,102 @@ class DefenseController extends Controller
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF
     }
 
+    public function downloadActDefense($defense_id) {
+    
+        $sus = Defense::where('_id', $defense_id)->first();
+
+        if (!$sus) {
+            return response()->json(['error' => 'Defense record not found'], 404);
+        }
+
+        setlocale(LC_TIME, 'es_ES.UTF-8', 'es_ES', 'Spanish_Spain', 'es');
+        $sus_dia= utf8_encode(strftime('%A', strtotime($sus->def_fecha)));
+        // Formatear la fecha y hora
+        $sus_ini = 'siendo las ' . $sus->def_hora . ' del día ' . $sus_dia . strftime(' %d del mes de %B del año %Y', strtotime($sus->def_fecha));
+
+
+        $student = Student::where('_id', $sus->student_id)->first();
+        $student_name = strtoupper($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name);
+
+
+        $revision_presidente = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'presidente')->where('rev_type', 'sustentacion')->first();
+        $revision_secretario = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'secretario')->where('rev_type', 'sustentacion')->first();
+        $revision_vocal = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'vocal')->where('rev_type', 'sustentacion')->first();
+        $revision_accesitario = Review::where('student_id', $student->_id)->where('rev_adviser_rol', 'accesitario')->where('rev_type', 'sustentacion')->first();
+
+
+    
+        // Recibe el id del Asesor
+        $presidente_p = Adviser::where('_id', $revision_presidente->adviser_id)->first();
+        $secretario_p = Adviser::where('_id', $revision_secretario->adviser_id)->first();
+        $vocal_p = Adviser::where('_id', $revision_vocal->adviser_id)->first();
+        $accesitario_p = Adviser::where('_id', $revision_accesitario->adviser_id)->first();
+
+
+        $presidente = ucwords(strtolower($presidente_p->adv_rank ?? 'Ing.' . ' ' . $presidente_p->adv_name . ' ' . $presidente_p->adv_lastname_m . ' ' . $presidente_p->adv_lastname_f));
+        $presidente_rol = strtoupper($revision_presidente->rev_adviser_rol);
+        
+        $secretario = ucwords(strtolower($secretario_p->adv_rank ?? 'Ing.' . ' ' . $secretario_p->adv_name . ' ' . $secretario_p->adv_lastname_m . ' ' . $secretario_p->adv_lastname_f));
+        $secretario_rol = strtoupper($revision_secretario->rev_adviser_rol);
+
+        $vocal = ucwords(strtolower($vocal_p->adv_rank ?? 'Ing.' . ' ' . $vocal_p->adv_name . ' ' . $vocal_p->adv_lastname_m . ' ' . $vocal_p->adv_lastname_f));
+        $vocal_rol = strtoupper($revision_vocal->rev_adviser_rol);
+
+
+        $accesitario = ucwords(strtolower($accesitario_p->adv_rank ?? 'Ing.' . ' ' . $accesitario_p->adv_name . ' ' . $accesitario_p->adv_lastname_m . ' ' . $accesitario_p->adv_lastname_f));
+        $accesitario_rol = strtoupper($revision_accesitario->rev_adviser_rol);
+
+               
+        $tittle = Solicitude::where('student_id', $student->_id)->first();
+        $tittle = mb_strtoupper($tittle->sol_title_inve, 'UTF-8');
+
+        $off = DocOf::where('student_id', $student->_id)->where('of_name', 'designacion de fecha y hora')->first();
+        $res = DocResolution::where('docof_id', $off->_id)->first();
+        $res_num = $res->docres_num_res;
+        $res_year = Carbon::parse($res->updated_at)->locale('es')->isoFormat('YYYY');
+        
+        $cuantitativo = $sus->def_score;
+
+        if($cuantitativo>10){
+            $declare = 'APROBADO';
+            $cualitativo = 'SUFICIENTE';
+        }
+        else{
+            $declare = 'DESAPROBADO';
+            $cualitativo = 'INSUFICIENTE';
+        }
+
+        $emi_hora = $sus->updated_at->format('H:i');
+        $emi_date = strftime('%d del mes de %B del año %Y', strtotime($sus->updated_at));
+
+        // Pasar los datos a la vista
+        $pdf = Pdf::loadView('sus_acta', compact(
+            'sus_ini',
+            'emi_hora',
+            'emi_date',
+            'sus',
+            'presidente',
+            'presidente_p',
+            'presidente_rol',
+            'secretario',
+            'secretario_p',
+            'secretario_rol',
+            'vocal',
+            'vocal_p',
+            'vocal_rol',
+            'accesitario',
+            'accesitario_p',
+            'accesitario_rol',
+            'tittle',
+            'student_name',
+            'res_num',
+            'res_year',
+            'cuantitativo',
+            'declare',
+            'cualitativo',
+        ));
+    
+        return $pdf->download('AST-' . $student_name .'.pdf'); // Puedes especificar un nombre para el archivo PDF
+    }
 }  
 
