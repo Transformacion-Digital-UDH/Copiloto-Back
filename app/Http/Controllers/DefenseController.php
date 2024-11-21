@@ -186,10 +186,25 @@ class DefenseController extends Controller
         $res_num = $res->docres_num_res;
         $res_year = Carbon::parse($res->updated_at)->locale('es')->isoFormat('YYYY');
         
+        $cuantitativo = $sus->def_score;
+
+        if($cuantitativo>10){
+            $declare = 'APROBADO';
+            $cualitativo = 'SUFICIENTE';
+        }
+        else{
+            $declare = 'DESAPROBADO';
+            $cualitativo = 'INSUFICIENTE';
+        }
+
+        $emi_hora = $sus->updated_at->format('H:i');
+        $emi_date = strftime('%d del mes de %B del año %Y', strtotime($sus->updated_at));
 
         // Pasar los datos a la vista
         $pdf = Pdf::loadView('sus_acta', compact(
             'sus_ini',
+            'emi_hora',
+            'emi_date',
             'sus',
             'presidente',
             'presidente_p',
@@ -207,6 +222,9 @@ class DefenseController extends Controller
             'student_name',
             'res_num',
             'res_year',
+            'cuantitativo',
+            'declare',
+            'cualitativo',
         ));
     
         return $pdf->stream(); // Puedes especificar un nombre para el archivo PDF

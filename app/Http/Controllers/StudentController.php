@@ -608,7 +608,7 @@ class StudentController extends Controller
 
         $docres = DocResolution::where('docof_id', $docof->_id)->first();
 
-        if (($docres->docres_status ?? '') !== 'tramitado') {
+        if (!$docres) {
             return response()->json([
                 'oficio_id' => $docof->_id ?? '',
                 'oficio_estado' => $docof->of_status ?? '',
@@ -617,7 +617,7 @@ class StudentController extends Controller
                 'error' => 'Su solicitud está en proceso'
             ], 400);
         }
-
+        
         $rev_sus = Review::where('student_id', $student_id)
                     ->where('rev_type', 'sustentacion')
                     ->get();

@@ -144,10 +144,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para para vista de DECLARAR APTO PARA SUSTENTAR ---> ESTUDIANTE
     Route::get('/estudiante/get-info/declarar-apto/{student_id}', [StudentController::class, 'getInfoDeclareApto']);
     //Ruta para para vista de DESIGNACION DE FECHA Y HORA PARA SUSTENTACION ---> ESTUDIANTE
-    Route::get('/estudiante/get-info/desigancion-fecha-hora-sustentacion/{student_id}', [StudentController::class, 'getInfoDesignationDate']);
     //Ruta para para vista de SUSTENTACION ---> ESTUDIANTE
     Route::get('/estudiante/get/resultado-sustentacion/{student_id}', [StudentController::class, 'getInfoDefenseStudent']);
 });
+Route::get('/estudiante/get-info/desigancion-fecha-hora-sustentacion/{student_id}', [StudentController::class, 'getInfoDesignationDate']);
     
  
     
