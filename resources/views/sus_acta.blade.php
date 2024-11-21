@@ -89,9 +89,9 @@
 
         <p>Habiendo absuelto las objeciones que le fueron formuladas por los miembros del Jurado de conformidad con las respectivas disposiciones 
             reglamentarias procedieron a deliberar y calificar,
-            declarándolo(a) <strong>APROBADO</strong> por <strong>UNANIMIDAD</strong> con el calificativo cuantitativo de <strong>12</strong> 
-            y cualitativo de <strong>SUFICIENTE</strong> según el (Art.47).</p>
-        <p>Siendo las <strong>18:44</strong> horas del día 08 del mes de marzo del año 2024, los miembros del Jurado Calificador firman la presente Acta en señal de conformidad.</p>
+            declarándolo(a) <strong>{{$declare}}</strong> por <strong>UNANIMIDAD</strong> con el calificativo cuantitativo de <strong>{{$cuantitativo}}</strong> 
+            y cualitativo de <strong>{{$cualitativo}}</strong> según el (Art.47).</p>
+        <p>Siendo las <strong>{{$emi_hora}}</strong> horas del día {{$emi_date}}, los miembros del Jurado Calificador firman la presente Acta en señal de conformidad.</p>
     </div>
 
     <table style="width: 100%; border-collapse: collapse; text-align: center;">
@@ -102,13 +102,13 @@
             </td>
             <td>
                 <img src="{{ public_path('/img/firma.jpg') }}" alt="Firma 2" style="width: 200px; height: 200px; object-fit: cover; margin-top: -20px"><br>
-                <span class="spam">Nombre<br>Orcid<br>DNI<br>rol</span>
+                <span class="spam">{{$secretario}}<br>{{$secretario_p->adv_orcid}}<br>{{$secretario_p->adv_dni ?? '0000000'}}<br>{{$secretario_rol}}</span>
             </td>
         </tr>
         <tr>
             <td colspan="2"text-align: center;">
                 <img src="{{ public_path('/img/firma.jpg') }}" alt="Firma 3" style="width: 200px; height: 200px; object-fit: cover; margin-top: -20px"><br>
-                <span class="spam">Nombre<br>Orcid<br>DNI<br>rol</span>
+                <span class="spam">{{$vocal}}<br>{{$vocal_p->adv_orcid}}<br>{{$vocal_p->adv_dni ?? '0000000'}}<br>{{$vocal_rol}}</span>
             </td>
         </tr>
     </table>
