@@ -463,7 +463,7 @@ class UserSeeder extends Seeder
                         // Otros campos específicos de la tabla `asesors`
                     ]);
                     break;
-                case 'pa':
+                case 'paisi':
                     \DB::table('paisis')->insert([
                         'user_id' => $createdUser->_id,
                         'pa_rank' => $user['role_data']['pa_rank'],
