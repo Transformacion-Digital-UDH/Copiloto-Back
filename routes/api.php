@@ -173,10 +173,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para ver todos los estudiantes a espera de revision de informe  ---> ASESOR
     Route::get('/asesor/get-revisiones/informe/{adviser_id}', [ReviewController::class, 'getInfoConfAdviserInforme']);
     //Ruta para ver todos los estudiantes a espera de revision de sustentacion  ---> ASESOR
+    Route::get('/asesor/get-revisiones/sustentacion/{adviser_id}', [ReviewController::class, 'getInfoDefenseAdviser']);
 
 });
 
-Route::get('/asesor/get-revisiones/sustentacion/{adviser_id}', [ReviewController::class, 'getInfoDefenseAdviser']);
 
     
 
