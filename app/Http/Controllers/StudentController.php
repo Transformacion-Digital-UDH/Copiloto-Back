@@ -661,11 +661,30 @@ class StudentController extends Controller
             ], 404);
         }
 
+        $nota = $sus->def_score;
+        
+        if($nota > 10){
+            $nota_estado='APROBADO';
+        }
+        else{
+            $nota_estado='DESAPROBADO';
+        }
+
+        setlocale(LC_TIME, 'es_ES.UTF-8', 'es_ES', 'Spanish_Spain', 'es');
+
+        // Combinar fecha y hora
+        $sus_fecha = strftime('%d de %B del %Y', strtotime($sus->updated_at));
+        $sus_hora = strftime('%H:%M', strtotime($sus->updated_at));
+
+        // Formatear el resultado completo
+        $sus_fecha_hora = $sus_fecha . ' - ' . $sus_hora;
+
         return response()->json([
             'sus_id' => $sus->_id,
             'sus_nota' => $sus->def_score,
-            'sus_fecha' => $sus->updated_at,
+            'sus_fecha' => $sus_fecha_hora ?? '',
             'sus_estado' => $sus->def_status,
+            'nota_estado' => $nota_estado ?? '',
         ], 200);
     }
 
