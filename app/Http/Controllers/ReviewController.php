@@ -627,6 +627,7 @@ class ReviewController extends Controller
                 'link_informe' => $solicitude->informe_link,
                 'actualizado' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
                 'rol' => $review->rev_adviser_rol,
+                'nota' => $review->rev_score ?? '',
                 'sustentacion' => $defense->_id ?? '',
                 'sustentacion_estado' => $defense->def_status ?? '',
             ];
