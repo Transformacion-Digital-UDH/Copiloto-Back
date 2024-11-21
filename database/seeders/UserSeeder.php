@@ -336,7 +336,7 @@ class UserSeeder extends Seeder
             // con rol programas academicos
             [
                 'name' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
-                'email' => 'programa.sistemas@udh.edu.pe',
+                'email' => 'paisi@udh.edu.pe',
                 'role' => 'paisi',
                 'role_data' => [
                     'pa_rank' => 'ING.',
