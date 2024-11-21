@@ -8,6 +8,7 @@ use App\Models\Adviser;
 use App\Models\Defense;
 use App\Models\DocOf;
 use App\Models\DocResolution;
+use App\Models\Filter;
 use App\Models\History;
 use App\Models\Review;
 use App\Models\Solicitude;
@@ -1203,6 +1204,7 @@ class DocOfController extends Controller
 
         public function soliciteOfficeApproveInforme($student_id)
     {
+
         // Verificar si el estudiante existe
         $student = Student::where('_id', $student_id)->first();
         if (!$student) {
@@ -1211,26 +1213,13 @@ class DocOfController extends Controller
             ], 400);
         }
 
-        // Verificar si el estudiante tiene todos los jurados aprobados
-        $presidente = Review::where('student_id', $student_id)
-            ->where('rev_adviser_rol', 'presidente')
-            ->where('rev_type', 'informe')
-            ->where('rev_status', 'aprobado')
-            ->first();
-        $secretario = Review::where('student_id', $student_id)
-            ->where('rev_adviser_rol', 'secretario')
-            ->where('rev_type', 'informe')
-            ->where('rev_status', 'aprobado')
-            ->first();
-        $vocal = Review::where('student_id', $student_id)
-            ->where('rev_adviser_rol', 'vocal')
-            ->where('rev_type', 'informe')
-            ->where('rev_status', 'aprobado')
-            ->first();
-
-        if (!$presidente || !$secretario || !$vocal) {
+        $filter = Filter::where('student_id', $student_id)
+                ->where('fil_name', 'turnitin')
+                ->where('fil_status', 'aprobado')
+                ->first();
+        if (!$filter) {
             return response()->json([
-                'mensaje' => 'El estudiante aún no tiene la conformidad de sus jurados',
+                'mensaje' => 'El estudiante no pasó turnitin',
             ], 400);
         }
 
