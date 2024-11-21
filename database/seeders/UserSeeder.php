@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
         $roles = [
             'estudiante' => $permissions['student'],
             'asesor' => $permissions['adviser'],
-            'pa' => $permissions['pa'],
+            'paisi' => $permissions['paisi'],
             'facultad' => $permissions['faculty'],
             'vri' => $permissions['vri'],
             'turnitin' => $permissions['turnitin'],
@@ -337,7 +337,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
                 'email' => 'programa.sistemas@udh.edu.pe',
-                'role' => 'pa',
+                'role' => 'paisi',
                 'role_data' => [
                     'pa_rank' => 'ING.',
                     'pa_name' => 'PAOLO',
@@ -351,7 +351,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'INGENIERÍA CIVIL',
                 'email' => 'programa.civil@udh.edu.pe',
-                'role' => 'pa',
+                'role' => 'paisi',
                 'role_data' => [
                     'pa_rank' => 'ING.',
                     'pa_name' => 'ERIKA',
@@ -365,7 +365,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'ARQUITECTURA',
                 'email' => 'programa.arquitectura@udh.edu.pe',
-                'role' => 'pa',
+                'role' => 'paisi',
                 'role_data' => [
                     'pa_rank' => 'ARQ.',
                     'pa_name' => 'ALBERTO',
