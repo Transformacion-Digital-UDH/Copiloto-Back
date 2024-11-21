@@ -613,11 +613,11 @@ class StudentController extends Controller
                 'oficio_id' => $docof->_id ?? '',
                 'oficio_estado' => $docof->of_status ?? '',
                 'resolucion_id' => $docres->_id ?? '',
-                'resolucion_estado' => $docres->docres_status ?? '',
+                'resolucion_estado' => $docres->docres_status ?? 'no iniciado',
                 'error' => 'Su solicitud está en proceso'
             ], 400);
         }
-        
+
         $rev_sus = Review::where('student_id', $student_id)
                     ->where('rev_type', 'sustentacion')
                     ->get();
@@ -643,9 +643,9 @@ class StudentController extends Controller
             'sus_fecha' => $sus->def_fecha ?? '',
             'sus_hora' => $sus->def_hora ?? '',
             'oficio_id' => $docof->_id ?? '',
-            'oficio_estado' => $docof->of_status ?? '',
+            'oficio_estado' => $docof->of_status ?? 'no iniciado',
             'resolucion_id' => $docres->_id ?? '',
-            'resolucion_estado' => $docres->docres_status ?? '',
+            'resolucion_estado' => $docres->docres_status ?? 'no iniciado',
         ], 200);
     }
 
