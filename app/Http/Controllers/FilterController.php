@@ -194,5 +194,4 @@ class FilterController extends Controller
         }
     }
 
-
 }
