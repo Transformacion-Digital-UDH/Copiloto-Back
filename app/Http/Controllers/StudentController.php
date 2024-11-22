@@ -11,6 +11,7 @@ use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\Adviser;
 use App\Models\Defense;
+use App\Models\Filter;
 use App\Models\Review;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -383,13 +384,13 @@ class StudentController extends Controller
     
         // Obtener nombres de los asesores o asignar vacío si no existen
         $presidente = $revision_presidente ? Adviser::where('_id', $revision_presidente->adviser_id)->first() : null;
-        $presidente_nombre = $presidente ? ucwords(strtolower($presidente->adv_name . ' ' . $presidente->adv_lastname_m . ' ' . $presidente->adv_lastname_f)) : '';
+        $presidente_nombre = $presidente ? ucwords(strtolower($presidente->adv_lastname_m . ' ' . $presidente->adv_lastname_f. ', ' . $presidente->adv_name)) : '';
     
         $secretario = $revision_secretario ? Adviser::where('_id', $revision_secretario->adviser_id)->first() : null;
-        $secretario_nombre = $secretario ? ucwords(strtolower($secretario->adv_name . ' ' . $secretario->adv_lastname_m . ' ' . $secretario->adv_lastname_f)) : '';
+        $secretario_nombre = $secretario ? ucwords(strtolower($secretario->adv_lastname_m . ' ' . $secretario->adv_lastname_f. ', ' . $secretario->adv_name)) : '';
     
         $vocal = $revision_vocal ? Adviser::where('_id', $revision_vocal->adviser_id)->first() : null;
-        $vocal_nombre = $vocal ? ucwords(strtolower($vocal->adv_name . ' ' . $vocal->adv_lastname_m . ' ' . $vocal->adv_lastname_f)) : '';
+        $vocal_nombre = $vocal ? ucwords(strtolower($vocal->adv_lastname_m . ' ' . $vocal->adv_lastname_f . ', '.$vocal->adv_name)) : '';
     
         // Retornar respuesta con valores por defecto en blanco donde no se encuentren datos
         return response()->json([
@@ -526,7 +527,7 @@ class StudentController extends Controller
     }
 
 
-    public function getStateTuCoachUDH($student_id)
+    public function getInfoFilterStudent($student_id)
     {
         $student = Student::where('_id', $student_id)->first();
 
@@ -536,32 +537,56 @@ class StudentController extends Controller
             ], 404);
         }
 
+        $filters = Filter::where('student_id', $student_id)->get();
+
+        $filtrosPredefinidos = [
+            'Primer filtro',
+            'Segundo filtro',
+            'Tercer filtro',
+        ];
+
+        $vri = [];
+
+        foreach ($filtrosPredefinidos as $nombreFiltro) {
+            $filter = $filters->firstWhere('fil_name', $nombreFiltro);
+
+            $vri[] = [
+                'fil_nombre' => $nombreFiltro,
+                'fil_estado'  => $filter->fil_status ?? 'no iniciado',
+                'fil_file'   => $filter->fil_file ?? '',
+            ];
+        }
+
         $stu_code = $student->stu_code;
 
         $response = Http::get("https://tucoach.udh.edu.pe/api/validar/{$stu_code}@udh.edu.pe");
 
         // Verifica si la solicitud fue exitosa antes de procesar la respuesta
-        if ($response->successful()) {
-            $data = $response->json();
+        if (!$response->successful()) {
 
-            $tucoach = 'aprobado';
-
-            if (!$data['status'] or $data['status'] === 'false') {
-                $tucoach = 'pendiente';
-            }
-
+            // Devuelve un error si la solicitud no fue exitosa
             return response()->json([
-
-                'doc_name' => 'Certificado de buenas prácticas - TUCOACH.UDH',
-                'doc_estado'=> $tucoach,
-                'doc_ver' => $data['url'] ?? '',
-            ],200);
+                'error' => 'No se pudo conectar con la API'
+            ], 500);
         }
 
-        // Devuelve un error si la solicitud no fue exitosa
+        $data = $response->json();
+
+        $tucoach = 'aprobado';
+
+        if (!$data['status'] or $data['status'] === 'false') {
+            $tucoach = 'pendiente';
+        }
+
         return response()->json([
-            'error' => 'No se pudo conectar con la API'
-        ], 500);
+            'tu_coach' => [
+                'doc_name' => 'Curso de buenas prácticas - TUCOACH.UDH',
+                'doc_estado'=> $tucoach,
+                'doc_ver' => $data['url'] ?? ''],
+            'filtros' => $vri,
+
+        ],200);
+        
     }
 
     public function getInfoDeclareApto($student_id){
