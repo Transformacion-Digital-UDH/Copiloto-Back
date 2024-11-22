@@ -55,19 +55,13 @@ class GoogleDocumentController extends Controller
         try {
             $solicitudeId = $request->input('solicitude_id');
             
-            // Obtener los datos de la solicitud y los usuarios
-            $data = $this->validateAndGetData($solicitudeId);
-            if (!$data) {
-                return response()->json(['error' => 'Datos no encontrados'], 404);
-            }
-
-            $solicitude = $data['solicitude'];
-            $student = $data['student'];
-            $adviser = $data['adviser'];
-            $paisi = $data['paisi'];
-            $studentUser = $data['studentUser'];
-            $adviserUser = $data['adviserUser'];
-            $paisiUser = $data['paisiUser'];
+            $solicitude = Solicitude::where('_id',$solicitudeId)->first();
+            $student = Student::where('_id',$solicitude->student_id)->first();
+            $adviser = Adviser::where('_id',$solicitude->adviser_id)->first();
+            $paisi = Paisi::where('pai_program','INGENIERÍA DE SISTEMAS E INFORMÁTICA')->first();
+            $studentUser = User::where('_id',$student->user_id)->first();
+            $adviserUser = User::where('_id',$adviser->user_id)->first();
+            $paisiUser = User::where('_id',$paisi->user_id)->first();
 
             // Crear el nombre del documento
             $documentName = $this->generateDocumentName($solicitude, $student);

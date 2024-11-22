@@ -1,6 +1,12 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Adviser;
+use App\Models\Paisi;
+use App\Models\Solicitude;
+use App\Models\Student;
+use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
 use Illuminate\Http\Request;
@@ -11,18 +17,15 @@ class GoogleDocumentEndController extends GoogleDocumentController
     {
         try {
             $solicitudeId = $request->input('solicitude_id');
-            $data = $this->validateAndGetData($solicitudeId);
 
-            if (!$data) {
-                return response()->json(['error' => 'Datos no encontrados'], 404);
-            }
+            $solicitude = Solicitude::where('_id',$solicitudeId)->first();
+            $student = Student::where('_id',$solicitude->student_id)->first();
+            $adviser = Adviser::where('_id',$solicitude->adviser_id)->first();
+            $paisi = Paisi::where('pai_program','INGENIERÍA DE SISTEMAS E INFORMÁTICA')->first();
+            $studentUser = User::where('_id',$student->user_id)->first();
+            $adviserUser = User::where('_id',$adviser->user_id)->first();
+            $paisiUser = User::where('_id',$paisi->user_id)->first();
 
-            $solicitude = $data['solicitude'];
-            $student = $data['student'];
-            $adviser = $data['adviser'];
-            $paisiUser = $data['paisiUser'];
-            $studentUser = $data['studentUser'];
-            $adviserUser = $data['adviserUser'];
 
             // Personaliza el nombre del documento y el ID de la plantilla para el informe
             $documentName = "Informe_" . $solicitude->sol_title_inve . "_" . $student->stu_name;
