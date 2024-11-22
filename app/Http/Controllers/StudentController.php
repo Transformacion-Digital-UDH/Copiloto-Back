@@ -579,11 +579,12 @@ class StudentController extends Controller
         }
 
         return response()->json([
-            $vri,
-            'doc' => [
-            'doc_name' => 'Certificado de buenas prácticas - TUCOACH.UDH',
-            'doc_estado'=> $tucoach,
-            'doc_ver' => $data['url'] ?? ''],
+            'tu_coach' => [
+                'doc_name' => 'Curso de buenas prácticas - TUCOACH.UDH',
+                'doc_estado'=> $tucoach,
+                'doc_ver' => $data['url'] ?? ''],
+            'filtros' => $vri,
+
         ],200);
         
     }
