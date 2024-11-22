@@ -540,9 +540,9 @@ class StudentController extends Controller
         $filters = Filter::where('student_id', $student_id)->get();
 
         $filtrosPredefinidos = [
-            'Primer filtro',
-            'Segundo filtro',
-            'Tercer filtro',
+            'primer filtro',
+            'segundo filtro',
+            'tercer filtro',
         ];
 
         $vri = [];
