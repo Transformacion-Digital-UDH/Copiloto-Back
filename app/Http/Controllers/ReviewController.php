@@ -521,7 +521,7 @@ class ReviewController extends Controller
         return response()->json([
             'estado' => 'pendiente',
             'message' => 'Su solicitud de revisión fue enviada a su asesor',
-        ], 201);
+        ], 200);
     }
 
 
