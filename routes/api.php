@@ -151,10 +151,12 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/estudiante/get/resultado-sustentacion/{student_id}', [StudentController::class, 'getInfoDefenseStudent']);
 });
 
-    //Ruta para para vista de CONFORMIDAD POR VRI ---> ESTUDIANTE
+    //Ruta para vista de CONFORMIDAD POR VRI ---> ESTUDIANTE
     Route::get('/estudiante/info-filtro/{student_id}', [StudentController::class, 'getInfoFilterStudent']);
-    //Ruta para para crear revision de CONFORMIDAD POR VRI ---> ESTUDIANTE
+    //Ruta para crear revision de CONFORMIDAD POR VRI ---> ESTUDIANTE
     Route::get('/vri/crear-primer-filtro/{student_id}', [FilterController::class, 'createReviewVRI']);
+    //Ruta para ver revisiones pendientes de PRIMER FILTRO ---> ESTUDIANTE
+    Route::get('/vri/get-primer-filtro', [FilterController::class, 'getStudentsFirstFilter']);
     
 
 // RUTAS PARA REVISIONES
