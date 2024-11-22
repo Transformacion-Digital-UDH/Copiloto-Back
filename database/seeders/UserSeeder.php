@@ -160,6 +160,20 @@ class UserSeeder extends Seeder
                 ]
             ],
             [
+                'name' => 'ABIMAEL',
+                'email' => '2020160035@udh.edu.pe',
+                'role' => 'estudiante',
+                'role_data' => [
+                    'stu_name' => 'ABIMAEL EPIFANIO',
+                    'stu_lastname_m' => 'FERNANDEZ',
+                    'stu_lastname_f' => 'RODRIGUEZ',
+                    'stu_dni' => '72938469',
+                    'stu_code' => '2020160035',
+                    'stu_program' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'stu_faculty' => 'INGENIERÍA',
+                ]
+            ],
+            [
                 'name' => 'MARYCIELO',
                 'email' => '2020210311@udh.edu.pe',
                 'role' => 'estudiante',
