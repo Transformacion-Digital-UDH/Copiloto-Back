@@ -353,12 +353,12 @@ class UserSeeder extends Seeder
                 'email' => 'programa.civil@udh.edu.pe',
                 'role' => 'pa',
                 'role_data' => [
-                    'pa_rank' => 'ING.',
-                    'pa_name' => 'ERIKA',
-                    'pa_lastname_m' => 'ARRATEA',
-                    'pa_lastname_f' => 'SALVADOR',
-                    'pa_program' => 'INGENIERÍA CIVIL',
-                    'pa_faculty' => 'INGENIERÍA',
+                    'pai_rank' => 'ING.',
+                    'pai_name' => 'ERIKA',
+                    'pai_lastname_m' => 'ARRATEA',
+                    'pai_lastname_f' => 'SALVADOR',
+                    'pai_program' => 'INGENIERÍA CIVIL',
+                    'pai_faculty' => 'INGENIERÍA',
                 ]
             ],
 
@@ -367,12 +367,12 @@ class UserSeeder extends Seeder
                 'email' => 'programa.arquitectura@udh.edu.pe',
                 'role' => 'pa',
                 'role_data' => [
-                    'pa_rank' => 'ARQ.',
-                    'pa_name' => 'ALBERTO',
-                    'pa_lastname_m' => 'JARA',
-                    'pa_lastname_f' => 'TRUJILLO',
-                    'pa_program' => 'ARQUITECTURA',
-                    'pa_faculty' => 'INGENIERÍA',
+                    'pai_rank' => 'ARQ.',
+                    'pai_name' => 'ALBERTO',
+                    'pai_lastname_m' => 'JARA',
+                    'pai_lastname_f' => 'TRUJILLO',
+                    'pai_program' => 'ARQUITECTURA',
+                    'pai_faculty' => 'INGENIERÍA',
                 ]
             ],
 

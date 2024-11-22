@@ -64,7 +64,7 @@ class GoogleDocumentController extends Controller
             $solicitude = $data['solicitude'];
             $student = $data['student'];
             $adviser = $data['adviser'];
-            $paisi = $data['paisi'];
+            // $paisi = $data['paisi'];
             $studentUser = $data['studentUser'];
             $adviserUser = $data['adviserUser'];
             $paisiUser = $data['paisiUser'];
