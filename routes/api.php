@@ -56,6 +56,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
 });
 
+
+
 //RUTAS PARA OFFICIOS
 Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para actualizar el estado de la solicitud de designacion de asesor ---> PAISI

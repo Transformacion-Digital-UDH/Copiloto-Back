@@ -18,6 +18,7 @@ class Adviser extends Model
         'adv_name',
         'adv_lastname_m',
         'adv_lastname_f',
+        'adv_dni',
         'adv_orcid',
         'adv_is_jury',
         'adv_college',
