@@ -384,13 +384,13 @@ class StudentController extends Controller
     
         // Obtener nombres de los asesores o asignar vacío si no existen
         $presidente = $revision_presidente ? Adviser::where('_id', $revision_presidente->adviser_id)->first() : null;
-        $presidente_nombre = $presidente ? ucwords(strtolower($presidente->adv_name . ' ' . $presidente->adv_lastname_m . ' ' . $presidente->adv_lastname_f)) : '';
+        $presidente_nombre = $presidente ? ucwords(strtolower($presidente->adv_lastname_m . ' ' . $presidente->adv_lastname_f. ', ' . $presidente->adv_name)) : '';
     
         $secretario = $revision_secretario ? Adviser::where('_id', $revision_secretario->adviser_id)->first() : null;
-        $secretario_nombre = $secretario ? ucwords(strtolower($secretario->adv_name . ' ' . $secretario->adv_lastname_m . ' ' . $secretario->adv_lastname_f)) : '';
+        $secretario_nombre = $secretario ? ucwords(strtolower($secretario->adv_lastname_m . ' ' . $secretario->adv_lastname_f. ', ' . $secretario->adv_name)) : '';
     
         $vocal = $revision_vocal ? Adviser::where('_id', $revision_vocal->adviser_id)->first() : null;
-        $vocal_nombre = $vocal ? ucwords(strtolower($vocal->adv_name . ' ' . $vocal->adv_lastname_m . ' ' . $vocal->adv_lastname_f)) : '';
+        $vocal_nombre = $vocal ? ucwords(strtolower($vocal->adv_lastname_m . ' ' . $vocal->adv_lastname_f . ', '.$vocal->adv_name)) : '';
     
         // Retornar respuesta con valores por defecto en blanco donde no se encuentren datos
         return response()->json([

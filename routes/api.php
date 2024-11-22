@@ -15,6 +15,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CommentControllerDocs;
 use App\Http\Controllers\DefenseController;
+use App\Http\Controllers\FilterController;
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
@@ -149,9 +150,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para para vista de SUSTENTACION ---> ESTUDIANTE
     Route::get('/estudiante/get/resultado-sustentacion/{student_id}', [StudentController::class, 'getInfoDefenseStudent']);
 });
-    
+
     //Ruta para para vista de CONFORMIDAD POR VRI ---> ESTUDIANTE
     Route::get('/estudiante/info-filtro/{student_id}', [StudentController::class, 'getInfoFilterStudent']);
+    //Ruta para para crear revision de CONFORMIDAD POR VRI ---> ESTUDIANTE
+    Route::get('/vri/crear-primer-filtro/{student_id}', [FilterController::class, 'createReviewVRI']);
     
 
 // RUTAS PARA REVISIONES
