@@ -54,7 +54,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para ver solicitudes aceptadas para ---> PAISI
     Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
 });
-Route::post('/solicitudes-store', [SolicitudeController::class, 'store']);
+Route::post('/solicitudes-stores', [SolicitudeController::class, 'store']); //<----------- cambiar a store bromita para aldo 
 
 
 
