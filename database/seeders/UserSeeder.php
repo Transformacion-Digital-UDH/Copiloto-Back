@@ -161,14 +161,14 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'ABIMAEL',
-                'email' => '2024@udh.edu.pe',
+                'email' => '2019110516@udh.edu.pe',
                 'role' => 'estudiante',
                 'role_data' => [
                     'stu_name' => 'ABIMAEL EPIFANIO',
                     'stu_lastname_m' => 'FERNANDEZ',
-                    'stu_lastname_f' => 'RODRIGUEZ',
-                    'stu_dni' => '2024',
-                    'stu_code' => '2024',
+                    'stu_lastname_f' => 'VENTURA',
+                    'stu_dni' => '74937272',
+                    'stu_code' => '2019110516',
                     'stu_program' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
                     'stu_faculty' => 'INGENIERÍA',
                 ]
@@ -353,12 +353,12 @@ class UserSeeder extends Seeder
                 'email' => 'paisi@udh.edu.pe',
                 'role' => 'paisi',
                 'role_data' => [
-                    'pa_rank' => 'ING.',
-                    'pa_name' => 'PAOLO',
-                    'pa_lastname_m' => 'SOLIS',
-                    'pa_lastname_f' => 'JARA',
-                    'pa_program' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
-                    'pa_faculty' => 'INGENIERÍA',
+                    'pai_rank' => 'ING.',
+                    'pai_name' => 'PAOLO',
+                    'pai_lastname_m' => 'SOLIS',
+                    'pai_lastname_f' => 'JARA',
+                    'pai_program' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'pai_faculty' => 'INGENIERÍA',
                 ]
             ],
 
@@ -480,12 +480,12 @@ class UserSeeder extends Seeder
                 case 'paisi':
                     \DB::table('paisis')->insert([
                         'user_id' => $createdUser->_id,
-                        'pa_rank' => $user['role_data']['pa_rank'],
-                        'pa_name' => $user['role_data']['pa_name'],
-                        'pa_lastname_m' => $user['role_data']['pa_lastname_m'],
-                        'pa_lastname_f' => $user['role_data']['pa_lastname_f'],
-                        'pa_program' => $user['role_data']['pa_program'],
-                        'pa_faculty' => $user['role_data']['pa_faculty'],
+                        'pai_rank' => $user['role_data']['pai_rank'],
+                        'pai_name' => $user['role_data']['pai_name'],
+                        'pai_lastname_m' => $user['role_data']['pai_lastname_m'],
+                        'pai_lastname_f' => $user['role_data']['pai_lastname_f'],
+                        'pai_program' => $user['role_data']['pai_program'],
+                        'pai_faculty' => $user['role_data']['pai_faculty'],
                         // Otros campos específicos de la tabla `pasis`
                     ]);
                     break;
