@@ -10,8 +10,10 @@ use App\Models\DocResolution;
 use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\Adviser;
+use App\Models\Defense;
 use App\Models\Review;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
 use MongoDB\Laravel\Eloquent\Casts\ObjectId;
 
@@ -92,20 +94,23 @@ class StudentController extends Controller
             ->where('rev_adviser_rol', '!=', 'asesor')
             ->where('rev_type', 'tesis')
             ->get();  
-        
+    
         // Crear un array para almacenar asesores y roles
-        $jurados = $reviews->map(function($review) {
+        $jurados = [];
+    
+        foreach ($reviews as $review) {
             // Obtener el asesor correspondiente a la revisión
             $adviser = Adviser::where('_id', $review->adviser_id)->first(); // Obtener el asesor
             
             // Verificar si el asesor existe
             $adviser_name = $adviser ? strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name) : 'No disponible';
     
-            return [
+            // Agregar el asesor y su rol al array de jurados
+            $jurados[] = [
                 'asesor' => $adviser_name, // Convertir a mayúsculas
                 'rol' => $review->rev_adviser_rol
             ];
-        });
+        }
     
         // Obtener el documento de oficio
         $docof = DocOf::where('student_id', $student_id)
@@ -131,6 +136,7 @@ class StudentController extends Controller
             'jurados' => $jurados,
         ], 200);
     }
+    
 
     public function getInfoApproveThesis($student_id){
         $docof = DocOf::where('student_id', $student_id)
@@ -289,6 +295,7 @@ class StudentController extends Controller
                 $data[] = [
                     'id_' => $student->_id,
                     'id_solicitud' => $sol_da->_id,
+                    'informe_link' => $sol_da->informe_link,
                     'nombre' => "{$student->stu_name} {$student->stu_lastname_m} {$student->stu_lastname_f}",
                     'asesor' => $asesor,
                     'estado' => $status,
@@ -517,4 +524,168 @@ class StudentController extends Controller
             'resolucion_estado' => $docres->docres_status,
         ], 200);
     }
+
+
+    public function getStateTuCoachUDH($student_id)
+    {
+        $student = Student::where('_id', $student_id)->first();
+
+        if (!$student){
+            return response()->json([
+                'error' => 'Estudiante no existe'
+            ], 404);
+        }
+
+        $stu_code = $student->stu_code;
+
+        $response = Http::get("https://tucoach.udh.edu.pe/api/validar/{$stu_code}@udh.edu.pe");
+
+        // Verifica si la solicitud fue exitosa antes de procesar la respuesta
+        if ($response->successful()) {
+            $data = $response->json();
+
+            $tucoach = 'aprobado';
+
+            if (!$data['status'] or $data['status'] === 'false') {
+                $tucoach = 'pendiente';
+            }
+
+            return response()->json([
+
+                'doc_name' => 'Certificado de buenas prácticas - TUCOACH.UDH',
+                'doc_estado'=> $tucoach,
+                'doc_ver' => $data['url'] ?? '',
+            ],200);
+        }
+
+        // Devuelve un error si la solicitud no fue exitosa
+        return response()->json([
+            'error' => 'No se pudo conectar con la API'
+        ], 500);
+    }
+
+    public function getInfoDeclareApto($student_id){
+        $docof = DocOf::where('student_id', $student_id)
+                    ->where('of_name', 'declaracion como apto')
+                    ->first();
+
+        if (!$docof){
+            return response()->json([
+                'estudiante_id' => $student_id ?? '',
+                'oficio_id' => $docof->_id ?? '',
+                'oficio_estado' => $docof->of_status ?? '',
+                'resolucion_id' => $docres->_id ?? '',
+                'resolucion_estado' => $docres->docres_status ?? '',
+            ], 200);
+        };
+
+        $docres = DocResolution::where('docof_id', $docof->_id)
+            ->first();
+
+        return response()->json([
+            'estudiante_id' => $student_id ?? '',
+            'oficio_id' => $docof->_id ?? '',
+            'oficio_estado' => $docof->of_status ?? '',
+            'resolucion_id' => $docres->_id ?? '',
+            'resolucion_estado' => $docres->docres_status ?? '',
+        ], 200);
+    }
+
+    public function getInfoDesignationDate($student_id)
+    {
+        $docof = DocOf::where('student_id', $student_id)
+                    ->where('of_name', 'designacion de fecha y hora')
+                    ->first();
+
+        // Verificar si existe el registro $docof
+        if (!$docof) {
+            return response()->json([
+                'estado' => 'no iniciado',
+                'error' => 'Oficio no encontrado, faltan requisitos'
+            ], 404);
+        }
+       
+
+        $docres = DocResolution::where('docof_id', $docof->_id)->first();
+
+        if (!$docres) {
+            return response()->json([
+                'oficio_id' => $docof->_id ?? '',
+                'oficio_estado' => $docof->of_status ?? '',
+                'resolucion_id' => $docres->_id ?? '',
+                'resolucion_estado' => $docres->docres_status ?? 'no iniciado',
+                'error' => 'Su solicitud está en proceso'
+            ], 400);
+        }
+
+        $rev_sus = Review::where('student_id', $student_id)
+                    ->where('rev_type', 'sustentacion')
+                    ->get();
+
+        $data = [];
+        foreach ($rev_sus as $rev) {
+            $adviser = Adviser::where('_id', $rev->adviser_id)->first();
+            if ($adviser) {
+                $adv_full_name = strtoupper("{$adviser->adv_name} {$adviser->adv_lastname_m} {$adviser->adv_lastname_f}");
+                $adv_role = $rev->rev_adviser_rol;
+
+                $data[] = [
+                    'asesor_nombre' => $adv_full_name,
+                    'asesor_rol' => $adv_role,
+                ];
+            }
+        }
+
+        $sus = Defense::where('student_id', $student_id)->first();
+
+        return response()->json([
+            'data' => $data,
+            'sus_fecha' => $sus->def_fecha ?? '',
+            'sus_hora' => $sus->def_hora ?? '',
+            'oficio_id' => $docof->_id ?? '',
+            'oficio_estado' => $docof->of_status ?? 'no iniciado',
+            'resolucion_id' => $docres->_id ?? '',
+            'resolucion_estado' => $docres->docres_status ?? 'no iniciado',
+        ], 200);
+    }
+
+    public function getInfoDefenseStudent($student_id){
+
+        $sus = Defense::where('student_id', $student_id)->first();
+
+        if(!$sus){
+            return response()->json([
+                'error' => 'este estudiante aun no tiene designacion de fecha y hora',
+                'estado' => 'no iniciado',
+                'status' => false,
+            ], 404);
+        }
+
+        $nota = $sus->def_score;
+        
+        if($nota > 10){
+            $nota_estado='APROBADO';
+        }
+        else{
+            $nota_estado='DESAPROBADO';
+        }
+
+        setlocale(LC_TIME, 'es_ES.UTF-8', 'es_ES', 'Spanish_Spain', 'es');
+
+        // Combinar fecha y hora
+        $sus_fecha = strftime('%d de %B del %Y', strtotime($sus->updated_at));
+        $sus_hora = strftime('%H:%M', strtotime($sus->updated_at));
+
+        // Formatear el resultado completo
+        $sus_fecha_hora = $sus_fecha . ' - ' . $sus_hora;
+
+        return response()->json([
+            'sus_id' => $sus->_id,
+            'sus_nota' => $sus->def_score,
+            'sus_fecha' => $sus_fecha_hora ?? '',
+            'sus_estado' => $sus->def_status,
+            'nota_estado' => $nota_estado ?? '',
+        ], 200);
+    }
+
 }

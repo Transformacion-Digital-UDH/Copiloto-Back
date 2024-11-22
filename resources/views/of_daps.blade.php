@@ -87,23 +87,19 @@
 
     </div>
     <div class="parrafo">
-        <p>Por medio del presente me dirijo a usted para saludarla cordialmente y a la vez para hacer llegar adjunto al presente lo siguiente:
-             <strong>Exp. {{$num_exp}}</strong> del Bachiller: <strong>{{$student}}</strong> quien solicita 
-             <strong>DESIGNACION DE JURADOS REVISORES PARA EL INFORME FINAL DEL TRAB. INVESTIGACIÓN (TESIS)</strong>
-              el mismo que ha sido aprobado para su ejecución del proyecto de Tesis; por el Consejo de Facultad, intitulada 
-             <strong>{{$tittle}}</strong>
-               Así mismo hago llegar la propuesta de la comisión de jurados revisores conformados por los siguientes docentes:</p>
+        <p>Por medio del presente me dirijo a Usted, para saludarla cordialmente y a la vez remitir el expediente 
+             <strong>N° {{$num_exp}}</strong> presentado por el (la) Bachiller: <strong>{{$student}}</strong> mediante el cual 
+             solicita Declarar Apto para Sustentación de Tesis y quien a su vez cumplió con presentar los requisitos correspondientes,
+              lo que se deriva para los fines pertinentes.</p>
     </div>
-        <ul style="margin-left: 20mm;">
-            <li>{{$presidente}}</li>
-            <li>{{$secretario}}</li>
-            <li>{{$vocal}}</li>
-        </ul>
     Adjunto:
     <ul style="margin-left: 20mm; list-style-type: disc;">
-            <li>Informe Digitalizado del Trabajo de Investigación (Tesis)</li>
-            <li>Resolución Aprob. Del Proy de Tesis Nª {{$num_res}}-{{$res_year}}-D-FI-UDH ({{$res_date}}).</li>
-            <li>Informe de Conformidad del Docente Asesor</li>
+            <li>Copia de Grado Académico de Bachiller.</li>
+            <li>Un ejemplar digital del proyecto de Tesis en formato Word.</li>
+            <li>Constancia de habilitación de tramité para Optar Titulo(Original).</li>
+            <li>Copia de DNI.</li>
+            <li>Certificado Judicial de antecedentes penales.</li>
+            <li>Pago por concepto de trámites de declarar apto.</li>
         </ul>
     <div class="parrafo">
         <p>Sin otro en particular, me despido recordándole las muestras de mi especial consideración y estima personal.</p>

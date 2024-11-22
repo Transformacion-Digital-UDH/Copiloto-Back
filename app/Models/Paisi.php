@@ -13,10 +13,15 @@ class Paisi extends Model
     protected $connection = 'mongodb';
     protected $collection = 'paisis'; // Nombre de la colección en MongoDB
     protected $fillable = [
+
+        'user_id',
+        'pai_rank',
         'pai_name',
         'pai_lastname_m',
         'pai_lastname_f',
-        'user_id',
+        'pai_program',
+        'pai_faculty',
+
     ];
 
     // Relación con el usuario

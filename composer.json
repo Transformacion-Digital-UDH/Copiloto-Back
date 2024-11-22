@@ -9,7 +9,7 @@
         "barryvdh/laravel-dompdf": "^3.0",
         "dedoc/scramble": "^0.11.13",
         "google/apiclient": "^2.0",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.9",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",

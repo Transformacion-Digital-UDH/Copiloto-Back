@@ -20,6 +20,8 @@ class Student extends Model
         'stu_dni',
         'stu_code',
         'user_id',
+        'stu_college',
+        'stu_faculty',
     ];
 
     // Relación con el usuario

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\AdviserResource;
 use App\Models\Adviser;
+use App\Models\DocOf;
 use App\Models\Review;
 use App\Models\Solicitude;
 use App\Models\Student;
@@ -28,49 +29,78 @@ class AdviserController extends Controller
         ],  200);
     }
 
-    public function getSelectJuriesTesis() {
+    public function getSelectJuriesTesis($docof_id)
+    {
+        $docof = DocOf::where('_id', $docof_id)->first();
+        $student_id = $docof->student_id;
+
         // Obtener todos los asesores que tienen 'adv_is_jury' en true
         $advisers = Adviser::where('adv_is_jury', true)->get();
         
         // Obtener los IDs de los asesores
         $adviser_ids = $advisers->pluck('_id');
         
-        // Obtener todas las revisiones (reviews) relacionadas con los asesores
+        // Obtener todas las revisiones relacionadas con el `student_id` actual
+        $existing_reviews = Review::where('student_id', $student_id)
+                            ->where('rev_adviser_rol', 'asesor')
+                            ->get();
+                            
+        if($docof->of_name == 'designacion de fecha y hora'){
+
+            $existing_reviews = Review::where('student_id', $student_id)
+                                    ->whereIn('rev_adviser_rol', ['asesor', 'presidente', 'secretario', 'vocal'])
+                                    ->where('rev_type', 'informe')
+                                    ->get();
+
+        }
+                            
+        // Filtrar asesores que no tienen ninguna revisión asignada para el estudiante actual
+        $filtered_advisers = [];
+        foreach ($advisers as $adviser) {
+            if (!$existing_reviews->contains('adviser_id', $adviser->_id)) {
+                $filtered_advisers[] = $adviser;
+            }
+        }
+
+        // Obtener los IDs de los asesores filtrados
+        $adviser_ids = collect($filtered_advisers)->pluck('_id');
+
+        // Obtener todas las revisiones (reviews) relacionadas con los asesores filtrados
         $reviews = Review::whereIn('adviser_id', $adviser_ids)->get();
-    
-        // Crear un array para almacenar los nombres y IDs de los asesores junto con sus revisiones
-        $adviser_info = $advisers->map(function($adviser) use ($reviews) {
-            // Filtrar revisiones del asesor actual que no tienen 'rev_status' igual a 'aprobado'
+        
+        // Crear un array para almacenar la información de los asesores
+        $adviser_info = [];
+        
+        foreach ($filtered_advisers as $adviser) {
             $adviser_reviews = $reviews->where('adviser_id', $adviser->_id)
-                ->where('rev_status', '!=', 'aprobado');
-    
-            return [
+                                    ->where('rev_status', '!=', 'aprobado');
+
+            $review_data = [];
+            foreach ($adviser_reviews as $review) {
+                $days_passed = Carbon::parse($review->created_at)->diffInDays(Carbon::now());
+                
+                $student = Student::where('_id', $review->student_id)->first();
+                $student_name = $student ? strtoupper($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name) : 'No disponible';
+                
+                $review_data[] = [
+                    'rol' => $review->rev_adviser_rol,
+                    'estudiante' => $student_name,
+                    'tiempo_dias' => $days_passed,
+                ];
+            }
+            
+            $adviser_info[] = [
                 'asesor' => strtoupper($adviser->adv_lastname_m . ' ' . $adviser->adv_lastname_f . ', ' . $adviser->adv_name),
                 'asesor_id' => $adviser->_id,
-                'revisiones' => $adviser_reviews->map(function($review) {
-                    // Calcular cuántos días han pasado desde la fecha de creación hasta hoy
-                    $days_passed = Carbon::parse($review->created_at)->diffInDays(Carbon::now());
-                    
-                    // Obtener el estudiante relacionado
-                    $student = Student::where('_id', $review->student_id)->first(); // Obtener el primer estudiante
-    
-                    // Verificar si el estudiante existe
-                    $student_name = $student ? strtoupper($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name) : 'No disponible';
-    
-                    return [
-                        'rol' => $review->rev_adviser_rol,
-                        'estudiante' => $student_name,
-                        'tiempo_dias' => $days_passed, // Días transcurridos
-                    ];
-                })->values()  // Usar values() para reiniciar los índices
+                'revisiones' => array_values($review_data),
             ];
-        });
-    
-        // Retornar los asesores y las revisiones en la respuesta JSON
-        return response()->json([
-            'data' => $adviser_info
-        ], 200); 
+        }
+
+        return $adviser_info;
     }
+
+
+
     
     public function getReviewInforme($adviser_id)
     {

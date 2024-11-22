@@ -119,23 +119,22 @@
 
         <p><strong>Presente.</strong></p>
         <p style="text-indent: 30px;">De mi consideración:</p>
-        <p style="text-indent: 30px;">Por medio del presente me dirijo a Usted, para saludarla cordialmente y a la vez remitirle el Expediente
-             <strong>N° {{$num_exp}}</strong> del Bachiller: <strong>{{$student}}</strong>, quien solicita Aprobación del Trabajo de Investigación Tesis. </p>
+        <p style="text-indent: 30px;">Por medio del presente me dirijo a Usted, para saludarla cordialmente y a la vez remitir el expediente
+             <strong>N° {{$num_exp}}</strong> presentado por el (la) Bachiller: <strong>{{$student}}</strong>, quien solicita quién solicita fecha y hora para sustentación de Tesis.</p>
         
-        <p style="text-indent: 30px;">Se pone en conocimiento que, mediante <strong> RESOLUCIÓN N° {{$num_res}}-{{$res_year}}-D-FI-UDH</strong> de fecha {{$res_date}}, perteneciente 
-            a la Bachiller: <strong>{{$student}}</strong> se le designo como asesor de Tesis al <strong>{{$asesor}}</strong>, y a su vez informar que, 
-            el Jurado Revisor del Trabajo de Investigación Tesis titulado: “<strong>{{$tittle}}</strong>” 
-            del P.A. de Ingeniería de sistemas <strong>– Sede – La esperanza – Huánuco</strong>, integrado por los siguientes docentes Revisores del Trabajo de Investigación de Tesis:</p>
-        <p style="text-indent: 30px;">
-            <span style="display: block; padding-left: 10px;">- {{$presidente}}</span>
-            <span style="display: block; padding-left: 10px;">- {{$secretario}}</span>
-            <span style="display: block; padding-left: 10px;">- {{$vocal}}</span>
-        </p>       
-        <p style="text-indent: 30px;">Quienes declaran <strong>APTO</strong> para ser ejecutado el Trabajo de Investigación Tesis. </p>
-        <p style="text-indent: 30px;">
-            <strong>Adjunto: </strong>
-            <span style="display: block; padding-left: 10px;">- Informe de Conformidad de los Jurados Revisores del Trabajo de Investigación de Tesis.</span>
-            <span style="display: block; padding-left: 10px;">- Trabajo de Investigación Tesis en PDF.</span>
+        <p style="text-indent: 30px;">Por tanto, hago llegar la propuesta de fecha y hora de sustentación de Tesis Intitulado: <strong>"{{$tittle}}"</strong>, 
+        Para el <strong>día {{$def_fecha}} a horas {{$def_hora}}</strong>, el cual se llevará a cabo de manera presencial en el <strong>auditorio de la Facultad de Ingeniería.</strong> Por lo cual se propone a los siguientes Docentes como jurados:</p>
+         <ul style="margin-left: 20mm;">
+            <li>{{$presidente}}</li>
+            <li>{{$secretario}}</li>
+            <li>{{$vocal}}</li>
+            <li>{{$asesor}} - (JURADO ACCESITARIO)	</li>
+        </ul>      
+        <ul><strong style="text-indent: 30px;">Adjunto:</strong></ul>
+        <ul style="margin-left: 20mm; list-style-type: disc;">
+            <li>Resolución de Aprobación del Informe Final del Trabajo de Investigación (Tesis)</li>
+            <li>Informe Final del Trabajo de Investigación (Tesis).</li>
+        </ul>
 
         <p style="text-indent: 30px;">Sin otro particular, me despido recordándole las muestras de mi especial consideración y estima personal.</p>
         <p style="text-align: center;">Atentamente,</p>

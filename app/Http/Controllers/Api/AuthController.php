@@ -128,12 +128,7 @@ class AuthController extends Controller
         
         return response()->json([
             'status' => true,
-            'data' => [
-                'estudiante_id' => $request->user()->student->_id,
-                'nombre' => $request->user()->name,
-                'correo' => $request->user()->email,
-                'rol' => $request->user()->role->name,
-            ],
+            'data' =>  new UserResource($request->user())
         ], 200);
     }
 

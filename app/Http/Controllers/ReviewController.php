@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Adviser;
+use App\Models\Defense;
 use App\Models\DocOf;
 use App\Models\DocResolution;
 use App\Models\HistoryReview;
@@ -94,6 +95,7 @@ class ReviewController extends Controller
             // Contar cuántas revisiones tiene el estudiante
             $count = HistoryReview::where('student_id', $student_id)
                                 ->where('adviser_id', $review->adviser_id)    
+                                ->where('rev_adviser_rol', $review->rev_adviser_rol)    
                                 ->where('rev_type', $review->rev_type)    
                                 ->count();
     
@@ -209,6 +211,7 @@ class ReviewController extends Controller
 
         // Agregar los datos de la revisión al array resultante
         $result[] = [
+            'solicitude_id' => $solicitude->_id,
             'review_id' => $review->_id,
             'stu_id' => $student->_id,
             'stu_name' => $studentName,
@@ -370,7 +373,7 @@ class ReviewController extends Controller
         if ($review) {
             // Define las reglas de validación
             $rules = [
-                'rev_status' => 'required|string|in:pendiente,aprobado,observado',
+                'rev_status' => 'required|string|in:pendiente,aprobado,observado,calificado',
                 'rev_num_of' => 'nullable|string',
             ];
     
@@ -399,6 +402,7 @@ class ReviewController extends Controller
                     break;
     
                 case 'aprobado':
+                    
                     $rules['rev_num_of'] = 'required|string'; // Agrega la regla para rev_num_of
                     
                     $this->validate($request, ['rev_num_of' => $rules['rev_num_of']]);
@@ -449,11 +453,29 @@ class ReviewController extends Controller
                     ], 200);
                     
                     break;
+
+                case 'calificado':
+
+                    $rules['rev_score'] = 'required|string'; // Agrega la regla para rev_num_of
+                    
+                    $this->validate($request, ['rev_score' => $rules['rev_score']]);
+
+                    // Actualiza la revisión
+                    $review->update([
+                        'rev_status' => 'calificado',
+                        'rev_score' => $request->input('rev_score'),
+                    ]);
+
+                    return response()->json([
+                        'estado' => $review->rev_status,
+                        'message' => 'calificado con éxito'
+                    ], 200);
+
+                    break;
     
                 default:
                     return response()->json(['message' => 'Estado no válido.'], 400);
             }
-    
             return response()->json(['message' => 'Estado de la revisión actualizado correctamente.'], 200);
         } else {
             return response()->json(['message' => 'Revisión no encontrada.'], 404);
@@ -551,6 +573,63 @@ class ReviewController extends Controller
                 'link-informe' => $solicitude->informe_link,
                 'actualizado' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
                 'rol' => $review->rev_adviser_rol,
+            ];
+        }
+    
+        // Retorna los datos ordenados y con los índices reorganizados
+        return response()->json([
+            'data' => array_values($result),  // Asegúrate de devolver los datos con índices reorganizados
+        ], 200);
+    }
+
+    public function getInfoDefenseAdviser($adviser_id) {
+        // Obtiene las revisiones del asesor
+        $reviews = Review::where('adviser_id', $adviser_id)
+                            ->where('rev_type', 'sustentacion')
+                            ->get();
+    
+        // Mapear los resultados asignando prioridad al estado usando sortBy
+        $sortedReviews = $reviews->sortBy(function ($review) {
+            switch ($review->rev_status) {
+                case 'pendiente':
+                    return 1;
+                case 'calificado':
+                    return 2;
+                default:
+                    return 3;  // Si hay un estado no esperado
+            }
+        });
+    
+        // Array donde almacenaremos los resultados formateados
+        $result = [];
+    
+        foreach ($sortedReviews as $review) {
+            // Obtener la solicitud y el estudiante relacionado a la revisión actual
+            $solicitude = Solicitude::where('student_id', $review->student_id)->first();
+            $student = Student::where('_id', $review->student_id)->first();
+            $defense = Defense::where('student_id',$review->student_id)->first();
+
+            // Manejar casos donde el estudiante no exista
+            if (!$student) {
+                continue;
+            }
+    
+            // Formatear el nombre del estudiante correctamente
+            $studentName = $student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name;
+    
+            // Agregar los datos de la revisión al array resultante
+            $result[] = [
+                'revision_id' => $review->_id,
+                'estudiante_id' => $student->_id,
+                'estudiante_nombre' => $studentName,
+                'titulo' => $solicitude ? $solicitude->sol_title_inve : 'No title', // Maneja si no hay solicitud
+                'revision_estado' => $review->rev_status,
+                'link_informe' => $solicitude->informe_link,
+                'actualizado' => $review->updated_at ? Carbon::parse($review->updated_at)->format('d/m/Y | H:i:s') : null,
+                'rol' => $review->rev_adviser_rol,
+                'nota' => $review->rev_score ?? '',
+                'sustentacion' => $defense->_id ?? '',
+                'sustentacion_estado' => $defense->def_status ?? '',
             ];
         }
     
