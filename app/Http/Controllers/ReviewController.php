@@ -78,6 +78,7 @@ class ReviewController extends Controller
     }
 
     public function updateStatusReview($student_id, Request $request) {
+        
         // Encuentra la revisión correspondiente al student_id
         $review = Review::where('student_id', $student_id)
                         ->where('rev_adviser_rol', 'asesor')

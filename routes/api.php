@@ -47,7 +47,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 //RUTAS PARA SOLICITUDES
 Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para crear una nueva solicitud ---> ESTUDIANTE
-    Route::post('/solicitudes-store', [SolicitudeController::class, 'store']);
     // Actualizar título de tesis y asesor ---> ESTUDIANTE
     Route::put('/solicitudes/{id}', [SolicitudeController::class, 'updateSolicitude'])->middleware('permission:update-solicitude');
     // Ruta para actualizar el estado de una solicitud ---> ESTUDIANTE, ASESOR
@@ -55,6 +54,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
     // Ruta para ver solicitudes aceptadas para ---> PAISI
     Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
 });
+Route::post('/solicitudes-store', [SolicitudeController::class, 'store']);
+
+
 
 //RUTAS PARA OFFICIOS
 Route::middleware(['auth:sanctum'])->group(function () {
@@ -118,11 +120,11 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 
 
+Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
 
 // RUTAS PARA ESTUDIANTES
 Route::middleware(['auth:sanctum'])->group(function () {   
     // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
-    Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
     // Ruta para ver los jurados asignados por id de estudiante
     Route::get('/student/get-juries/{student_id}', [StudentController::class, 'viewJuriesForTesisByStudent']); 
     //Ruta para para vista de APROBACION DE TESIS ---> ESTUDIANTE
