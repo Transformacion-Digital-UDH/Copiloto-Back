@@ -220,7 +220,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'FREDDY',
-                'email' => 'freddy.huapaya@udh.edu.pe',
+                'email' => 'freddy.huapaya1@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_rank' => 'DR.',
@@ -236,7 +236,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'ALBERTO',
-                'email' => 'alberto.jara@udh.edu.pe',
+                'email' => 'alberto.jara1@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_rank' => 'MG.',
@@ -252,7 +252,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'ALDO',
-                'email' => 'aldo.ramirez@udh.edu.pe',
+                'email' => 'aldo.ramirez1@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_rank' => 'MG.',
@@ -268,7 +268,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'BERTHA',
-                'email' => 'bertha.campos@udh.edu.pe',
+                'email' => 'bertha.campos1@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_rank' => 'MG.',
@@ -284,7 +284,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'CARLOS',
-                'email' => 'carlos.suarez@udh.edu.pe',
+                'email' => 'carlos.suarez1@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_rank' => 'MG.',
@@ -300,7 +300,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'EDGARDO',
-                'email' => 'edgardo.lopez@udh.edu.pe',
+                'email' => 'edgardo.lopez1@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_rank' => 'MG.',
@@ -316,7 +316,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'JUAN',
-                'email' => 'juan.huapalla@udh.edu.pe',
+                'email' => 'juan.huapalla1@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_rank' => 'MG',
@@ -332,7 +332,7 @@ class UserSeeder extends Seeder
             ],
             [
                 'name' => 'WALTER',
-                'email' => 'walter.baldeon@udh.edu.pe',
+                'email' => 'walter.baldeon1@udh.edu.pe',
                 'role' => 'asesor',
                 'role_data' => [
                     'adv_rank' => 'MG.',
