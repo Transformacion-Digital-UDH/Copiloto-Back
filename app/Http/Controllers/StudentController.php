@@ -11,6 +11,7 @@ use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\Adviser;
 use App\Models\Defense;
+use App\Models\Filter;
 use App\Models\Review;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -526,7 +527,7 @@ class StudentController extends Controller
     }
 
 
-    public function getStateTuCoachUDH($student_id)
+    public function getInfoFilterStudent($student_id)
     {
         $student = Student::where('_id', $student_id)->first();
 
@@ -536,32 +537,55 @@ class StudentController extends Controller
             ], 404);
         }
 
+        $filters = Filter::where('student_id', $student_id)->get();
+
+        $filtrosPredefinidos = [
+            'Primer filtro',
+            'Segundo filtro',
+            'Tercer filtro',
+        ];
+
+        $vri = [];
+
+        foreach ($filtrosPredefinidos as $nombreFiltro) {
+            $filter = $filters->firstWhere('fil_name', $nombreFiltro);
+
+            $vri[] = [
+                'fil_nombre' => $nombreFiltro,
+                'fil_estado'  => $filter->fil_status ?? 'no iniciado',
+                'fil_file'   => $filter->fil_file ?? '',
+            ];
+        }
+
         $stu_code = $student->stu_code;
 
         $response = Http::get("https://tucoach.udh.edu.pe/api/validar/{$stu_code}@udh.edu.pe");
 
         // Verifica si la solicitud fue exitosa antes de procesar la respuesta
-        if ($response->successful()) {
-            $data = $response->json();
+        if (!$response->successful()) {
 
-            $tucoach = 'aprobado';
-
-            if (!$data['status'] or $data['status'] === 'false') {
-                $tucoach = 'pendiente';
-            }
-
+            // Devuelve un error si la solicitud no fue exitosa
             return response()->json([
-
-                'doc_name' => 'Certificado de buenas prácticas - TUCOACH.UDH',
-                'doc_estado'=> $tucoach,
-                'doc_ver' => $data['url'] ?? '',
-            ],200);
+                'error' => 'No se pudo conectar con la API'
+            ], 500);
         }
 
-        // Devuelve un error si la solicitud no fue exitosa
+        $data = $response->json();
+
+        $tucoach = 'aprobado';
+
+        if (!$data['status'] or $data['status'] === 'false') {
+            $tucoach = 'pendiente';
+        }
+
         return response()->json([
-            'error' => 'No se pudo conectar con la API'
-        ], 500);
+            $vri,
+            'doc' => [
+            'doc_name' => 'Certificado de buenas prácticas - TUCOACH.UDH',
+            'doc_estado'=> $tucoach,
+            'doc_ver' => $data['url'] ?? ''],
+        ],200);
+        
     }
 
     public function getInfoDeclareApto($student_id){
