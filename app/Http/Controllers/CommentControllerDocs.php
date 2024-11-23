@@ -8,6 +8,7 @@ use Google_Service_Drive;
 use Illuminate\Http\Request;
 use App\Models\Solicitude;
 use App\Models\Comment;
+use App\Models\Student;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Carbon\Carbon;
@@ -284,5 +285,20 @@ class CommentControllerDocs extends Controller
             return $matches[1];
         }
         return null;
+    }
+    
+    public function getComment($student_id){
+        
+        $solicitud = Solicitude::where('student_id', $student_id)->first();
+        $student = Student::where('_id', $student_id)->first();
+        $student_name = ucwords(strtolower($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ', ' . $student->stu_name));
+
+        $comments = Comment::where('solicitude_id',$solicitud->_id)->first();
+
+        return response()->json([
+            'est_id' => $student_id,
+            'est_nombre' => $student_name,
+            'comentarios' => $comments,
+        ], 200);
     }
 }

@@ -553,7 +553,8 @@ class StudentController extends Controller
             $vri[] = [
                 'fil_nombre' => $nombreFiltro,
                 'fil_estado'  => $filter->fil_status ?? 'no iniciado',
-                'fil_file'   => $filter->fil_file ?? '',
+                'fil_archivo'   => $filter->fil_file ?? '',
+                'fil_ruta' => $filter->fil_path ?? '',
             ];
         }
 
