@@ -155,10 +155,18 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/estudiante/info-filtro/{student_id}', [StudentController::class, 'getInfoFilterStudent']);
     //Ruta para crear revision de CONFORMIDAD POR VRI ---> ESTUDIANTE
     Route::get('/vri/crear-primer-filtro/{student_id}', [FilterController::class, 'createReviewVRI']);
-    //Ruta para ver revisiones pendientes de PRIMER FILTRO ---> ESTUDIANTE
+    //Ruta para ver revisiones pendientes de PRIMER FILTRO ---> VRI
     Route::get('/vri/get-primer-filtro', [FilterController::class, 'getStudentsFirstFilter']);
+    //Ruta para ver revisiones pendientes de SEGUNDO FILTRO ---> VRI
+    Route::get('/vri/get-segundo-filtro', [FilterController::class, 'getStudentsSecondFilter']);
+    //Ruta para ver revisiones pendientes de TERCER FILTRO ---> VRI
+    Route::get('/vri/get-tercer-filtro', [FilterController::class, 'getStudentsTirdFilter']);
+    //Ruta para ACTUALIZAR estados de FILTROS ---> VRI
+    Route::put('/vri/update-filter/{filter_id}/status', [FilterController::class, 'updateFilter']);
+    //Ruta para ver los COMENTARIOS ---> ESTUDIANTE
+    Route::get('/vri/coments/{student_id}', [CommentControllerDocs::class, 'getComment']);
     
-
+    
 // RUTAS PARA REVISIONES
 Route::middleware(['auth:sanctum'])->group(function () {  
     // Ruta para que el estudiante solicite la primera revision ---> ESTUDIANTE
