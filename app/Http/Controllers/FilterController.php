@@ -64,7 +64,6 @@ class FilterController extends Controller
             'student_id' => $student_id,
             'fil_name' => 'primer filtro',
             'fil_status' => 'pendiente',
-            'fil_file' => null,
         ]);
 
         // Guardar el nuevo documento en la base de datos
@@ -233,7 +232,6 @@ class FilterController extends Controller
                             'student_id' => $filter->student_id,
                             'fil_name' => 'segundo filtro',
                             'fil_status' => 'pendiente',
-                            'fil_file' => '',
                             'fil_path' => '',
                         ]);
 
@@ -249,34 +247,68 @@ class FilterController extends Controller
                         break;
 
                     case 'segundo filtro':
-                            // Crear el segundo filtro
-                        Filter::create([
-                            'student_id' => $filter->student_id,
-                            'fil_name' => 'tercer filtro',
-                            'fil_status' => 'pendiente',
-                            'fil_file' => '',
-                            'fil_path' => '',
-                        ]);
+                        if ($request->hasFile('fil_path')) {
 
-                        // Actualizar el estado del primer filtro
-                        $filter->update([
-                            'fil_status' => $status,
-                        ]);
+                            $request->validate([
+                                'fil_path' => 'required|file|mimes:pdf|max:10240',
+                            ]);
+                            // Obtener el nombre del archivo usando el DNI y agregar la extensión .pdf
+                            $fileName = 'CBP_' . $student_dni . '.pdf';
+                
+                            // Guardar el archivo con el nombre especificado en la carpeta 'Constancias'
+                            $path = $request->file('fil_path')->storeAs('ConstanciaBuenasPracticas', $fileName, 'public');
+                
+                            // Actualizar los campos en la base de datos
+                            $filter->fil_path = $path; // Ruta del archivo guardado
+                            $filter->fil_status = $status; 
+                            $filter->save();
+           
+                                    // Crear el segundo filtro
+                            Filter::create([
+                                'student_id' => $filter->student_id,
+                                'fil_name' => 'tercer filtro',
+                                'fil_status' => 'pendiente',
+                                'fil_path' => '',
+                            ]);
+
+                            return response()->json([
+                                'estado' => $status,
+                                'message' => 'Archivo subido correctamente. Segundo filtro aprobado',
+                            ], 200);
+                        }
 
                         return response()->json([
-                            'estado' => 'aprobado',
-                            'message' => 'Segundo filtro aprobado',
-                        ], 200);
+                            'message' => 'No se pudo cargar el archivo.'
+                        ]);
+
                         break;
                     case 'tercer filtro':
-                        $filter->update([
-                            'fil_status' => $status,
-                        ]);
-    
+
+                        if ($request->hasFile('fil_path')) {
+
+                            $request->validate([
+                                'fil_path' => 'required|file|mimes:pdf|max:10240',
+                            ]);
+                            // Obtener el nombre del archivo usando el DNI y agregar la extensión .pdf
+                            $fileName = 'CO_' . $student_dni . '.pdf';
+                
+                            // Guardar el archivo con el nombre especificado en la carpeta 'Constancias'
+                            $path = $request->file('fil_path')->storeAs('ConstanciaOriginalidad', $fileName, 'public');
+                
+                            // Actualizar los campos en la base de datos
+                            $filter->fil_path = $path; // Ruta del archivo guardado
+                            $filter->fil_status = $status; 
+                            $filter->save();
+
+                            return response()->json([
+                                'estado' => $status,
+                                'message' => 'Archivo subido correctamente. Tercer filtro aprobado',
+                            ], 200);
+                        }
+
                         return response()->json([
-                            'estado' => 'aprobado',
-                            'message' => 'Tercer filtro aprobado',
-                        ], 200);
+                            'message' => 'No se pudo cargar el archivo.'
+                        ]);
                         break;
                     
                     default:
