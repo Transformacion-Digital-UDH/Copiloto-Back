@@ -12,6 +12,7 @@ use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class FilterController extends Controller
 {
@@ -340,7 +341,7 @@ class FilterController extends Controller
                 $sol_da = Solicitude::where('student_id', $student_id)->first();
                 $informe = $sol_da->informe_link;
 
-
+                
                 // Datos estructurados
                 $data[] = [
                     'estudiante_id' => $student_id,

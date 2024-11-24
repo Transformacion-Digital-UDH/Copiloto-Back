@@ -16,6 +16,7 @@ use App\Models\Review;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use MongoDB\Laravel\Eloquent\Casts\ObjectId;
 
 class StudentController extends Controller
@@ -549,12 +550,13 @@ class StudentController extends Controller
 
         foreach ($filtrosPredefinidos as $nombreFiltro) {
             $filter = $filters->firstWhere('fil_name', $nombreFiltro);
+            
+            $url = ($filter && $filter->fil_path) ? Storage::url($filter->fil_path) : '';
 
             $vri[] = [
                 'fil_nombre' => $nombreFiltro,
                 'fil_estado'  => $filter->fil_status ?? 'no iniciado',
-                'fil_archivo'   => $filter->fil_file ?? '',
-                'fil_ruta' => $filter->fil_path ?? '',
+                'fil_ruta' => $url ?? '',
             ];
         }
 
