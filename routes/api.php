@@ -143,6 +143,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para para vista de APROBACION DE INFORME FINAL ---> ESTUDIANTE
     Route::get('/estudiante/get-info-aprobar/informe/{student_id}', [StudentController::class, 'getInfoApproveInforme']);
     //Ruta para para vista de validación de VRI ---> ESTUDIANTE
+    
     //Ruta para para vista de DECLARAR APTO PARA SUSTENTAR ---> ESTUDIANTE
     Route::get('/estudiante/get-info/declarar-apto/{student_id}', [StudentController::class, 'getInfoDeclareApto']);
     //Ruta para para vista de DESIGNACION DE FECHA Y HORA PARA SUSTENTACION ---> ESTUDIANTE
