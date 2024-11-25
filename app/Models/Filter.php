@@ -14,6 +14,6 @@ class Filter extends Model
         'student_id',
         'fil_name', //primer filtro, segundo filtro, tercer filtro
         'fil_status', //pendiente, observado, aprobado
-        'fil_file', //pdf
+        'fil_path', //alamcenamiento para los pdf subidos
     ];
 }

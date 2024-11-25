@@ -12,6 +12,7 @@ use App\Models\Student;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class FilterController extends Controller
 {
@@ -64,7 +65,6 @@ class FilterController extends Controller
             'student_id' => $student_id,
             'fil_name' => 'primer filtro',
             'fil_status' => 'pendiente',
-            'fil_file' => null,
         ]);
 
         // Guardar el nuevo documento en la base de datos
@@ -132,6 +132,7 @@ class FilterController extends Controller
 
                 // Datos estructurados
                 $data[] = [
+                    'estudiante_id' => $student_id,
                     'nombre' => $student_name,
                     'filtro_id' => $filter->_id,
                     'filtro_fecha' => $filter ? Carbon::parse($filter->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') : '',
@@ -194,4 +195,252 @@ class FilterController extends Controller
         }
     }
 
+    public function updateFilter(Request $request, $fil_id)
+    {
+        // Buscar el filtro
+        $filter = Filter::where('_id', $fil_id)
+                        ->where('fil_status', '!=', 'aprobado')
+                        ->first();
+
+        if (!$filter) {
+            return response()->json(['message' => 'Registro no encontrado o en proceso.'], 404);
+        }
+
+        // Buscar al estudiante asociado
+        $student = Student::where('_id', $filter->student_id)->first();
+        $student_dni = $student->stu_dni;
+
+        // Validar la solicitud
+        $rules = [
+            'fil_estado' => 'required|string|in:aprobado',
+        ];
+
+        $this->validate($request, $rules);
+
+        // Obtener el estado enviado
+        $status = $request->input('fil_estado');
+
+        // Procesar según el estado
+        switch ($status) {
+            case 'aprobado':
+
+                $fil_name = $filter->fil_name;
+
+                switch ($fil_name) {
+                    case 'primer filtro':
+                            // Crear el segundo filtro
+                        Filter::create([
+                            'student_id' => $filter->student_id,
+                            'fil_name' => 'segundo filtro',
+                            'fil_status' => 'pendiente',
+                            'fil_path' => '',
+                        ]);
+
+                        // Actualizar el estado del primer filtro
+                        $filter->update([
+                            'fil_status' => $status,
+                        ]);
+
+                        return response()->json([
+                            'estado' => 'aprobado',
+                            'message' => 'Primer filtro aprobado',
+                        ], 200);
+                        break;
+
+                    case 'segundo filtro':
+                        if ($request->hasFile('fil_path')) {
+
+                            $request->validate([
+                                'fil_path' => 'required|file|mimes:pdf|max:10240',
+                            ]);
+                            // Obtener el nombre del archivo usando el DNI y agregar la extensión .pdf
+                            $fileName = 'CBP_' . $student_dni . '.pdf';
+                
+                            // Guardar el archivo con el nombre especificado en la carpeta 'Constancias'
+                            $path = $request->file('fil_path')->storeAs('ConstanciaBuenasPracticas', $fileName, 'public');
+                
+                            // Actualizar los campos en la base de datos
+                            $filter->fil_path = $path; // Ruta del archivo guardado
+                            $filter->fil_status = $status; 
+                            $filter->save();
+           
+                                    // Crear el segundo filtro
+                            Filter::create([
+                                'student_id' => $filter->student_id,
+                                'fil_name' => 'tercer filtro',
+                                'fil_status' => 'pendiente',
+                                'fil_path' => '',
+                            ]);
+
+                            return response()->json([
+                                'estado' => $status,
+                                'message' => 'Archivo subido correctamente. Segundo filtro aprobado',
+                            ], 200);
+                        }
+
+                        return response()->json([
+                            'message' => 'No se pudo cargar el archivo.'
+                        ]);
+
+                        break;
+                    case 'tercer filtro':
+
+                        if ($request->hasFile('fil_path')) {
+
+                            $request->validate([
+                                'fil_path' => 'required|file|mimes:pdf|max:10240',
+                            ]);
+                            // Obtener el nombre del archivo usando el DNI y agregar la extensión .pdf
+                            $fileName = 'CO_' . $student_dni . '.pdf';
+                
+                            // Guardar el archivo con el nombre especificado en la carpeta 'Constancias'
+                            $path = $request->file('fil_path')->storeAs('ConstanciaOriginalidad', $fileName, 'public');
+                
+                            // Actualizar los campos en la base de datos
+                            $filter->fil_path = $path; // Ruta del archivo guardado
+                            $filter->fil_status = $status; 
+                            $filter->save();
+
+                            return response()->json([
+                                'estado' => $status,
+                                'message' => 'Archivo subido correctamente. Tercer filtro aprobado',
+                            ], 200);
+                        }
+
+                        return response()->json([
+                            'message' => 'No se pudo cargar el archivo.'
+                        ]);
+                        break;
+                    
+                    default:
+                        return response()->json(['message' => 'Filtro no válido'], 400);
+                    }
+                break;
+
+
+            default:
+                return response()->json(['message' => 'Estado no válido.'], 400);
+            }
+        }
+
+    public function getStudentsSecondFilter(){
+        try {
+            // Obtener filtros asociados al "primer filtro"
+            $filters = Filter::where('fil_name', 'segundo filtro')->get();
+
+            $data = [];
+
+            foreach ($filters as $filter) {
+                $student_id = $filter->student_id;
+
+                // Obtener datos del estudiante
+                $student = Student::where('_id', $student_id)->first();
+                $student_name = $student ? ucwords(strtolower($student->stu_name . ' ' . $student->stu_lastname_m . ' ' . $student->stu_lastname_f)) : '';
+
+                // Designación de asesor
+                $sol_da = Solicitude::where('student_id', $student_id)->first();
+                $informe = $sol_da->informe_link;
+
+                
+                // Datos estructurados
+                $data[] = [
+                    'estudiante_id' => $student_id,
+                    'nombre' => $student_name,
+                    'filtro_id' => $filter->_id,
+                    'filtro_fecha' => $filter ? Carbon::parse($filter->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') : '',
+                    'filtro_estado' => $filter->fil_status,
+                    'documentos' => [
+                        [
+                            'doc_nombre' => 'Informe final de proyecto de tesis',
+                            'doc_link' => $informe ?? '',
+                        ],
+                    ],
+                ];
+            }
+
+            // Ordenar datos: primero por estado (pendiente, aprobado), luego por fecha más reciente
+            usort($data, function ($a, $b) {
+                // Ordenar por estado
+                $estadoOrden = ['pendiente' => 1, 'aprobado' => 2];
+                $estadoA = $estadoOrden[$a['filtro_estado']] ?? 3;
+                $estadoB = $estadoOrden[$b['filtro_estado']] ?? 3;
+
+                if ($estadoA !== $estadoB) {
+                    return $estadoA <=> $estadoB;
+                }
+
+                // Ordenar por fecha más reciente
+                return strtotime($b['filtro_fecha']) <=> strtotime($a['filtro_fecha']);
+            });
+
+            // Retornar datos estructurados
+            return response()->json($data);
+        } catch (\Exception $e) {
+            Log::error('Error in getStudentsFirstFilter: ' . $e->getMessage());
+            return response()->json(['error' => 'Error al obtener los datos: ' . $e->getMessage()], 500);
+        }
+
+    }
+
+    public function getStudentsTirdFilter(){
+        try {
+            // Obtener filtros asociados al "primer filtro"
+            $filters = Filter::where('fil_name', 'tercer filtro')->get();
+
+            $data = [];
+
+            foreach ($filters as $filter) {
+                $student_id = $filter->student_id;
+
+                // Obtener datos del estudiante
+                $student = Student::where('_id', $student_id)->first();
+                $student_name = $student ? ucwords(strtolower($student->stu_name . ' ' . $student->stu_lastname_m . ' ' . $student->stu_lastname_f)) : '';
+
+                // Designación de asesor
+                $sol_da = Solicitude::where('student_id', $student_id)->first();
+                $informe = $sol_da->informe_link;
+
+
+                // Datos estructurados
+                $data[] = [
+                    'estudiante_id' => $student_id,
+                    'nombre' => $student_name,
+                    'filtro_id' => $filter->_id,
+                    'filtro_fecha' => $filter ? Carbon::parse($filter->updated_at)->locale('es')->isoFormat('DD[-]MM[-]YYYY') : '',
+                    'filtro_estado' => $filter->fil_status,
+                    'documentos' => [
+                        [
+                            'doc_nombre' => 'Informe final de proyecto de tesis',
+                            'doc_link' => $informe ?? '',
+                        ],
+                    ],
+                ];
+            }
+
+            // Ordenar datos: primero por estado (pendiente, aprobado), luego por fecha más reciente
+            usort($data, function ($a, $b) {
+                // Ordenar por estado
+                $estadoOrden = ['pendiente' => 1, 'aprobado' => 2];
+                $estadoA = $estadoOrden[$a['filtro_estado']] ?? 3;
+                $estadoB = $estadoOrden[$b['filtro_estado']] ?? 3;
+
+                if ($estadoA !== $estadoB) {
+                    return $estadoA <=> $estadoB;
+                }
+
+                // Ordenar por fecha más reciente
+                return strtotime($b['filtro_fecha']) <=> strtotime($a['filtro_fecha']);
+            });
+
+            // Retornar datos estructurados
+            return response()->json($data);
+        } catch (\Exception $e) {
+            Log::error('Error in getStudentsFirstFilter: ' . $e->getMessage());
+            return response()->json(['error' => 'Error al obtener los datos: ' . $e->getMessage()], 500);
+        }
+
+    }
+
 }
+
+

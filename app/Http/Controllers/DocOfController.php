@@ -1214,7 +1214,7 @@ class DocOfController extends Controller
         }
 
         $filter = Filter::where('student_id', $student_id)
-                ->where('fil_name', 'turnitin')
+                ->where('fil_name', 'tercer filtro')
                 ->where('fil_status', 'aprobado')
                 ->first();
         if (!$filter) {
