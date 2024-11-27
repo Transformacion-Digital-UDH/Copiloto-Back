@@ -24,13 +24,21 @@ class SolicitudeController extends Controller
     //Crear solicitude después del registro del estudiante
     public function store(Request $request)
     {
-        // Validar que el student_id está presente
-        $validatedData = $request->validate([
-            'student_id' => 'required|string|exists:students,_id',
-        ]);
+
+        $student_id = $request->input('student_id');
+        
+        $student = Student::where('_id', $student_id)->first();
+       
+        if(!$student){
+            return response()->json([
+                'message' => 'El estudiante no existe.',
+                'status' => false,
+                'id'=>$student_id,
+            ], 404);
+        }
 
         // Verificar si ya existe una solicitud en estado 'pending' o 'in-progress' para este estudiante
-        $existingSolicitude = Solicitude::where('student_id', $validatedData['student_id'])
+        $existingSolicitude = Solicitude::where('student_id', $student_id)
                                         ->whereIn('sol_status', ['pendiente', 'en progreso'])
                                         ->first();
 
@@ -41,29 +49,12 @@ class SolicitudeController extends Controller
             ], 409); // Código 409: Conflict
         }
 
-        // Buscar el role_id correspondiente al rol 'paisi' en la colección de roles
-        $paisiRole = Role::where('name', 'paisi')->first();
-        // Buscar un usuario que tenga el role_id del rol 'paisi' y el programa 'ingeniería de sistemas e informática'
-        $paisiUser = User::where('role_id', $paisiRole->_id)
-                    ->where('us_program', 'ingeniería de sistemas e informática')
-                    ->first();
-
-        if (!$paisiUser) {
-            return response()->json([
-                'message' => 'No se encontró un PAISI con el programa Ingeniería de Sistemas e Informática.'
-            ], 404); // Código 404: Not Found
-        }
-
-        // Ahora buscar el documento del paisi en la colección 'paisi' que tiene el user_id de ese usuario
-        $paisi = Paisi::where('user_id', $paisiUser->_id)->first();
-
         // Crear la solicitud si no existe una en estado pendiente o en progreso
         $solicitude = Solicitude::create([
             'sol_title_inve' => null, // Inicialmente vacío
             'sol_type_inve' => null, // Inicialmente vacío
             'adviser_id' => null, // Inicialmente vacío
-            'student_id' => $validatedData['student_id'], // ID del estudiante
-            'paisi_id' => $paisi->_id, // Asignar el paisi_id
+            'student_id' => $student_id, // ID del estudiante
             'sol_status' => 'en progreso' // Estado inicial en progreso
         ]);
 

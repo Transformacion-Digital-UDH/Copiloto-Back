@@ -15,6 +15,7 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CommentControllerDocs;
 use App\Http\Controllers\DefenseController;
+use App\Http\Controllers\FilterController;
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
@@ -56,6 +57,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
 });
 
+
+
 //RUTAS PARA OFFICIOS
 Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para actualizar el estado de la solicitud de designacion de asesor ---> PAISI
@@ -76,7 +79,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/oficio/solicitud-jurados/informe', [DocOfController::class, 'getOfficeForJuriesInforme']);
     //Ruta para crear oficio de solicitud de aprobacion de informe por la facultad--->PAISI
     Route::get('/oficio/solicitud-aprobar/informe/{student_id}', [DocOfController::class, 'soliciteOfficeApproveInforme']);
-    //Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI
+    //Ruta para para ver oficios en de APROBACION DE INFORM con orden --->PAISI
     Route::get('/oficio/get-aprobar/informe', [DocOfController::class, 'getOfficeApproveInforme']);
     //Ruta para solicitar el oficio de DECLARAR APTO PARA SUSTENTAR --->ESTUDANTE
     Route::get('/oficio/declarar-apto/{student_id}', [DocOfController::class, 'soliciteOfficeDeclareApto']);
@@ -139,8 +142,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/oficio/crear-solicitud-jurados/informe/{student_id}', [DocOfController::class, 'createOfficeJuriesForInforme']);
     //Ruta para para vista de APROBACION DE INFORME FINAL ---> ESTUDIANTE
     Route::get('/estudiante/get-info-aprobar/informe/{student_id}', [StudentController::class, 'getInfoApproveInforme']);
-    //Ruta para para vista de validación de TU COACH UDH ---> ESTUDIANTE
-    Route::get('/estudiante/get-certificado-buenas-practicas/{student_id}', [StudentController::class, 'getStateTuCoachUDH']);
+    //Ruta para para vista de validación de VRI ---> ESTUDIANTE
+    
     //Ruta para para vista de DECLARAR APTO PARA SUSTENTAR ---> ESTUDIANTE
     Route::get('/estudiante/get-info/declarar-apto/{student_id}', [StudentController::class, 'getInfoDeclareApto']);
     //Ruta para para vista de DESIGNACION DE FECHA Y HORA PARA SUSTENTACION ---> ESTUDIANTE
@@ -148,10 +151,23 @@ Route::middleware(['auth:sanctum'])->group(function () {
     //Ruta para para vista de SUSTENTACION ---> ESTUDIANTE
     Route::get('/estudiante/get/resultado-sustentacion/{student_id}', [StudentController::class, 'getInfoDefenseStudent']);
 });
-    
- 
-    
 
+    //Ruta para vista de CONFORMIDAD POR VRI ---> ESTUDIANTE
+    Route::get('/estudiante/info-filtro/{student_id}', [StudentController::class, 'getInfoFilterStudent']);
+    //Ruta para crear revision de CONFORMIDAD POR VRI ---> ESTUDIANTE
+    Route::get('/vri/crear-primer-filtro/{student_id}', [FilterController::class, 'createReviewVRI']);
+    //Ruta para ver revisiones pendientes de PRIMER FILTRO ---> VRI
+    Route::get('/vri/get-primer-filtro', [FilterController::class, 'getStudentsFirstFilter']);
+    //Ruta para ver revisiones pendientes de SEGUNDO FILTRO ---> VRI
+    Route::get('/vri/get-segundo-filtro', [FilterController::class, 'getStudentsSecondFilter']);
+    //Ruta para ver revisiones pendientes de TERCER FILTRO ---> VRI
+    Route::get('/vri/get-tercer-filtro', [FilterController::class, 'getStudentsTirdFilter']);
+    //Ruta para ACTUALIZAR estados de FILTROS ---> VRI
+    Route::put('/vri/update-filter/{filter_id}/status', [FilterController::class, 'updateFilter']);
+    //Ruta para ver los COMENTARIOS ---> ESTUDIANTE
+    Route::get('/vri/coments/{student_id}', [CommentControllerDocs::class, 'getComment']);
+    
+    
 // RUTAS PARA REVISIONES
 Route::middleware(['auth:sanctum'])->group(function () {  
     // Ruta para que el estudiante solicite la primera revision ---> ESTUDIANTE
