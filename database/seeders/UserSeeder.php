@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'adviser' => [
                 'confirm-solicitude'
             ],
-            'paisi' => [
+            'pa' => [
                 'create-link',
                 'confirm-carte',
                 'view-document'
@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
         $roles = [
             'estudiante' => $permissions['student'],
             'asesor' => $permissions['adviser'],
-            'paisi' => $permissions['paisi'],
+            'pa' => $permissions['pa'],
             'facultad' => $permissions['faculty'],
             'vri' => $permissions['vri'],
             'turnitin' => $permissions['turnitin'],
@@ -350,50 +350,50 @@ class UserSeeder extends Seeder
             // con rol programas academicos
             [
                 'name' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
-                'email' => 'paisi@udh.edu.pe',
-                'role' => 'paisi',
+                'email' => 'titulacion.sistemas@udh.edu.pe',
+                'role' => 'pa',
                 'role_data' => [
-                    'pai_rank' => 'ING.',
-                    'pai_name' => 'PAOLO',
-                    'pai_lastname_m' => 'SOLIS',
-                    'pai_lastname_f' => 'JARA',
-                    'pai_program' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
-                    'pai_faculty' => 'INGENIERÍA',
+                    'pa_rank' => 'ING.',
+                    'pa_name' => 'PAOLO',
+                    'pa_lastname_m' => 'SOLIS',
+                    'pa_lastname_f' => 'JARA',
+                    'pa_program' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'pa_faculty' => 'INGENIERÍA',
                 ]
             ],
 
             [
                 'name' => 'INGENIERÍA CIVIL',
-                'email' => 'programa.civil@udh.edu.pe',
-                'role' => 'paisi',
+                'email' => 'titulacion.civil@udh.edu.pe',
+                'role' => 'pa',
                 'role_data' => [
-                    'pai_rank' => 'ING.',
-                    'pai_name' => 'ERIKA',
-                    'pai_lastname_m' => 'ARRATEA',
-                    'pai_lastname_f' => 'SALVADOR',
-                    'pai_program' => 'INGENIERÍA CIVIL',
-                    'pai_faculty' => 'INGENIERÍA',
+                    'pa_rank' => 'ING.',
+                    'pa_name' => 'ERIKA',
+                    'pa_lastname_m' => 'ARRATEA',
+                    'pa_lastname_f' => 'SALVADOR',
+                    'pa_program' => 'INGENIERÍA CIVIL',
+                    'pa_faculty' => 'INGENIERÍA',
                 ]
             ],
 
             [
                 'name' => 'ARQUITECTURA',
                 'email' => 'programa.arquitectura@udh.edu.pe',
-                'role' => 'paisi',
+                'role' => 'pa',
                 'role_data' => [
-                    'pai_rank' => 'ARQ.',
-                    'pai_name' => 'ALBERTO',
-                    'pai_lastname_m' => 'JARA',
-                    'pai_lastname_f' => 'TRUJILLO',
-                    'pai_program' => 'ARQUITECTURA',
-                    'pai_faculty' => 'INGENIERÍA',
+                    'pa_rank' => 'ARQ.',
+                    'pa_name' => 'ALBERTO',
+                    'pa_lastname_m' => 'JARA',
+                    'pa_lastname_f' => 'TRUJILLO',
+                    'pa_program' => 'ARQUITECTURA',
+                    'pa_faculty' => 'INGENIERÍA',
                 ]
             ],
 
             // con rol facultad
             [
                 'name' => 'INGENIERÍA',
-                'email' => 'facultad@udh.edu.pe',
+                'email' => 'titulacion.ingenieria@udh.edu.pe',
                 'role' => 'facultad',
                 'role_data' => [
                     'fa_rank' => 'MG.',
@@ -406,7 +406,7 @@ class UserSeeder extends Seeder
 
             [
                 'name' => 'CIENCIAS DE LA SALUD',
-                'email' => 'facultad.salud@udh.edu.pe',
+                'email' => 'titulacion.salud@udh.edu.pe',
                 'role' => 'facultad',
                 'role_data' => [
                     'fa_rank' => 'DRA.',
@@ -477,15 +477,15 @@ class UserSeeder extends Seeder
                         // Otros campos específicos de la tabla `asesors`
                     ]);
                     break;
-                case 'paisi':
-                    \DB::table('paisis')->insert([
+                case 'pa':
+                    \DB::table('programs')->insert([
                         'user_id' => $createdUser->_id,
-                        'pai_rank' => $user['role_data']['pai_rank'],
-                        'pai_name' => $user['role_data']['pai_name'],
-                        'pai_lastname_m' => $user['role_data']['pai_lastname_m'],
-                        'pai_lastname_f' => $user['role_data']['pai_lastname_f'],
-                        'pai_program' => $user['role_data']['pai_program'],
-                        'pai_faculty' => $user['role_data']['pai_faculty'],
+                        'pa_rank' => $user['role_data']['pa_rank'],
+                        'pa_name' => $user['role_data']['pa_name'],
+                        'pa_lastname_m' => $user['role_data']['pa_lastname_m'],
+                        'pa_lastname_f' => $user['role_data']['pa_lastname_f'],
+                        'pa_program' => $user['role_data']['pa_program'],
+                        'pa_faculty' => $user['role_data']['pa_faculty'],
                         // Otros campos específicos de la tabla `pasis`
                     ]);
                     break;
