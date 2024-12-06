@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'adviser' => [
                 'confirm-solicitude'
             ],
-            'pa' => [
+            'program' => [
                 'create-link',
                 'confirm-carte',
                 'view-document'
@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
         $roles = [
             'estudiante' => $permissions['student'],
             'asesor' => $permissions['adviser'],
-            'pa' => $permissions['pa'],
+            'program' => $permissions['program'],
             'facultad' => $permissions['faculty'],
             'vri' => $permissions['vri'],
             'turnitin' => $permissions['turnitin'],
@@ -183,6 +183,20 @@ class UserSeeder extends Seeder
                     'stu_lastname_f' => 'NOEL',
                     'stu_dni' => '77327670',
                     'stu_code' => '2020210311',
+                    'stu_program' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
+                    'stu_faculty' => 'INGENIERÍA',
+                ]
+            ],
+            [
+                'name' => 'MARVIN',
+                'email' => '2019110448@udh.edu.pe',
+                'role' => 'estudiante',
+                'role_data' => [
+                    'stu_name' => 'MARVIN HECTOR',
+                    'stu_lastname_m' => 'CAMPOS',
+                    'stu_lastname_f' => 'DEZA',
+                    'stu_dni' => '75179992',
+                    'stu_code' => '2019110448',
                     'stu_program' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
                     'stu_faculty' => 'INGENIERÍA',
                 ]
@@ -351,7 +365,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'INGENIERÍA DE SISTEMAS E INFORMÁTICA',
                 'email' => 'titulacion.sistemas@udh.edu.pe',
-                'role' => 'pa',
+                'role' => 'programa',
                 'role_data' => [
                     'pa_rank' => 'ING.',
                     'pa_name' => 'PAOLO',
@@ -365,7 +379,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'INGENIERÍA CIVIL',
                 'email' => 'titulacion.civil@udh.edu.pe',
-                'role' => 'pa',
+                'role' => 'programa',
                 'role_data' => [
                     'pa_rank' => 'ING.',
                     'pa_name' => 'ERIKA',
@@ -379,7 +393,7 @@ class UserSeeder extends Seeder
             [
                 'name' => 'ARQUITECTURA',
                 'email' => 'programa.arquitectura@udh.edu.pe',
-                'role' => 'pa',
+                'role' => 'programa',
                 'role_data' => [
                     'pa_rank' => 'ARQ.',
                     'pa_name' => 'ALBERTO',
@@ -477,7 +491,7 @@ class UserSeeder extends Seeder
                         // Otros campos específicos de la tabla `asesors`
                     ]);
                     break;
-                case 'pa':
+                case 'program':
                     \DB::table('programs')->insert([
                         'user_id' => $createdUser->_id,
                         'pa_rank' => $user['role_data']['pa_rank'],
