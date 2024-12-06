@@ -6,21 +6,21 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use MongoDB\Laravel\Eloquent\Model;
 use MongoDB\Laravel\Relations\BelongsTo;
 
-class Paisi extends Model
+class Program extends Model
 {
     use HasFactory;
     
     protected $connection = 'mongodb';
-    protected $collection = 'paisis'; // Nombre de la colección en MongoDB
+    protected $collection = 'programs'; // Nombre de la colección en MongoDB
     protected $fillable = [
 
         'user_id',
-        'pai_rank',
-        'pai_name',
-        'pai_lastname_m',
-        'pai_lastname_f',
-        'pai_program',
-        'pai_faculty',
+        'pa_rank',
+        'pa_name',
+        'pa_lastname_m',
+        'pa_lastname_f',
+        'pa_program',
+        'pa_faculty',
 
     ];
 
@@ -38,6 +38,6 @@ class Paisi extends Model
 
     // Función para obtener el nombre completo
     public function getFullName(){
-        return $this->pai_name . ' ' . $this->pai_lastname_m . ' ' . $this->pai_lastname_f;
+        return $this->pa_name . ' ' . $this->pa_lastname_m . ' ' . $this->pa_lastname_f;
     }
 }

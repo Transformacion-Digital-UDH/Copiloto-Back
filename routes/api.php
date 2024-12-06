@@ -30,6 +30,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/me', [AuthController::class, 'me']);
 });
 
+
+
 Route::apiResource('users', \App\Http\Controllers\UserController::class);
 Route::get('solicitudes', [SolicitudeController::class, 'getAll']);
 Route::get('students', [StudentController::class, 'getAll']);
@@ -49,24 +51,69 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
 //RUTAS PARA SOLICITUDES
 Route::middleware(['auth:sanctum'])->group(function () {
+    
+    
+});
+
+//RUTAS PARA ESTUDIANTES
+Route::middleware(['auth:sanctum'])->group(function () {
+
+//--------->>>>> DESIGNACION DE ASESOR
+
     // Ruta para crear una nueva solicitud ---> ESTUDIANTE
     Route::post('/solicitudes-store', [SolicitudeController::class, 'store']);
-    // Actualizar título de tesis y asesor ---> ESTUDIANTE
+    // Actualizar título de tesis ---> ESTUDIANTE
     Route::put('/solicitudes/{id}', [SolicitudeController::class, 'updateSolicitude'])->middleware('permission:update-solicitude');
-    // Ruta para actualizar el estado de una solicitud ---> ESTUDIANTE, ASESOR
-    Route::patch('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
-    // Ruta para ver solicitudes aceptadas para ---> PAISI
-    Route::get('/paisi/getSolicitude', [SolicitudeController::class, 'getSolicitudeForPaisi']); 
+
 });
 
 
-
-//RUTAS PARA OFFICIOS
+//RUTAS PARA ASESORES
 Route::middleware(['auth:sanctum'])->group(function () {
+
+//--------->>>>> DESIGNACION DE ASESOR
+
+    // Ruta para actualizar el estado de una solicitud ---> ASESOR
+    Route::patch('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
+});
+
+
+//RUTAS PARA PROGRAMA ACADEMICO
+Route::middleware(['auth:sanctum'])->group(function () {
+
+//--------->>>>> DESIGNACION DE ASESOR
+    
+    // Ruta para ver solicitudes aceptadas para ---> PAISI
+    Route::get('/paisi/getSolicitude/{pa_id}', [SolicitudeController::class, 'getSolicitudeForPaisi']);
     //Ruta para actualizar el estado de la solicitud de designacion de asesor ---> PAISI
-    Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']);
+    Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']); 
+});
+
+
+//RUTAS PARA FACULTAD
+Route::middleware(['auth:sanctum'])->group(function () {
+
+//--------->>>>> DESIGNACION DE ASESOR
+
+    // Ruta para ver las resoluciones de designacion de asesor ---> FACULTAD
+    Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
+    // Actualizar estado para Resolucion designacion de asesor ---> FACULTAD
+    Route::put('/resolution/{id}/status', [DocResolutionController::class, 'updateStatus']);
+
+});
+
+Route::get('/faculty/getOffices/{facultad_id}', [DocOfController::class, 'getOffices']);
+
+
+//RUTAS PARA PAISI
+Route::middleware(['auth:sanctum'])->group(function () {
+
+    
+
+
     //Ruta para crear la solicitud de oficio multiple, para jurados de tesis ---> ESTUDIANTE
     Route::get('/office/solicitude-juries/{student_id}', [DocOfController::class, 'soliciteJuriesForTesis']);
+
     //Ruta para ver las solicitudes de designacion de jurados para la tesis ---> PAISI
     Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
     //Ruta para actualizar el estado del oficio de designacion de jurados --->PAISI
@@ -97,11 +144,10 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 //RUTAS PARA RESOLUCIONES
 Route::middleware(['auth:sanctum'])->group(function () {   
-    // Actualizar estado para Resolucion ---> FACULTAD
-    Route::put('/resolution/{id}/status', [DocResolutionController::class, 'updateStatus']);
+    
     //Ruta para ver las resoluciones de aprobacion de tesis ---> FACULTAD
     Route::get('/resolucion/get-aprobar-tesis', [DocResolutionController::class, 'getReslutionApproveThesis']);
-    //Ruta para ver actualizar las resoluciones ---> FACULTAD
+    //Ruta para actualizar las resoluciones ---> FACULTAD
     Route::put('/resolucion/aprobacion-tesis/{docres_id}/status', [DocResolutionController::class, 'updateStatusResolutionApproveThesis']);
     //Ruta para ver las resoluciones de aprobacion de INFORME ---> FACULTAD
     Route::get('/resolucion/get-aprobar/informe', [DocResolutionController::class, 'getReslutionApproveInforme']);
@@ -294,7 +340,6 @@ Route::get('/sustentacion/ver-acta/{sustentacion_id}', [DefenseController::class
 Route::get('/sustentacion/descargar-acta/{sustentacion_id}', [DefenseController::class, 'downloadActDefense']);
 
 
-Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
 
 
 //Ruta para extraer y guardar los comentarios
