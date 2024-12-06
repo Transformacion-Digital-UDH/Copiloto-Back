@@ -6,13 +6,11 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\SolicitudeResource;
 use App\Models\Adviser;
-use App\Models\User;
-use App\Models\Paisi;
-use App\Models\Role;
 use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\History;
 use App\Models\DocOf;
+use App\Models\Program;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -193,10 +191,28 @@ class SolicitudeController extends Controller
 
 
     //Muesta solicitudes de asesoria aceptados
-    public function getSolicitudeForPaisi()
+    public function getSolicitudeForPaisi($pa_id)
     {
-        $solicitudes = Solicitude::where('sol_status', 'aceptado')->get();                                   
-        return SolicitudeResource::collection($solicitudes);
+        // Buscar el programa con el ID proporcionado
+        $pa = Program::where('_id', $pa_id)->first();
+
+        // Obtener los estudiantes que tengan el mismo pa_program
+        $students = Student::where('stu_program', $pa->pa_program)->get();
+
+        // Filtrar las solicitudes aceptadas relacionadas con estos estudiantes
+        $solicitudes = Solicitude::where('sol_status', 'aceptado')->get();
+
+        // Filtrar las solicitudes para que solo queden las asociadas a los estudiantes correctos
+        $filteredSolicitudes = $solicitudes->filter(function($solicitud) use ($students) {
+            
+            // Comprobamos si el estudiante asociado tiene el programa correspondiente
+            return $students->contains(function($student) use ($solicitud) {
+                return $solicitud->student_id == $student->_id;
+            });
+        });
+
+        // Devolver las solicitudes filtradas
+        return SolicitudeResource::collection($filteredSolicitudes);
 
     }
 
