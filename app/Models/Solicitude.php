@@ -38,7 +38,7 @@ class Solicitude extends Model
 
     public function paisi()
     {
-        return $this->belongsTo(Paisi::class, 'paisi_id');
+        return $this->belongsTo(Program::class, 'paisi_id');
     }
 
     public function docof(): HasOne

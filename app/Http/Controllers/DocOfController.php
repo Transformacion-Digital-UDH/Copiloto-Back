@@ -8,8 +8,8 @@ use App\Models\Adviser;
 use App\Models\Defense;
 use App\Models\DocOf;
 use App\Models\DocResolution;
+use App\Models\Faculty;
 use App\Models\Filter;
-use App\Models\History;
 use App\Models\Review;
 use App\Models\Solicitude;
 use App\Models\Student;
@@ -155,9 +155,23 @@ class DocOfController extends Controller
         return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ' ' . $student->stu_name . ' OFF-DA.pdf'); // Puedes especificar un nombre para el archivo PDF
     }
 
-    public function getOffices(){
-        $docs = DocOf::where('of_status', 'tramitado')->where('of_name','Solicitud de resolución de designación de asesor')->get();
-        return DocOfResource::collection($docs);
+    public function getOffices($facultad_id){
+
+        $facultad = Faculty::where('_id', $facultad_id)->first();
+
+        $students = Student::where('stu_faculty', $facultad->fa_faculty)->get();
+
+        // // // Filtrar las oficios para que solo queden las asociadas a los estudiantes correctos
+        // // $filteredOffices = $solicitudes->filter(function($solicitud) use ($students) {
+            
+        // //     // Comprobamos si el estudiante asociado tiene el programa correspondiente
+        // //     return $students->contains(function($student) use ($solicitud) {
+        // //         return $solicitud->student_id == $student->_id;
+        // //     });
+        // });
+
+        // // Devolver las solicitudes filtradas
+        // return DocOfResource::collection($filteredSolicitudes);
     }
     
     public function updateStatusPaisi(Request $request, $id)
