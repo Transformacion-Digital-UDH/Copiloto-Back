@@ -20,4 +20,10 @@ class Faculty extends Model
         'fa_faculty',
 
     ];
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
 }
