@@ -97,7 +97,7 @@
             <p>
                 Visto, el Oficio N° {{$office->of_num_of}}-{{$year_res}}-CA-PAISI-FI-UDH presentado por el Coordinador
                 del Programa Académico de Ingeniería de Sistemas e Informática y el Expediente N°
-                {{$office->of_num_exp}}, del Bach. <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>, quién solicita Asesor de
+                {{$office->of_num_exp}}, del estudiante <strong>{{ $studentFormatted['stu_lastname_m'] }} {{ $studentFormatted['stu_lastname_f'] }}, {{ $studentFormatted['stu_name'] }}</strong>, quién solicita Asesor de
                 Tesis, para desarrollar el trabajo de investigación (Tesis).
             </p>
             <p><strong>CONSIDERANDO:</strong></p>
