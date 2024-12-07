@@ -392,6 +392,8 @@ class UserSeeder extends Seeder
 
             [
                 'name' => 'ARQUITECTURA',
+                'email' => 'titulacion.arquitectura@udh.edu.pe',
+                'role' => 'pa',
                 'email' => 'programa.arquitectura@udh.edu.pe',
                 'role' => 'programa',
                 'role_data' => [

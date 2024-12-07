@@ -167,7 +167,7 @@ class SolicitudeController extends Controller
              // Crear un nuevo registro en la colección docOf si no es "rechazado"
              $docOf = new DocOf([
                 'solicitude_id' => $solicitude->_id,
-                'of_name' => null,  // Inicializado como null
+                'of_name' => 'Solicitud de resolución de designación de asesor',
                 'of_num_of' => null,  // Inicializado como null
                 'of_num_exp' => null,  // Inicializado como null
                 'of_status' => 'pendiente',  // Estado fijo en "pendiente"
