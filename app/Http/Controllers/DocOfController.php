@@ -209,23 +209,32 @@ class DocOfController extends Controller
             return response()->json(['message' => 'No se encontraron oficios asociados a las solicitudes filtradas'], 404);
         }
 
-        // Formatear la respuesta para devolver los oficios filtrados
-        return response()->json([
-            'data' => $filteredOficios->map(function ($oficio) {
-                return [
-                    'id' => $oficio->_id,
-                    'nombre_de_oficio' => $oficio->of_name,
-                    'estado' => $oficio->of_status,
-                    'numero_de_oficio' => $oficio->of_num_of,
-                    'fecha_creado' => $oficio->created_at,
-                    'estudiante_nombre' => $oficio->student->name ?? 'No disponible',
-                    'asesor_nombre' => $oficio->advisor->name ?? 'No disponible',
-                    'resolucion_estado' => $oficio->resolution_status ?? 'No disponible',
-                    'resolucion_id' => $oficio->resolution_id ?? 'No disponible',
-                ];
-            }),
-        ], 200);
+        // Pre-cargar datos relacionados
+        $filteredSolicitudes->load(['student', 'adviser']);
+        $filteredOficios->load(['solicitude']);
+
+        // Crear la respuesta formateada
+        $data = $filteredOficios->map(function ($oficio) {
+            $solicitude = $oficio->solicitude;
+            $student = $solicitude->student ?? null;
+            $adviser = $solicitude->adviser ?? null;
+
+            return [
+                'id' => $oficio->_id,
+                'nombre_de_oficio' => $oficio->of_name,
+                'estado' => $oficio->of_status,
+                'numero_de_oficio' => $oficio->of_num_of,
+                'fecha_creado' => $oficio->created_at,
+                'estudiante_nombre' => $student ? $student->getFullName() : '',
+                'asesor_nombre' => $adviser ? $adviser->getFullName() : '',
+                'resolucion_estado' => DocResolution::where('docof_id', $oficio->_id)->first()?->docres_status ?? '',
+                'resolucion_id' => DocResolution::where('docof_id', $oficio->_id)->first()?->_id ?? '',
+            ];
+        });
+
+        return response()->json(['data' => $data], 200);
     }
+
 
 
 
