@@ -236,8 +236,6 @@ class DocOfController extends Controller
     }
 
 
-
-
     public function updateStatusPaisi(Request $request, $id)
     {
         // Validar la entrada
