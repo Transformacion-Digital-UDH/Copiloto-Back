@@ -23,7 +23,7 @@ class UserSeeder extends Seeder
             'adviser' => [
                 'confirm-solicitude'
             ],
-            'program' => [
+            'programa' => [
                 'create-link',
                 'confirm-carte',
                 'view-document'
@@ -56,7 +56,7 @@ class UserSeeder extends Seeder
         $roles = [
             'estudiante' => $permissions['student'],
             'asesor' => $permissions['adviser'],
-            'program' => $permissions['program'],
+            'programa' => $permissions['programa'],
             'facultad' => $permissions['faculty'],
             'vri' => $permissions['vri'],
             'turnitin' => $permissions['turnitin'],
@@ -393,8 +393,6 @@ class UserSeeder extends Seeder
             [
                 'name' => 'ARQUITECTURA',
                 'email' => 'titulacion.arquitectura@udh.edu.pe',
-                'role' => 'pa',
-                'email' => 'programa.arquitectura@udh.edu.pe',
                 'role' => 'programa',
                 'role_data' => [
                     'pa_rank' => 'ARQ.',
@@ -493,7 +491,7 @@ class UserSeeder extends Seeder
                         // Otros campos específicos de la tabla `asesors`
                     ]);
                     break;
-                case 'program':
+                case 'programa':
                     \DB::table('programs')->insert([
                         'user_id' => $createdUser->_id,
                         'pa_rank' => $user['role_data']['pa_rank'],
