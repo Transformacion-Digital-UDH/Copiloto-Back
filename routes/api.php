@@ -96,7 +96,6 @@ Route::middleware(['auth:sanctum'])->group(function () {
 //--------->>>>> DESIGNACION DE ASESOR
 
     // Ruta para ver las resoluciones de designacion de asesor ---> FACULTAD
-    Route::get('/faculty/getOffices', [DocOfController::class, 'getOffices']);
     // Actualizar estado para Resolucion designacion de asesor ---> FACULTAD
     Route::put('/resolution/{id}/status', [DocResolutionController::class, 'updateStatus']);
 

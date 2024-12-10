@@ -38,7 +38,18 @@ class UserResource extends JsonResource
                 $is_jury = $this->adviser->adv_is_jury;
                 break;
 
-            case 'paisi':
+            case 'programa':
+                $id = $this->program->_id;
+                $names = $this->program->pa_name;
+                $lastname_m = $this->program->pa_lastname_m;
+                $lastname_f = $this->program->pa_lastname_f;
+                break;
+
+            case 'facultad':
+                $id = $this->faculty->_id;
+                $names = $this->faculty->fa_name;
+                $lastname_m = $this->faculty->fa_lastname_m;
+                $lastname_f = $this->faculty->fa_lastname_f;
                 break;
         }
 

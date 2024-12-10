@@ -92,4 +92,14 @@ class User extends Authenticatable
     {
         return $this->hasOne(Adviser::class);
     }
+
+    public function program(): HasOne
+    {
+        return $this->hasOne(Program::class);
+    }
+    
+    public function faculty(): HasOne
+    {
+        return $this->hasOne(Faculty::class);
+    }
 }
