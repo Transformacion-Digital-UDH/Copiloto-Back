@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Adviser;
-use App\Models\Paisi;
+use App\Models\Program;
 use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\User;
@@ -21,10 +21,10 @@ class GoogleDocumentEndController extends GoogleDocumentController
             $solicitude = Solicitude::where('_id',$solicitudeId)->first();
             $student = Student::where('_id',$solicitude->student_id)->first();
             $adviser = Adviser::where('_id',$solicitude->adviser_id)->first();
-            $paisi = Paisi::where('pai_program','INGENIERÍA DE SISTEMAS E INFORMÁTICA')->first();
+            $program = Program::where('pa_program','INGENIERÍA DE SISTEMAS E INFORMÁTICA')->first();
             $studentUser = User::where('_id',$student->user_id)->first();
             $adviserUser = User::where('_id',$adviser->user_id)->first();
-            $paisiUser = User::where('_id',$paisi->user_id)->first();
+            $programUser = User::where('_id',$program->user_id)->first();
 
 
             // Personaliza el nombre del documento y el ID de la plantilla para el informe
@@ -42,7 +42,7 @@ class GoogleDocumentEndController extends GoogleDocumentController
             $this->replaceDocumentPlaceholders($documentId, $solicitude, $student, $adviser);
 
             // Asignar permisos
-            $this->assignPermissions($documentId, $paisiUser, $studentUser, $adviserUser);
+            $this->assignPermissions($documentId, $programUser, $studentUser, $adviserUser);
             
             // Mover el documento a la carpeta específica del informe
             $this->moveDocumentToFolder($documentId, $folderId);

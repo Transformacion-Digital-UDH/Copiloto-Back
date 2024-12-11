@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 use App\Models\Solicitude;
 use App\Models\Student;
 use App\Models\Adviser;
-use App\Models\Paisi;
+use App\Models\Program;
 use App\Models\User;
 use Illuminate\Support\Facades\Log;
 
@@ -58,10 +58,10 @@ class GoogleDocumentController extends Controller
             $solicitude = Solicitude::where('_id',$solicitudeId)->first();
             $student = Student::where('_id',$solicitude->student_id)->first();
             $adviser = Adviser::where('_id',$solicitude->adviser_id)->first();
-            $paisi = Paisi::where('pai_program','INGENIERÍA DE SISTEMAS E INFORMÁTICA')->first();
+            $program = Program::where('pa_program','INGENIERÍA DE SISTEMAS E INFORMÁTICA')->first();
             $studentUser = User::where('_id',$student->user_id)->first();
             $adviserUser = User::where('_id',$adviser->user_id)->first();
-            $paisiUser = User::where('_id',$paisi->user_id)->first();
+            $programUser = User::where('_id',$program->user_id)->first();
 
             // Crear el nombre del documento
             $documentName = $this->generateDocumentName($solicitude, $student);
@@ -82,7 +82,7 @@ class GoogleDocumentController extends Controller
             $this->replaceDocumentPlaceholders($documentId, $solicitude, $student, $adviser);
 
             // Asignar permisos
-            $this->assignPermissions($documentId, $paisiUser, $studentUser, $adviserUser);
+            $this->assignPermissions($documentId, $programUser, $studentUser, $adviserUser);
 
             // Mover el documento a una carpeta específica
             $this->moveDocumentToFolder($documentId);
@@ -113,17 +113,17 @@ class GoogleDocumentController extends Controller
 
         $student = Student::find($solicitude->student_id);
         $adviser = Adviser::find($solicitude->adviser_id);
-        $paisi = Paisi::find($solicitude->paisi_id);
+        $program = Program::find($solicitude->program_id);
 
-        if (!$student || !$adviser || !$paisi) {
+        if (!$student || !$adviser || !$program) {
             return null;
         }
 
         $studentUser = User::find($student->user_id);
         $adviserUser = User::find($adviser->user_id);
-        $paisiUser = User::find($paisi->user_id);
+        $programUser = User::find($program->user_id);
 
-        if (!$studentUser || !$adviserUser || !$paisiUser) {
+        if (!$studentUser || !$adviserUser || !$programUser) {
             return null;
         }
 
@@ -131,10 +131,10 @@ class GoogleDocumentController extends Controller
             'solicitude' => $solicitude,
             'student' => $student,
             'adviser' => $adviser,
-            'paisi' => $paisi,
+            'program' => $program,
             'studentUser' => $studentUser,
             'adviserUser' => $adviserUser,
-            'paisiUser' => $paisiUser
+            'programUser' => $programUser
         ];
     }
 
@@ -191,9 +191,9 @@ class GoogleDocumentController extends Controller
         ]);
     }
 
-    protected function assignPermissions($documentId, $paisiUser, $studentUser, $adviserUser)
+    protected function assignPermissions($documentId, $programUser, $studentUser, $adviserUser)
     {
-        $this->assignDrivePermissions($documentId, $paisiUser->email, 'writer');
+        $this->assignDrivePermissions($documentId, $programUser->email, 'writer');
         $this->assignDrivePermissions($documentId, $studentUser->email, 'writer');
         $this->assignDrivePermissions($documentId, $adviserUser->email, 'commenter');
     }

@@ -16,6 +16,8 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\CommentControllerDocs;
 use App\Http\Controllers\DefenseController;
 use App\Http\Controllers\FilterController;
+use App\Http\Controllers\CommentExportController;
+
 
 // rutas para autenticacion
 Route::post('login', [AuthController::class, 'login']); // inicio de sesión
@@ -354,3 +356,6 @@ Route::get('/sustentacion/descargar-acta/{sustentacion_id}', [DefenseController:
 
 //Ruta para extraer y guardar los comentarios
 Route::post('/solicitudes/{solicitudeId}/comments/extract', [CommentControllerDocs::class, 'extractAndSaveComments']);
+Route::get('/comments/{solicitudeId}/export', [CommentExportController::class, 'exportCommentsToExcel']);
+
+
