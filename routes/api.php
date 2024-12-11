@@ -59,12 +59,34 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
 
 //--------->>>>> DESIGNACION DE ASESOR
-
+    // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
+    Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
     // Ruta para crear una nueva solicitud ---> ESTUDIANTE
     Route::post('/solicitudes-store', [SolicitudeController::class, 'store']);
     // Actualizar título de tesis ---> ESTUDIANTE
     Route::put('/solicitudes/{id}', [SolicitudeController::class, 'updateSolicitude'])->middleware('permission:update-solicitude');
 
+//--------->>>>> CONFORMIDAD POR EL ASESOR
+    // Ruta para que el estudiante solicite la primera revision ---> ESTUDIANTE
+    Route::post('/student/first-review/{student_id}', [ReviewController::class, 'createReview']);
+    // Ruta para ver las correcciones observadas y aprobada en orden ---> ESTUDIANTE
+    Route::get('/student/get-review/{student_id}', [HistoryReviewController::class, 'viewRevisionByStudent']);   
+
+//--------->>>>> DESIGNACION DE JURADOS - TESIS
+    //Ruta para crear la solicitud de oficio multiple, para jurados de tesis ---> ESTUDIANTE
+    Route::get('/office/solicitude-juries/{student_id}', [DocOfController::class, 'soliciteJuriesForTesis']);
+    // Ruta para ver los jurados asignados por id de estudiante
+    Route::get('/student/get-juries/{student_id}', [StudentController::class, 'viewJuriesForTesisByStudent']);
+    
+
+});
+
+//RUTAS COMPARTIDAS ESTUDIANTE - ASESOR
+Route::middleware(['auth:sanctum'])->group(function () {
+
+//--------->>>>> CONFORMIDAD POR EL ASESOR - JURADOS  
+    // Ruta para el actualizar estado de la revision ---> ESTUDIANTE, ASESOR
+    Route::put('/student/review/{student_id}/status', [ReviewController::class, 'updateStatusReview']);
 });
 
 
@@ -72,9 +94,13 @@ Route::middleware(['auth:sanctum'])->group(function () {
 Route::middleware(['auth:sanctum'])->group(function () {
 
 //--------->>>>> DESIGNACION DE ASESOR
-
     // Ruta para actualizar el estado de una solicitud ---> ASESOR
     Route::patch('/solicitudes/{id}/status', [SolicitudeController::class, 'updateStatus']);
+    
+//--------->>>>> CONFORMIDAD POR EL ASESOR DEL PROYECTO DE TESIS
+    // Ruta para ver las correcciones pendientes ---> ASESOR
+    Route::get('/adviser/get-review/{adviser_id}', [ReviewController::class, 'viewRevisionByAdviser']); 
+
 });
 
 
@@ -87,6 +113,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/paisi/getSolicitude/{pa_id}', [SolicitudeController::class, 'getSolicitudeForPaisi']);
     //Ruta para actualizar el estado de la solicitud de designacion de asesor ---> PAISI
     Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']); 
+
+//--------->>>>> DESIGNACION DE JURADOS - TESIS
+    //Ruta para ver las solicitudes de designacion de jurados para la tesis ---> PAISI
+    Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
+    //Ruta para actualizar el estado del oficio de designacion de jurados --->PAISI --------> (TESIS - INFORME)
+    Route::put('/office/djt/{docof_id}/status', [DocOfController::class, 'updateSoliciteJuriesForTesis']);
+    
+
 });
 
 
@@ -96,27 +130,23 @@ Route::middleware(['auth:sanctum'])->group(function () {
 //--------->>>>> DESIGNACION DE ASESOR
 
     // Ruta para ver las resoluciones de designacion de asesor ---> FACULTAD
+    Route::get('/faculty/getOffices/{facultad_id}', [DocOfController::class, 'getOffices']);
     // Actualizar estado para Resolucion designacion de asesor ---> FACULTAD
     Route::put('/resolution/{id}/status', [DocResolutionController::class, 'updateStatus']);
 
 });
 
-Route::get('/faculty/getOffices/{facultad_id}', [DocOfController::class, 'getOffices']);
 
 
 //RUTAS PARA PAISI
 Route::middleware(['auth:sanctum'])->group(function () {
-
     
 
 
-    //Ruta para crear la solicitud de oficio multiple, para jurados de tesis ---> ESTUDIANTE
-    Route::get('/office/solicitude-juries/{student_id}', [DocOfController::class, 'soliciteJuriesForTesis']);
+    
 
-    //Ruta para ver las solicitudes de designacion de jurados para la tesis ---> PAISI
-    Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
-    //Ruta para actualizar el estado del oficio de designacion de jurados --->PAISI
-    Route::put('/office/djt/{docof_id}/status', [DocOfController::class, 'updateSoliciteJuriesForTesis']);
+    
+    
     //Ruta para crear oficio de solicitud de aprobacion de tesis por la facultad--->PAISI
     Route::get('/oficio/solicitud-aprobar-tesis/{student_id}', [DocOfController::class, 'soliciteOfficeApproveThesis']);
     //Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI
@@ -171,8 +201,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
 // RUTAS PARA ESTUDIANTES
 Route::middleware(['auth:sanctum'])->group(function () {   
-    // Ruta para ver solicitudes, oficio y resoluciones de estudiante por id
-    Route::get('/student/getInfo/{student_id}', [StudentController::class, 'getInfoStudentById']); 
+    
     // Ruta para ver los jurados asignados por id de estudiante
     Route::get('/student/get-juries/{student_id}', [StudentController::class, 'viewJuriesForTesisByStudent']); 
     //Ruta para para vista de APROBACION DE TESIS ---> ESTUDIANTE
@@ -217,14 +246,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     
 // RUTAS PARA REVISIONES
 Route::middleware(['auth:sanctum'])->group(function () {  
-    // Ruta para que el estudiante solicite la primera revision ---> ESTUDIANTE
-    Route::post('/student/first-review/{student_id}', [ReviewController::class, 'createReview']);
-    // Ruta para el actualizar estado de la revision ---> ESTUDIANTE, ASESOR
-    Route::put('/student/review/{student_id}/status', [ReviewController::class, 'updateStatusReview']);
-    // Ruta para ver las correcciones observadas y aprobada en orden ---> ESTUDIANTE
-    Route::get('/student/get-review/{student_id}', [HistoryReviewController::class, 'viewRevisionByStudent']);   
-    // Ruta para ver las correcciones pendientes ---> ASESOR
-    Route::get('/adviser/get-review/{adviser_id}', [ReviewController::class, 'viewRevisionByAdviser']); 
+    
     // Ruta para que los jurados vean las reviciones con el estado de las otra revisiones pendientes ---> ASESORES(JURADOS)
     Route::get('/adviser/get-review-jury/{adviser_id}', [ReviewController::class, 'viewReviewAsJuryForAdviser']);
     // Ruta para ver las reviciones pendientes de los jurados con informacion del estudiante ---> ESTUDIANTE
