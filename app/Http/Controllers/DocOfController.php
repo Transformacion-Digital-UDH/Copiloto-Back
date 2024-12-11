@@ -523,38 +523,38 @@ class DocOfController extends Controller
                     ->where('sol_status', 'aceptado')
                     ->first();
 
-                // if ($solicitude && $solicitude->$name_doc) {
-                //     preg_match('/[-\w]{25,}/', $solicitude->$name_doc, $matches);
-                //     $documentId = $matches[0] ?? null;
+                if ($solicitude && $solicitude->$name_doc) {
+                    preg_match('/[-\w]{25,}/', $solicitude->$name_doc, $matches);
+                    $documentId = $matches[0] ?? null;
 
-                //     if ($documentId) {
-                //         // Obtener correos electrónicos de los jurados
-                //         $juradoEmails = [];
-                //         $roles = ['presidente', 'secretario', 'vocal'];
-                //         foreach ($roles as $rol) {
-                //             $adviser = Adviser::find($request->input($rol));
-                //             if ($adviser) {
-                //                 $user = User::find($adviser->user_id);
-                //                 if ($user) {
-                //                     $juradoEmails[] = $user->email;
-                //                 } else {
-                //                     return response()->json(['error' => "El usuario con rol $rol no fue encontrado"], 404);
-                //                 }
-                //             } else {
-                //                 return response()->json(['error' => "El asesor con rol $rol no fue encontrado"], 404);
-                //             }
-                //         }
+                    if ($documentId) {
+                        // Obtener correos electrónicos de los jurados
+                        $juradoEmails = [];
+                        $roles = ['presidente', 'secretario', 'vocal'];
+                        foreach ($roles as $rol) {
+                            $adviser = Adviser::find($request->input($rol));
+                            if ($adviser) {
+                                $user = User::find($adviser->user_id);
+                                if ($user) {
+                                    $juradoEmails[] = $user->email;
+                                } else {
+                                    return response()->json(['error' => "El usuario con rol $rol no fue encontrado"], 404);
+                                }
+                            } else {
+                                return response()->json(['error' => "El asesor con rol $rol no fue encontrado"], 404);
+                            }
+                        }
 
-                //         // Asignar permisos de comentar a los jurados en el documento
-                //         foreach ($juradoEmails as $email) {
-                //             $this->googleDocumentController->assignDrivePermissions($documentId, $email, 'commenter');
-                //         }
-                //     } else {
-                //         return response()->json(['error' => 'Document ID no encontrado en el enlace'], 404);
-                //     }
-                // } else {
-                //     return response()->json(['error' => 'Solicitud o enlace de documento no encontrado'], 404);
-                // }
+                        // Asignar permisos de comentar a los jurados en el documento
+                        foreach ($juradoEmails as $email) {
+                            $this->googleDocumentController->assignDrivePermissions($documentId, $email, 'commenter');
+                        }
+                    } else {
+                        return response()->json(['error' => 'Document ID no encontrado en el enlace'], 404);
+                    }
+                } else {
+                    return response()->json(['error' => 'Solicitud o enlace de documento no encontrado'], 404);
+                }
 
                 return response()->json([
                     'message' => 'Oficio tramitado',
