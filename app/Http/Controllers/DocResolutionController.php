@@ -19,6 +19,16 @@ class DocResolutionController extends Controller
 {
     public function resPDF($id)
     {
+        return $this->viewDowloadResolution($id);
+    }
+
+    public function downloadResolution($id)
+    {
+        return $this->viewDowloadResolution($id, true);
+    }
+
+    public function viewDowloadResolution($id, $down = false)
+    {
         $resolution = DocResolution::findOrFail($id);
         $formattedDate = fechaTexto($resolution->updated_at);
         $year_res = formatAnio($resolution->updated_at);
@@ -65,67 +75,16 @@ class DocResolutionController extends Controller
                 'year_res'
             )
         );
-        return $pdf->stream();
-    }
-
-    public function downloadResolution($id)
-    {
-        $resolution = DocResolution::where('_id', $id)->first();
-        // Verifica si el registro no se encuentra
-        if (!$resolution) {
-            abort(404);
-        }
-        // Formatear la fecha updated_at como "11 de julio de 2024"
-        $formattedDate = Carbon::parse($resolution->updated_at)->locale('es')->isoFormat('D [de] MMMM [de] YYYY');
-        $year_res = Carbon::parse($resolution->updated_at)->locale('es')->isoFormat('YYYY');
-
-        $office = DocOf::where('_id', $resolution->docof_id)->first();
-        $year_of = Carbon::parse($office->updated_at)->locale('es')->isoFormat('YYYY');
-
-        $solicitude = Solicitude::where('_id', $office->solicitude_id)->first();
-        // Recibe el id del Asesor
-        $adviser = Adviser::where('_id', $solicitude->adviser_id)->first();
-        // Verifica si el asesor existe
-        if ($adviser) {
-            // Formatear los nombres del asesor
-            $adviserFormatted = [
-                'adv_name' => ucwords(strtolower($adviser->adv_name)),
-                'adv_lastname_m' => ucwords(strtolower($adviser->adv_lastname_m)),
-                'adv_lastname_f' => ucwords(strtolower($adviser->adv_lastname_f)),
-            ];
+        if ($down) {
+            $name_doc = $student->stu_lastname_m . ' ' . $student->stu_lastname_f . ' ' . $student->stu_name . ' RES-DA.pdf';
+            return $pdf->download($name_doc);
         } else {
-            $adviserFormatted = null;
+            return $pdf->stream();
         }
-        if ($adviser) {
-            // Concatenar las primeras letras de los nombres y apellidos
-            $siglas = strtoupper(
-                mb_substr($adviser->adv_name, 0, 1) .
-                    mb_substr($adviser->adv_lastname_m, 0, 1) .
-                    mb_substr($adviser->adv_lastname_f, 0, 1)
-            );
-        } else {
-            $siglas = null;
-        }
-        $student = Student::where('_id', $solicitude->student_id)->first();
-        // Verifica si el estudiante existe
-        if ($student) {
-            // Formatear los nombres del estudiante
-            $studentFormatted = [
-                'stu_name' => ucwords(strtolower($student->stu_name)),
-                'stu_lastname_m' => strtoupper($student->stu_lastname_m),
-                'stu_lastname_f' => strtoupper($student->stu_lastname_f),
-            ];
-        } else {
-            $studentFormatted = null;
-        }
-        // Pasar los datos a la vista
-        $pdf = Pdf::loadView('resolution_adviser', compact('siglas', 'resolution', 'office', 'formattedDate', 'adviserFormatted', 'studentFormatted', 'year_of', 'year_res'));
-        return $pdf->download($student->stu_lastname_m . ' ' . $student->stu_lastname_f . ' ' . $student->stu_name . ' RES-DA.pdf'); // Puedes especificar un nombre para el archivo PDF
     }
 
     public function updateStatus(Request $request, $id)
     {
-        // Validar la entrada
         $rules = [
             'docres_status' => 'required|string|in:pendiente,tramitado,observado',
             'docres_observation' => 'nullable|string',
@@ -140,7 +99,6 @@ class DocResolutionController extends Controller
         if ($request->input('docres_status') === 'tramitado') {
             $rules['docres_num_res'] = 'required|string';
         }
-
 
         $validator = Validator::make($request->all(), $rules);
 
