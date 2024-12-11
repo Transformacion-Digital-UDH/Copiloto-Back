@@ -73,6 +73,9 @@ Route::middleware(['auth:sanctum'])->group(function () {
 //--------->>>>> DESIGNACION DE JURADOS - TESIS
     //Ruta para crear la solicitud de oficio multiple, para jurados de tesis ---> ESTUDIANTE
     Route::get('/office/solicitude-juries/{student_id}', [DocOfController::class, 'soliciteJuriesForTesis']);
+    // Ruta para ver los jurados asignados por id de estudiante
+    Route::get('/student/get-juries/{student_id}', [StudentController::class, 'viewJuriesForTesisByStudent']);
+    
 
 });
 
@@ -108,6 +111,14 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/paisi/getSolicitude/{pa_id}', [SolicitudeController::class, 'getSolicitudeForPaisi']);
     //Ruta para actualizar el estado de la solicitud de designacion de asesor ---> PAISI
     Route::put('/offices/{id}/update-status-paisi', [DocOfController::class, 'updateStatusPaisi']); 
+
+//--------->>>>> DESIGNACION DE JURADOS - TESIS
+    //Ruta para ver las solicitudes de designacion de jurados para la tesis ---> PAISI
+    Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
+    //Ruta para actualizar el estado del oficio de designacion de jurados --->PAISI --------> (TESIS - INFORME)
+    Route::put('/office/djt/{docof_id}/status', [DocOfController::class, 'updateSoliciteJuriesForTesis']);
+    
+
 });
 
 
@@ -132,10 +143,8 @@ Route::middleware(['auth:sanctum'])->group(function () {
 
     
 
-    //Ruta para ver las solicitudes de designacion de jurados para la tesis ---> PAISI
-    Route::get('/office/get-solicitude-juries', [DocOfController::class, 'viewSolicitudeOfJuries']);
-    //Ruta para actualizar el estado del oficio de designacion de jurados --->PAISI
-    Route::put('/office/djt/{docof_id}/status', [DocOfController::class, 'updateSoliciteJuriesForTesis']);
+    
+    
     //Ruta para crear oficio de solicitud de aprobacion de tesis por la facultad--->PAISI
     Route::get('/oficio/solicitud-aprobar-tesis/{student_id}', [DocOfController::class, 'soliciteOfficeApproveThesis']);
     //Ruta para para ver oficios en de APROBACION DE TESIS con orden --->PAISI

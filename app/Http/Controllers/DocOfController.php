@@ -224,7 +224,7 @@ class DocOfController extends Controller
                 'nombre_de_oficio' => $oficio->of_name,
                 'estado' => $oficio->of_status,
                 'numero_de_oficio' => $oficio->of_num_of,
-                'fecha_creado' => $oficio->created_at,
+                'fecha_creado' => $oficio->created_at->format('d/m/Y'), 
                 'estudiante_nombre' => $student ? $student->getFullName() : '',
                 'asesor_nombre' => $adviser ? $adviser->getFullName() : '',
                 'resolucion_estado' => DocResolution::where('docof_id', $oficio->_id)->first()?->docres_status ?? '',
